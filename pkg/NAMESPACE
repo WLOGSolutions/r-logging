@@ -1,0 +1,17 @@
+export(levels,
+       levellog,
+       finest,
+       finer,
+       fine,
+       debug,
+       info,
+       warn,
+       error,
+       basicConfig,
+       getLogger,
+       addHandler,
+       removeHandler,
+       setLevel,
+       writeToFile,
+       writeToConsole
+       )
