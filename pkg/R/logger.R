@@ -124,11 +124,15 @@ updateOptions <- function(name, ...) {
     name <- paste('logging.ROOT', name, sep='.')
 
   config <- list(...)
-  if (! 'level' %in% config)
+  if (! 'level' %in% names(config))
     config$level = levels['INFO']
 
-  exp <- parse(text=paste('logging.options(',name,' = config)', sep=''))
-  eval(exp)
+  # is there a logger by this name already?
+  if (! exists(name, logging.options))
+    logging.options[[name]] <- new.env()
+
+  for (key in names(config))
+    logging.options[[name]][[key]] <- config[[key]]
 }
 
 ## Get a specific logger configuration
@@ -140,16 +144,18 @@ getLogger <- function(name='', ...)
   else
     fullname <- paste('logging.ROOT', name, sep='.')
 
-  if (! fullname %in% names(logging.options())){
+  if (! exists(fullname, envir=logging.options)){
     updateOptions(name, ...)
   }
 
-  logging.options()[[fullname]]
+  logging.options[[fullname]]
 }
 
 ## set the level of a handler or a logger
 setLevel <- function(name, level)
 {
+  if (level %in% names(levels))
+    level <- levels[level]
   updateOptions(name, level=level)
 }
 
@@ -230,6 +236,6 @@ removeHandler <- function(name, logger='') {
 ## initialize the module
 
 ## The logger options manager
-logging.options <- options.manager('logging.options')
+logging.options <- new.env()
 
 getLogger('', handlers=NULL, level=0)

@@ -43,20 +43,18 @@ test.fineLevelsAreOrdered <- function() {
   checkEquals(logging::levels[['FINE']] < logging::levels[['DEBUG']], TRUE)
 }
 
-failing.test.canSetLoggerLevelByNamedValue <- function() {
+test.canSetLoggerLevelByNamedValue <- function() {
   basicConfig()
-  setLevel('', levels[['DEBUG']])
+  setLevel('', levels['DEBUG'])
   rootLogger <- getLogger('')
   expect <- levels['DEBUG']
-  print(rootLogger[['level']])
   checkEquals(rootLogger[['level']], expect)
 }
 
-failing.test.canSetLoggerLevelByName <- function() {
+test.canSetLoggerLevelByName <- function() {
   basicConfig()
   setLevel('', 'DEBUG')
   rootLogger <- getLogger('')
   expect <- levels['DEBUG']
-  print(rootLogger[['level']])
   checkEquals(rootLogger[['level']], expect)
 }
