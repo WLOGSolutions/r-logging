@@ -43,19 +43,25 @@ echo $contents; } ?>
 
 <!-- end of project description -->
 
-<p> What you find here behaves similarly to what you also find in
-Python's standard logging module.  Far from being comparable to a
-Python standard module, this tiny logging module does include
-hierarchic loggers, multiple handlers at each logger, the possibility
-to specify a formatter for each handler (one default formatter is
-given), same levels (names and numeric values) as Python's logging
-package, a simple basicConfig function to quickly put yourself
-in a usable situation...
+<p/>What you find here behaves similarly to what you also find in Python's standard logging module.</p>
 
-This package owes a lot to Brian Lee's futile package, the stackoverflow community and the
-documentation of the Python logging package.
+<p/>Far from being comparable to a Python standard module, this tiny logging module does include
+<ul>
+<li>hierarchic loggers, </li>
+<li>multiple handlers at each logger, </li>
+<li>the possibility to specify a formatter for each handler (one default formatter is given), </li>
+<li>same levels (names and numeric values) as Python's logging package, </li>
+<li>a simple basicConfig function to quickly put yourself in a usable situation...</li>
+</ul></p>
 
-<p> The <strong>project summary page</strong> you can find <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
+<p>This package owes a lot to 
+<ul>
+<li>Brian Lee's futile package, </li>
+<li>the stackoverflow community </li>
+<li>and the documentation of the Python logging package.</li>
+</ul></p>
+
+<p>The <strong>project summary page</strong> you can find <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
 
 </body>
 </html>
