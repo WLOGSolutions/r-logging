@@ -18,7 +18,7 @@ a tentative logging package
   Python's logging package, a simple logging.BasicConfig function to
   quickly put yourself in a usable situation...
 
-  This package owes a lot to Brian Lee's
+  This package owes a lot to Brian Lee Yung Rowe's
   \code{\link[futile:futile-package]{futile}} package and the
   documentation of the Python logging package.
 
@@ -61,7 +61,7 @@ lines on the console and just one line in the \code{sample.log} file.
 \author{
   Mario Frasca <mariotomo@gmail.com>
   
-  Brian Lee Yung Rowe <brian@muxspace.com>
+  Brian Lee Yung Rowe <r@nurometic.com>
 
 Maintainer: Mario Frasca <mario.frasca@nelen-schuurmans.nl>
 }

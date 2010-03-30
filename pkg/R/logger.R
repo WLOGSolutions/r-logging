@@ -136,7 +136,6 @@ updateOptions <- function(name, ...) {
 }
 
 ## Get a specific logger configuration
-## remember: you can't alter an object in R
 getLogger <- function(name='', ...)
 {
   if(name=='')
