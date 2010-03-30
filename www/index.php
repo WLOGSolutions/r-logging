@@ -56,7 +56,7 @@ echo $contents; } ?>
 
 <p>This package owes a lot to 
 <ul>
-<li>Brian Lee's futile package, </li>
+<li>Brian Lee Yung Rowe's futile package, </li>
 <li>the stackoverflow community </li>
 <li>and the documentation of the Python logging package.</li>
 </ul></p>
