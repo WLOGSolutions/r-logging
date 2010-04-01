@@ -12,8 +12,6 @@
 \usage{
 basicConfig()
 }
-\arguments{
-}
 \examples{
 library(logging)
 basicConfig()
