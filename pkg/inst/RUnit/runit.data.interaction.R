@@ -1,6 +1,7 @@
 require(RUnit)
 
 # test functions are called in lexicographic order.
+# $Id$
 
 test.000.getLoggerWithoutInitializingDoesNotCrash <- function() {
   rootLogger <- getLogger("")
@@ -9,14 +10,14 @@ test.000.getLoggerWithoutInitializingDoesNotCrash <- function() {
 test.001.defaultLoggingLevelIsINFO <- function() {
   basicConfig()
   rootLogger <- getLogger('')
-  expect <- levels['INFO']
+  expect <- logging:::loglevels['INFO']
   checkEquals(rootLogger[['level']], expect)
 }
 
 test.002.canInitializeTwice <- function() {
   basicConfig()
   rootLogger <- getLogger('')
-  expect <- levels['INFO']
+  expect <- logging:::loglevels['INFO']
   checkEquals(rootLogger[['level']], expect)
 }
 
@@ -29,25 +30,25 @@ test.canGetRootLoggerWithoutName <- function() {
 }
 
 test.canFindLoggingLevels <- function() {
-  checkEquals(logging::levels[['NOTSET']], 0)
-  checkEquals(logging::levels[['DEBUG']], 10)
-  checkEquals(logging::levels[['INFO']], 20)
-  checkEquals(logging::levels[['WARN']], 30)
-  checkEquals(logging::levels[['ERROR']], 40)
-  checkEquals(logging::levels[['FATAL']], 50)
+  checkEquals(logging:::loglevels[['NOTSET']], 0)
+  checkEquals(logging:::loglevels[['DEBUG']], 10)
+  checkEquals(logging:::loglevels[['INFO']], 20)
+  checkEquals(logging:::loglevels[['WARN']], 30)
+  checkEquals(logging:::loglevels[['ERROR']], 40)
+  checkEquals(logging:::loglevels[['FATAL']], 50)
 }
 
 test.fineLevelsAreOrdered <- function() {
-  checkEquals(logging::levels[['FINEST']] < logging::levels[['FINER']], TRUE)
-  checkEquals(logging::levels[['FINER']] < logging::levels[['FINE']], TRUE)
-  checkEquals(logging::levels[['FINE']] < logging::levels[['DEBUG']], TRUE)
+  checkEquals(logging:::loglevels[['FINEST']] < logging:::loglevels[['FINER']], TRUE)
+  checkEquals(logging:::loglevels[['FINER']] < logging:::loglevels[['FINE']], TRUE)
+  checkEquals(logging:::loglevels[['FINE']] < logging:::loglevels[['DEBUG']], TRUE)
 }
 
 test.canSetLoggerLevelByNamedValue <- function() {
   basicConfig()
-  setLevel('', levels['DEBUG'])
+  setLevel('', logging:::loglevels['DEBUG'])
   rootLogger <- getLogger('')
-  expect <- levels['DEBUG']
+  expect <- logging:::loglevels['DEBUG']
   checkEquals(rootLogger[['level']], expect)
 }
 
@@ -55,6 +56,6 @@ test.canSetLoggerLevelByName <- function() {
   basicConfig()
   setLevel('', 'DEBUG')
   rootLogger <- getLogger('')
-  expect <- levels['DEBUG']
+  expect <- logging:::loglevels['DEBUG']
   checkEquals(rootLogger[['level']], expect)
 }

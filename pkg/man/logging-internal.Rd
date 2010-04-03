@@ -1,4 +1,6 @@
 % File src/R/man/logging-internal.Rd
+% $Id$
+
 \name{logging-internal}
 \title{undocumented internal functions and variables}
 \description{

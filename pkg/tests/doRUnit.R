@@ -1,5 +1,7 @@
 #!/usr/bin/Rscript
 ## unit tests will not be done if RUnit is not available
+## $Id$
+
 if(require("RUnit", quietly=TRUE)) {
 
   ## --- Setup ---

@@ -1,4 +1,5 @@
 % File src/R/man/logging.handler-actions.Rd
+% $Id$
 
 \name{handler-actions}
 \alias{handler-actions}

@@ -1,4 +1,5 @@
 % File src/R/man/basicConfig.Rd
+% $Id$
 
 \name{basicConfig}
 \alias{basicConfig}
@@ -15,6 +16,6 @@ basicConfig()
 \examples{
 library(logging)
 basicConfig()
-debug("not shown, basic is INFO")
-warn("shown and timestamped")
+logdebug("not shown, basic is INFO")
+logwarn("shown and timestamped")
 }

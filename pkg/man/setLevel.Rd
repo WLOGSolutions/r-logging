@@ -1,4 +1,5 @@
 % File src/R/man/setLevel.Rd
+% $Id$
 
 \name{setLevel}
 \alias{setLevel}

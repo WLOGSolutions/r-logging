@@ -1,4 +1,5 @@
 % File src/R/man/addHandler.Rd
+% $Id$
 
 \name{addHandler}
 \alias{addHandler}

@@ -2,18 +2,29 @@
 
 rm ../logging*.tar.gz
 
-[[ $(svnversion -c .) =~ ([0-9]+):?([0-9]*)([A-Z]*) ]]
-LOW=${BASH_REMATCH[1]}
-HIGH=${BASH_REMATCH[2]:-$LOW}
-FLAGS=${BASH_REMATCH[3]:-''}
+# build high-date from files
+# $Id: logger.R 8906 2010-03-09 07:49:46Z Mario $
 
-# [ $LOW -ne $HIGH ] && echo "- mixed revisions in local copy (low:high=$LOW:$HIGH)"
-[ "$FLAGS" != "" ] && echo "- local copy has flags: $FLAGS"
-echo "- highest revision in local copy: $HIGH"
+MAX=$(egrep -hro "[$]Id: .*[$]" . | ( 
+  HIGH=0
+  while read line
+  do
+    RREV=$( echo $line | egrep -hro "[ ][0-9]+[ ]" ) 
+    if [ $RREV -gt $HIGH ] 
+    then 
+      HIGH=$RREV
+      maxline=$line
+    fi
+  done
+  echo $maxline
+))
+
+HIGH=$(( $( echo $MAX | egrep -hro "[ ][0-9]+[ ]" ) ))
+DATE=$( echo $MAX | egrep -hro "[0-9-]+[ ][0-9:]+Z" )
+
+echo "- $HIGH:$DATE"
 
 sed -re "s/(^Version:[^-]*).+$/\1-$HIGH/" DESCRIPTION.template > DESCRIPTION
-
-DATE=`LC_ALL=C svn info | awk '/^Last Changed Date:/ {print $4,$5}'`
 
 now=$(date)
 cat <<EOF > R/version.R
@@ -27,4 +38,3 @@ SVNVERSION <- "$HIGH"
 SVNDATE <- "$DATE"
 
 EOF
-

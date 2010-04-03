@@ -1,4 +1,5 @@
 % File src/R/man/logging-package.Rd
+% $Id$
 
 \name{logging-package}
 \Rdversion{1.1}

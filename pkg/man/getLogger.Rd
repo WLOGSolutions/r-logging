@@ -1,4 +1,5 @@
 % File src/R/man/getLogger.Rd
+% $Id$
 
 \name{getLogger}
 \alias{getLogger}

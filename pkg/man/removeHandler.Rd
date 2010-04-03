@@ -1,4 +1,5 @@
 % File src/R/man/removeHandler.Rd
+% $Id$
 
 \name{removeHandler}
 \alias{removeHandler}

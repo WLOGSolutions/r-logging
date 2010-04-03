@@ -28,8 +28,8 @@
 ##
 
 ## TODO: these constants must be exported and documented
-levels <- c(0, 1, 4, 7, 10, 20, 30, 40, 50, 50)
-names(levels) <- c('NOTSET', 'FINEST', 'FINER', 'FINE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL', 'FATAL')
+loglevels <- c(0, 1, 4, 7, 10, 20, 30, 40, 50, 50)
+names(loglevels) <- c('NOTSET', 'FINEST', 'FINER', 'FINE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL', 'FATAL')
 
 ## main log function, used by all other ones
 ## (entry points for messages)
@@ -48,7 +48,7 @@ levellog <- function(level, msg, ..., logger='')
   record$timestamp <- sprintf("%s", Sys.time())
   record$logger <- logger
   record$level <- level
-  record$levelname <- names(which(levels == level)[1])
+  record$levelname <- names(which(loglevels == level)[1])
   if(is.na(record$levelname))
     record$levelname <- paste("NumericLevel(", level, ")", sep='')
 
@@ -71,48 +71,48 @@ levellog <- function(level, msg, ..., logger='')
 }
 
 ## using log
-debug <- function(msg, ..., logger='')
+logdebug <- function(msg, ..., logger='')
 {
-  levellog(levels['DEBUG'], msg, ..., logger=logger)
+  levellog(loglevels[['DEBUG']], msg, ..., logger=logger)
   invisible()
 }
 
-finest <- function(msg, ..., logger='')
+logfinest <- function(msg, ..., logger='')
 {
-  levellog(levels['FINEST'], msg, ..., logger=logger)
+  levellog(loglevels['FINEST'], msg, ..., logger=logger)
   invisible()
 }
 
-finer <- function(msg, ..., logger='')
+logfiner <- function(msg, ..., logger='')
 {
-  levellog(levels['FINER'], msg, ..., logger=logger)
+  levellog(loglevels['FINER'], msg, ..., logger=logger)
   invisible()
 }
 
-fine <- function(msg, ..., logger='')
+logfine <- function(msg, ..., logger='')
 {
-  levellog(levels['FINE'], msg, ..., logger=logger)
-  invisible()
-}
-
-## using log
-info <- function(msg, ..., logger='')
-{
-  levellog(levels['INFO'], msg, ..., logger=logger)
+  levellog(loglevels[['FINE']], msg, ..., logger=logger)
   invisible()
 }
 
 ## using log
-warn <- function(msg, ..., logger='')
+loginfo <- function(msg, ..., logger='')
 {
-  levellog(levels['WARN'], msg, ..., logger=logger)
+  levellog(loglevels['INFO'], msg, ..., logger=logger)
   invisible()
 }
 
 ## using log
-error <- function(msg, ..., logger='')
+logwarn <- function(msg, ..., logger='')
 {
-  levellog(levels['ERROR'], msg, ..., logger=logger)
+  levellog(loglevels['WARN'], msg, ..., logger=logger)
+  invisible()
+}
+
+## using log
+logerror <- function(msg, ..., logger='')
+{
+  levellog(loglevels['ERROR'], msg, ..., logger=logger)
   invisible()
 }
 
@@ -125,7 +125,7 @@ updateOptions <- function(name, ...) {
 
   config <- list(...)
   if (! 'level' %in% names(config))
-    config$level = levels['INFO']
+    config$level = loglevels['INFO']
 
   # is there a logger by this name already?
   if (! exists(name, logging.options))
@@ -153,8 +153,8 @@ getLogger <- function(name='', ...)
 ## set the level of a handler or a logger
 setLevel <- function(name, level)
 {
-  if (level %in% names(levels))
-    level <- levels[level]
+  if (level %in% names(loglevels))
+    level <- loglevels[level]
   updateOptions(name, level=level)
 }
 
@@ -199,7 +199,7 @@ defaultFormat <- function(record) {
 #################################################################################
 
 basicConfig <- function() {
-  updateOptions('', level=levels['INFO'])
+  updateOptions('', level=loglevels['INFO'])
   addHandler(writeToConsole, name='basic.stdout')
   invisible()
 }
