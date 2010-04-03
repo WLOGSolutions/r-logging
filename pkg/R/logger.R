@@ -19,7 +19,7 @@
 ##
 ## Usage      : library(logging)
 ##
-## $Id: logger.R 9806 2010-03-09 07:49:46Z Mario $
+## $Id$
 ##
 ## initial programmer :  Mario Frasca
 ## based on:             Brian Lee Yung Rowe's futile library
