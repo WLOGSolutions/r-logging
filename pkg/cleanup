@@ -23,7 +23,7 @@ DATE=$( echo $MAX | egrep -hro "[0-9-]+[ ][0-9:]+Z" )
 
 echo "- $HIGH:$DATE"
 
-sed -re "s/(^Version:[^-]*).+$/\1-$HIGH/" DESCRIPTION.template > DESCRIPTION
+#sed -re "s/(^Version:[^-]*).+$/\1-$HIGH/" DESCRIPTION.template > DESCRIPTION
 
 now=$(date)
 cat <<EOF > R/version.R
@@ -31,7 +31,6 @@ cat <<EOF > R/version.R
 #      by $0
 #      on $now
 #
-# SVNVERSION as reported by svnversion at that point in time,
 
 SVNVERSION <- "$HIGH"
 SVNDATE <- "$DATE"
