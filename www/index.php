@@ -55,7 +55,7 @@ echo $contents; } ?>
 <li>a simple basicConfig function to quickly put yourself in a usable situation...</li>
 </ul></p>
 
-<p>have a look at a short introductiory <a href="sample_session.html">sample session</a>.</p>
+<p>have a look at a short introductory <a href="sample_session.html">sample session</a>.</p>
 
 <p>This package owes a lot to 
 <ul>
