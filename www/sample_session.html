@@ -1,0 +1,75 @@
+<html>
+<body>
+<h4>annotated sample sessions</h4>
+
+<h5>the basics</h5>
+
+<p>in this session we work with one single logger, the root logger, and we use only console handlers</p>
+
+<p>start up R, load the library, use the basic configuration.</p>
+<pre>
+R> library(logging)
+R> basicConfig()
+R>
+</pre>
+
+<p>check the content of the root logger (loggers are environments):
+after this basic configuration, it contains one handler.  this is
+enough for some simple logging to the console.  the default logging
+level of the root logger is INFO.  anything at level lower than INFO
+will not be logged.</p>
+
+<pre>
+R> with(getLogger(), names(handlers))
+[1] "basic.stdout"
+R> loginfo('does it work?')
+2010-04-07 11:39:49 INFO does it work?
+R> logwarn('%s %d', 'my name is', 5)
+2010-04-07 11:40:38 WARN my name is 5 
+R> logdebug('I am a silent child')
+R>
+</pre>
+
+<p>we add an other handler to the console, without specifying it name.
+it gets one automatically from the name of the function.  you can add
+and remove handlers using their names.</p>
+
+<pre>
+R> addHandler(writeToConsole)
+R> with(getLogger(), names(handlers))
+[1] "basic.stdout"   "writeToConsole"
+R> loginfo('test')
+2010-04-07 11:31:06 INFO test 
+2010-04-07 11:31:06 INFO test 
+R> logwarn('test')
+2010-04-07 11:31:15 WARN test 
+2010-04-07 11:31:15 WARN test 
+R> removeHandler('writeToConsole')
+R> logwarn('test')
+2010-04-07 11:32:37 WARN test 
+R>
+</pre>
+
+<p>handlers are associated to a level.  any logging record passing
+through a handler and having a level lower than the level of the
+handler is ignored.  you can alter the level of a handler.  this is
+what we do here: we alter the level of the default console handler
+'basic.stdout' to 30 (WARNING).  by the way, also handlers are environments.</p>
+
+<pre>
+R> addHandler(writeToConsole)
+R> setLevel(30, getHandler('basic.stdout'))
+R> loginfo('test')
+R> logwarn('test')
+2010-04-07 15:17:40 WARN test 
+R> with(getHandler('basic.stdout'), level)
+[1] 30
+R> 
+</pre>
+
+<h5>hierarchical loggers</h5>
+<h5>logging to file</h5>
+<h5>formatting your log record</h5>
+
+</body>
+</html>
