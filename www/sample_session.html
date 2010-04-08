@@ -36,8 +36,8 @@ environments, so we can use for example <tt>ls</tt> and <tt>with</tt>
 to inspect them.  after this basic configuration, our logger has
 handlers and a level and it contains one handler.  this is enough for
 some simple logging to the console.  the default logging level of the
-root logger is <tt>INFO</tt> (20).  anything at level lower than <tt>INFO</tt> will not be
-logged.</p>
+root logger is <tt>INFO</tt> (20).  anything at severity lower
+than <tt>INFO</tt> will not be logged.</p>
 
 <code>
 R> <user>ls(getLogger())</user><br/>
@@ -77,11 +77,11 @@ R>
 </code>
 
 <p>handlers have a level associated to them.  any logging record
-passing through a handler and having a level lower than the level of
-the handler is ignored.  you can alter the level of a handler.  this
-is what we do in the following lines: we alter the level of the
-default console handler 'basic.stdout' to 30 (<tt>WARN</tt>).  by
-the way, also handlers are environments.</p>
+passing through a handler and having a severity lower than the level
+of the handler is ignored.  you can alter the level of a handler.
+this is what we do in the following lines: we alter the level of the
+default console handler 'basic.stdout' to 30 (<tt>WARN</tt>).  by the
+way, also handlers are environments.</p>
 
 <code>
 R> <user>addHandler(writeToConsole)</user><br/>
@@ -135,17 +135,17 @@ R> <user>loginfo('chiarastella', logger='libro.romanzo.campanile')</user><br/>
 2010-04-08 11:18:59 INFO:libro.romanzo.campanile:chiarastella<br/>
 R> <user>loginfo('memories of a survivor', logger='libro.romanzo.lessing')</user><br/>
 2010-04-08 11:22:06 INFO:libro.romanzo.lessing:memories of a survivor<br/>
-R> <user>logwarn('talking to a upper level logger', logger='libro')</user><br/>
+R> <user>logwarn('talking to a hierarchically upper logger', logger='libro')</user><br/>
 R> <user>logerror('talking to an unrelated logger', logger='rivista.cucina')</user><br/>
 R> 
 </code>
 
-<p>notice that loggers are automatically defined by the simple action of
-naming them.  what happened above is that the handler we created,
+<p>notice that loggers are automatically defined by the simple action
+of naming them.  what happened above is that the handler we created,
 attached to the 'libro.romanzo' logger, only saw the records going to
-the loggers below its logger.  all records going to upper level
-loggers or to unrelated loggers are not logged, regardless of the
-level.</p>
+the loggers below its logger.  all records going to hierarchically
+upper loggers or to unrelated loggers are not logged, regardless of
+their severity.</p>
 
 <p>also notice that the text printed doesn't contain any more that
 "::".  between the two ":" there's the name of the logger that
@@ -166,14 +166,14 @@ file.  the logging package exports the commodity
 function <tt>writeToFile</tt> for this purpouse.  the name of the file
 is given as an extra parameter in the call to <tt>addHandler</tt>.</p>
 
-<p>recall that both loggers <em>and</em> handlers have a level.  records
-at a specific level are examined by loggers first; if the level is
-higher than the level of the logger, they are offered to all of the
-attached handlers.  handlers will again check the level of the record
-before taking action.  in the following example we make sure
-absolutely all logrecords are examined by initializing the root logger
-at the <tt>FINEST</tt> level.  the level of the <tt>basic_stdout</tt>
-console handler is not affected.</p>
+<p>recall that both loggers <em>and</em> handlers have a level.
+records at a specific severity are examined by loggers first; if the
+severity is higher than the level of the logger, they are offered to
+all of the attached handlers.  handlers will again check the level of
+the record before taking action.  in the following example we make
+sure absolutely all logrecords are examined by initializing the root
+logger at the <tt>FINEST</tt> level.  the level of
+the <tt>basic_stdout</tt> console handler is not affected.</p>
 
 <code>
 R> <user>logReset()</user><br/>
@@ -199,9 +199,10 @@ R>
 
 <p>all log records have been passed to both
 handlers <tt>basic.stdout</tt> and <tt>writeToFile</tt>.  the default
-console handler has handled records at or above level <tt>INFO</tt>,
-our file handler had threshold <tt>DEBUG</tt> so it handled also the
-second record.  the fourth record was dropped by both handlers.</p>
+console handler has handled records with severity at or
+above <tt>INFO</tt>, our file handler had threshold <tt>DEBUG</tt> so
+it handled also the second record in the example session.  the fourth
+record was dropped by both handlers.</p>
 
 <p><a href="logging_to_file.R">code</a></p>
 
