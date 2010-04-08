@@ -1,0 +1,20 @@
+tt { font-family: 1em Courier, Fixed, monospace; 
+     font-size: 120%;
+     font-weight: bold } 
+code { display: block;
+       font: 1em Courier, Fixed, monospace;
+       font-size: 100%;
+       color: #000;
+       overflow: auto;
+       text-align: left;
+       border: 1px solid #5581C0;
+       padding: 3px 18px 3px 30px;
+       margin: 1em 0 1em 0;
+       line-height: 18px;
+       font-weight: normal!important;
+}
+user { font-weight: bold }
+h3, h4, p { font-family: helvetica, sans-serif;} 
+p { line-height: 20pt;
+    margin: 0 5em 6pt 0;
+} 

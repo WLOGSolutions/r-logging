@@ -1,29 +1,7 @@
 <html>
-<head><title>sample sessions</title>
-<style 
-type="text/css"> <!-- 
-tt { font-family: 1em Courier, Fixed, monospace; 
-     font-size: 120%;
-     font-weight: bold } 
-code { display: block;
-       font: 1em Courier, Fixed, monospace;
-       font-size: 100%;
-       color: #000;
-       overflow: auto;
-       text-align: left;
-       border: 1px solid #5581C0;
-       padding: 3px 18px 3px 30px;
-       margin: 1em 0 1em 0;
-       line-height: 18px;
-       font-weight: normal!important;
-}
-user { font-weight: bold }
-h3, h4, p { font-family: helvetica, sans-serif;} 
-p { line-height: 20pt;
-    margin: 0 5em 6pt 0;
-} 
---> 
-</style>
+<head>
+  <title>sample sessions</title>
+  <link href="additions.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <h3>annotated sample sessions</h3>
@@ -170,8 +148,9 @@ received the logging record in the first place.</p>
 <h4>logging to file</h4>
 
 <p>actually the name of this paragraph is misleading.  a more correct
-name would be <em>handling to file</em>, since it's a handler which is
-going to send some representation of your logrecords to a file.  </p>
+name would be <em>handling to file</em>, since it's a handler and not
+a logger that is actually writing some representation of your
+logrecords to a file.  </p>
 
 <p>to make sure log records are sent to a file, you choose a logger
 and attach to it a handler with action a function that writes to your
@@ -179,9 +158,18 @@ file.  the logging package exports the commodity
 function <tt>writeToFile</tt> for this purpouse.  the name of the file
 is given as an extra parameter in the call to <tt>addHandler</tt>.</p>
 
+<p>recall that both loggers <em>and</em> handlers have a level.  records
+at a specific level are examined by loggers first; if the level is
+higher than the level of the logger, they are offered to all of the
+attached handlers.  handlers will again check the level of the record
+before taking action.  in the following example we make sure
+absolutely all logrecords are examined by initializing the root logger
+at the <tt>FINEST</tt> level.  the level of the <tt>basic_stdout</tt>
+console handler is not affected.</p>
+
 <code>
 R> <user>logReset()</user><br/>
-R> <user>basicConfig()</user><br/>
+R> <user>basicConfig(level='FINEST')</user><br/>
 R> <user>addHandler(writeToFile, file="~/testing.log", level='DEBUG')</user><br/>
 R> <user>with(getLogger(), names(handlers))</user><br/>
 [1] "basic.stdout"   "writeToFile"<br/>
@@ -190,6 +178,7 @@ R> <user>loginfo('test %d', 1)</user><br/>
 R> <user>logdebug('test %d', 2)</user><br/>
 R> <user>logwarn('test %d', 3)</user><br/>
 2010-04-07 11:31:15 WARN::test 3<br/>
+R> <user>logfinest('test %d', 4)</user><br/>
 R> 
 </code>
 
@@ -199,6 +188,12 @@ R>
 2010-04-07 11:31:11 DEBUG::test 2<br/>
 2010-04-07 11:31:15 WARN::test 3<br/>
 </code>
+
+<p>all log records have been passed to both
+handlers <tt>basic.stdout</tt> and <tt>writeToFile</tt>.  the default
+console handler has handled records at or above level <tt>INFO</tt>,
+our file handler had threshold <tt>DEBUG</tt> so it handled also the
+second record.  the fourth record was dropped by both handlers.</p>
 
 <h4>formatting your log records</h4>
 

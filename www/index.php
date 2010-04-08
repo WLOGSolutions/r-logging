@@ -1,4 +1,3 @@
-
 <!-- This is the project specific website template -->
 <!-- It can be changed as liked or replaced by other content -->
 <!-- $Id$ -->
@@ -20,6 +19,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title><?php echo $group_name; ?></title>
 	<link href="<?php echo $themeroot; ?>styles/estilo1.css" rel="stylesheet" type="text/css" />
+	<link href="additions.css" rel="stylesheet" type="text/css" />
   </head>
 
 <body>
@@ -44,9 +44,9 @@ echo $contents; } ?>
 
 <!-- end of project description -->
 
-<p/>What you find here behaves similarly to what you also find in Python's standard logging module.</p>
+<p>What you find here behaves similarly to what you also find in Python's standard logging module.</p>
 
-<p/>Far from being comparable to a Python standard module, this tiny logging module does include
+<p>Far from being comparable to a Python standard module, this tiny logging module does include
 <ul>
 <li>hierarchic loggers, </li>
 <li>multiple handlers at each logger, </li>
