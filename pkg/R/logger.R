@@ -31,6 +31,15 @@
 loglevels <- c(0, 1, 4, 7, 10, 20, 30, 40, 50, 50)
 names(loglevels) <- c('NOTSET', 'FINEST', 'FINER', 'FINE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL', 'FATAL')
 
+namedLevel <- function(value) {
+  if(is.null(names(value))) {
+    position <- which(loglevels == value)
+    if(length(position) == 1)
+      value = loglevels[position]
+  }
+  value
+}
+
 ## main log function, used by all other ones
 ## (entry points for messages)
 levellog <- function(level, msg, ..., logger=NA, sourcelogger='')
@@ -49,7 +58,7 @@ levellog <- function(level, msg, ..., logger=NA, sourcelogger='')
 
   record$timestamp <- sprintf("%s", Sys.time())
   record$logger <- sourcelogger
-  record$level <- level
+  record$level <- namedLevel(level)
   record$levelname <- names(which(loglevels == level)[1])
   if(is.na(record$levelname))
     record$levelname <- paste("NumericLevel(", level, ")", sep='')
@@ -164,6 +173,7 @@ setLevel.character <- function(level, container='') {
 }
 
 setLevel.numeric <- function(level, container='') {
+  level <- namedLevel(level)
   updateOptions(container, level=level)
 }
 
@@ -237,7 +247,7 @@ addHandler.character <- function(handler, action, ..., level=20, logger='', form
 {
   name <- handler # parameter 'handler' identifies the name
   handler <- new.env()
-  assign('level', level, handler)
+  assign('level', namedLevel(level), handler)
   assign('action', action, handler)
   assign('formatter', formatter, handler)
   handlers <- with(getLogger(logger), handlers)

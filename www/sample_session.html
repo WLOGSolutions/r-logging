@@ -18,7 +18,11 @@ code { display: block;
        font-weight: normal!important;
 }
 user { font-weight: bold }
-h3, h4, p { font-family: helvetica, sans-serif } --> 
+h3, h4, p { font-family: helvetica, sans-serif;} 
+p { line-height: 20pt;
+    margin: 0 5em 6pt 0;
+} 
+--> 
 </style>
 </head>
 <body>
@@ -27,6 +31,12 @@ h3, h4, p { font-family: helvetica, sans-serif } -->
 <p>this is a minimal tutorial, showing by example what you can do with
 and expect from this library.  this text is directed to scripts
 authors who want to be able to log the activity of their programs.</p>
+
+<p>this library attempts to be as compatible as possible (that is: as
+it was conceivable to the author) to the
+standard <a href="http://docs.python.org/library/logging.html">Python
+logging</a> library.  if you are accustomed to that logging library,
+this one will look familiar to you.</p>
 
 <h4>the basics</h4>
 
@@ -44,7 +54,7 @@ environments, so we can use for example <tt>ls</tt> and <tt>with</tt>
 to inspect them.  after this basic configuration, our logger has
 handlers and a level and it contains one handler.  this is enough for
 some simple logging to the console.  the default logging level of the
-root logger is INFO.  anything at level lower than INFO will not be
+root logger is <tt>INFO</tt> (20).  anything at level lower than <tt>INFO</tt> will not be
 logged.</p>
 
 <code>
@@ -88,8 +98,8 @@ R>
 passing through a handler and having a level lower than the level of
 the handler is ignored.  you can alter the level of a handler.  this
 is what we do in the following lines: we alter the level of the
-default console handler 'basic.stdout' to 30 (WARNING).  by the way,
-also handlers are environments.</p>
+default console handler 'basic.stdout' to 30 (<tt>WARN</tt>).  by
+the way, also handlers are environments.</p>
 
 <code>
 R> <user>addHandler(writeToConsole)</user><br/>
@@ -98,7 +108,8 @@ R> <user>loginfo('test')</user><br/>
 R> <user>logwarn('test')</user><br/>
 2010-04-07 15:17:40 WARN::test <br/>
 R> <user>with(getHandler('basic.stdout'), level)</user><br/>
-[1] 30<br/>
+WARN <br/>
+&nbsp; 30 <br/>
 R> 
 </code>
 
