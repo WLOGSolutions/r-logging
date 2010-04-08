@@ -10,8 +10,12 @@
 and expect from this library.  this text is directed to scripts
 authors who want to be able to log the activity of their programs.</p>
 
-<p>this library attempts to be as compatible as possible (that is: as
-it was conceivable to the author) to the
+<p>this page is organized in sections.  each section can be seen and
+tried out as a separate R session.  at the end of the section there's
+a link to a R script with the R instructions tried in the section.</p>
+
+<p>this logging library attempts to be as compatible as possible (that
+is: as it was conceivable to the author) to the
 standard <a href="http://docs.python.org/library/logging.html">Python
 logging</a> library.  if you are accustomed to that logging library,
 this one will look familiar to you.</p>
@@ -91,6 +95,8 @@ WARN <br/>
 R> 
 </code>
 
+<p><a href="the_basics.R">code</a></p>
+
 <h4>hierarchical loggers</h4>
 
 <p>in the previous section we have worked -implicitly- with one
@@ -145,6 +151,8 @@ level.</p>
 "::".  between the two ":" there's the name of the logger that
 received the logging record in the first place.</p>
 
+<p><a href="hierarchical_loggers.R">code</a></p>
+
 <h4>logging to file</h4>
 
 <p>actually the name of this paragraph is misleading.  a more correct
@@ -194,6 +202,8 @@ handlers <tt>basic.stdout</tt> and <tt>writeToFile</tt>.  the default
 console handler has handled records at or above level <tt>INFO</tt>,
 our file handler had threshold <tt>DEBUG</tt> so it handled also the
 second record.  the fourth record was dropped by both handlers.</p>
+
+<p><a href="logging_to_file.R">code</a></p>
 
 <h4>formatting your log records</h4>
 
