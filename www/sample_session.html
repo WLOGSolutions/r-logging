@@ -1,60 +1,88 @@
 <html>
-<head><title>sample sessions</title></head>
+<head><title>sample sessions</title>
+<style 
+type="text/css"> <!-- 
+tt { font-family: 1em Courier, Fixed, monospace; 
+     font-size: 120%;
+     font-weight: bold } 
+code { display: block;
+       font: 1em Courier, Fixed, monospace;
+       font-size: 100%;
+       color: #000;
+       overflow: auto;
+       text-align: left;
+       border: 1px solid #5581C0;
+       padding: 3px 18px 3px 30px;
+       margin: 1em 0 1em 0;
+       line-height: 18px;
+       font-weight: normal!important;
+}
+user { font-weight: bold }
+h3, h4, p { font-family: helvetica, sans-serif } --> 
+</style>
+</head>
 <body>
 <h3>annotated sample sessions</h3>
 
-this is a minimal tutorial, showing by example what you can do with
+<p>this is a minimal tutorial, showing by example what you can do with
 and expect from this library.  this text is directed to scripts
-authors who want to be able to log the activity of their programs.
+authors who want to be able to log the activity of their programs.</p>
 
 <h4>the basics</h4>
 
 <p>in this session we work with one single logger, the root logger, and we use only console handlers</p>
 
 <p>start up R, load the library, use the basic configuration.</p>
-<pre>
-R> library(logging)
-R> basicConfig()
+<code>
+R> <user>library(logging)</user><br/>
+R> <user>basicConfig()</user><br/>
 R>
-</pre>
+</code>
 
-<p>check the content of the root logger (loggers are environments):
-after this basic configuration, it contains one handler.  this is
-enough for some simple logging to the console.  the default logging
-level of the root logger is INFO.  anything at level lower than INFO
-will not be logged.</p>
+<p>let's check the effect of the above actions.  our loggers are
+environments, so we can use for example <tt>ls</tt> and <tt>with</tt>
+to inspect them.  after this basic configuration, our logger has
+handlers and a level and it contains one handler.  this is enough for
+some simple logging to the console.  the default logging level of the
+root logger is INFO.  anything at level lower than INFO will not be
+logged.</p>
 
-<pre>
-R> with(getLogger(), names(handlers))
-[1] "basic.stdout"
-R> loginfo('does it work?')
-2010-04-08 11:28:35 INFO::does it work?
-R> logwarn('%s %d', 'my name is', 5)
-2010-04-08 11:28:48 WARN::my name is 5
-R> logdebug('I am a silent child')
+<code>
+R> <user>ls(getLogger())</user><br/>
+[1] "handlers" "level"<br/>
+R> <user>with(getLogger(), level)</user><br/>
+INFO <br/>
+&nbsp; 20 <br/>
+R> <user>with(getLogger(), names(handlers))</user><br/>
+[1] "basic.stdout"<br/>
+R> <user>loginfo('does it work?')</user><br/>
+2010-04-08 11:28:35 INFO::does it work?<br/>
+R> <user>logwarn('%s %d', 'my name is', 5)</user><br/>
+2010-04-08 11:28:48 WARN::my name is 5<br/>
+R> <user>logdebug('I am a silent child')</user><br/>
 R>
-</pre>
+</code>
 
 <p>we add an other handler to the console, without specifying its
 name.  it gets one automatically from the name of the function.  you
 can add and remove handlers using their names.  you can also refer to
 them by function, if that is the way you defined it.</p>
 
-<pre>
-R> addHandler(writeToConsole)
-R> with(getLogger(), names(handlers))
-[1] "basic.stdout"   "writeToConsole"
-R> loginfo('test')
-2010-04-07 11:31:06 INFO::test
-2010-04-07 11:31:06 INFO::test
-R> logwarn('test')
-2010-04-07 11:31:15 WARN::test
-2010-04-07 11:31:15 WARN::test
-R> removeHandler('writeToConsole')
-R> logwarn('test')
-2010-04-07 11:32:37 WARN::test
+<code>
+R> <user>addHandler(writeToConsole)</user><br/>
+R> <user>with(getLogger(), names(handlers))</user><br/>
+[1] "basic.stdout"   "writeToConsole"<br/>
+R> <user>loginfo('test')</user><br/>
+2010-04-07 11:31:06 INFO::test<br/>
+2010-04-07 11:31:06 INFO::test<br/>
+R> <user>logwarn('test')</user><br/>
+2010-04-07 11:31:15 WARN::test<br/>
+2010-04-07 11:31:15 WARN::test<br/>
+R> <user>removeHandler('writeToConsole')</user><br/>
+R> <user>logwarn('test')</user><br/>
+2010-04-07 11:32:37 WARN::test<br/>
 R>
-</pre>
+</code>
 
 <p>handlers have a level associated to them.  any logging record
 passing through a handler and having a level lower than the level of
@@ -63,16 +91,16 @@ is what we do in the following lines: we alter the level of the
 default console handler 'basic.stdout' to 30 (WARNING).  by the way,
 also handlers are environments.</p>
 
-<pre>
-R> addHandler(writeToConsole)
-R> setLevel(30, getHandler('basic.stdout'))
-R> loginfo('test')
-R> logwarn('test')
-2010-04-07 15:17:40 WARN::test 
-R> with(getHandler('basic.stdout'), level)
-[1] 30
+<code>
+R> <user>addHandler(writeToConsole)</user><br/>
+R> <user>setLevel(30, getHandler('basic.stdout'))</user><br/>
+R> <user>loginfo('test')</user><br/>
+R> <user>logwarn('test')</user><br/>
+2010-04-07 15:17:40 WARN::test <br/>
+R> <user>with(getHandler('basic.stdout'), level)</user><br/>
+[1] 30<br/>
 R> 
-</pre>
+</code>
 
 <h4>hierarchical loggers</h4>
 
@@ -82,12 +110,12 @@ the empty string.  this also explains that "::" in the messages sent
 to the console, between the first and the second ":" there's the name
 of the logger that is associated to the log record shown.</p>
 
-<pre>
-R> with(getLogger(logger=''), names(handlers))
-[1] "basic.stdout"
-R> with(getLogger('libro'), names(handlers))
+<code>
+R> <user>with(getLogger(logger=''), names(handlers))</user><br/>
+[1] "basic.stdout"<br/>
+R> <user>with(getLogger('libro'), names(handlers))</user><br/>
 NULL
-</pre>
+</code>
 
 <p>when issuing a logging record, you can specify to which logger you
 want to send it.  loggers are created when first needed, so we can
@@ -105,17 +133,17 @@ in this hierarchy.  an example will hopefully clarify.  </p>
 <p>let's start from scratch, either a brand new R session or by
 resetting the logging system.</p>
 
-<pre>
-R> logReset()
-R> addHandler(writeToConsole, logger='libro.romanzo')
-R> loginfo('chiarastella', logger='libro.romanzo.campanile')
-2010-04-08 11:18:59 INFO:libro.romanzo.campanile:chiarastella
-R> loginfo('memories of a survivor', logger='libro.romanzo.lessing')
-2010-04-08 11:22:06 INFO:libro.romanzo.lessing:memories of a survivor
-R> logwarn('talking to a upper level logger', logger='libro')
-R> logerror('talking to an unrelated logger', logger='rivista.cucina')
+<code>
+R> <user>logReset()</user><br/>
+R> <user>addHandler(writeToConsole, logger='libro.romanzo')</user><br/>
+R> <user>loginfo('chiarastella', logger='libro.romanzo.campanile')</user><br/>
+2010-04-08 11:18:59 INFO:libro.romanzo.campanile:chiarastella<br/>
+R> <user>loginfo('memories of a survivor', logger='libro.romanzo.lessing')</user><br/>
+2010-04-08 11:22:06 INFO:libro.romanzo.lessing:memories of a survivor<br/>
+R> <user>logwarn('talking to a upper level logger', logger='libro')</user><br/>
+R> <user>logerror('talking to an unrelated logger', logger='rivista.cucina')</user><br/>
 R> 
-</pre>
+</code>
 
 <p>notice that loggers are automatically defined by the simple action of
 naming them.  what happened above is that the handler we created,
