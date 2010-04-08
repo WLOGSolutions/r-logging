@@ -40,7 +40,7 @@ this one will look familiar to you.</p>
 
 <h4>the basics</h4>
 
-<p>in this session we work with one single logger, the root logger, and we use only console handlers</p>
+<p>in this session we work with one single logger, the root logger, and we use only console handlers.</p>
 
 <p>start up R, load the library, use the basic configuration.</p>
 <code>
@@ -169,9 +169,36 @@ received the logging record in the first place.</p>
 
 <h4>logging to file</h4>
 
-<B>TODO</B>
-use the exported commodity function <tt>writeToFile</tt>.  you specify the name
-of the file as an extra parameter <tt>file</tt> to the function <tt>addHandler</tt>.
+<p>actually the name of this paragraph is misleading.  a more correct
+name would be <em>handling to file</em>, since it's a handler which is
+going to send some representation of your logrecords to a file.  </p>
+
+<p>to make sure log records are sent to a file, you choose a logger
+and attach to it a handler with action a function that writes to your
+file.  the logging package exports the commodity
+function <tt>writeToFile</tt> for this purpouse.  the name of the file
+is given as an extra parameter in the call to <tt>addHandler</tt>.</p>
+
+<code>
+R> <user>logReset()</user><br/>
+R> <user>basicConfig()</user><br/>
+R> <user>addHandler(writeToFile, file="~/testing.log", level='DEBUG')</user><br/>
+R> <user>with(getLogger(), names(handlers))</user><br/>
+[1] "basic.stdout"   "writeToFile"<br/>
+R> <user>loginfo('test %d', 1)</user><br/>
+2010-04-07 11:31:06 INFO::test 1<br/>
+R> <user>logdebug('test %d', 2)</user><br/>
+R> <user>logwarn('test %d', 3)</user><br/>
+2010-04-07 11:31:15 WARN::test 3<br/>
+R> 
+</code>
+
+<p>if the file was not existing or empty, this would be its content after the above steps:</p>
+<code>
+2010-04-07 11:31:06 INFO::test 1<br/>
+2010-04-07 11:31:11 DEBUG::test 2<br/>
+2010-04-07 11:31:15 WARN::test 3<br/>
+</code>
 
 <h4>formatting your log records</h4>
 

@@ -31,7 +31,16 @@
 loglevels <- c(0, 1, 4, 7, 10, 20, 30, 40, 50, 50)
 names(loglevels) <- c('NOTSET', 'FINEST', 'FINER', 'FINE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL', 'FATAL')
 
-namedLevel <- function(value) {
+namedLevel <- function(value)
+  UseMethod('namedLevel')
+
+namedLevel.character <- function(value) {
+  position <- which(names(loglevels) == value)
+  if(length(position) == 1)
+    loglevels[position]
+}
+
+namedLevel.numeric <- function(value) {
   if(is.null(names(value))) {
     position <- which(loglevels == value)
     if(length(position) == 1)
@@ -203,12 +212,12 @@ writeToConsole <- function(msg, handler)
 
 writeToFile <- function(msg, handler)
 {
-  if (! 'file' %in% names(handler))
+  if (!exists('file', envir=handler))
   {
     cat("handler with writeToFile 'action' must have a 'file' element.\n")
     return()
   }
-  cat(paste(msg, '\n', sep=''), file=handler$file, append=TRUE)
+  cat(paste(msg, '\n', sep=''), file=with(handler, file), append=TRUE)
 }
 
 #################################################################################
@@ -221,8 +230,8 @@ defaultFormat <- function(record) {
 
 #################################################################################
 
-basicConfig <- function() {
-  updateOptions('', level=loglevels['INFO'])
+basicConfig <- function(level=20) {
+  updateOptions('', level=namedLevel(level))
   addHandler('basic.stdout', writeToConsole)
   invisible()
 }
@@ -247,6 +256,7 @@ addHandler.character <- function(handler, action, ..., level=20, logger='', form
 {
   name <- handler # parameter 'handler' identifies the name
   handler <- new.env()
+  updateOptions.environment(handler, ...)
   assign('level', namedLevel(level), handler)
   assign('action', action, handler)
   assign('formatter', formatter, handler)
