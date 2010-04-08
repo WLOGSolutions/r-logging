@@ -1,6 +1,11 @@
 <html>
+<head><title>sample sessions</title></head>
 <body>
 <h3>annotated sample sessions</h3>
+
+this is a minimal tutorial, showing by example what you can do with
+and expect from this library.  this text is directed to scripts
+authors who want to be able to log the activity of their programs.
 
 <h4>the basics</h4>
 
@@ -109,15 +114,24 @@ R> logerror('talking to an unrelated logger', logger='rivista.cucina')
 R> 
 </pre>
 
-notice that loggers are automatically defined by the simple action of
+<p>notice that loggers are automatically defined by the simple action of
 naming them.  what happened above is that the handler we created,
 attached to the 'libro.romanzo' logger, only saw the records going to
 the loggers below its logger.  all records going to upper level
 loggers or to unrelated loggers are not logged, regardless of the
-level.
+level.</p>
 
-<h5>logging to file</h5>
-<h5>formatting your log records</h5>
+<p>also notice that the text printed doesn't contain any more that
+"::".  between the two ":" there's the name of the logger that
+received the logging record in the first place.</p>
+
+<h4>logging to file</h4>
+
+<B>TODO</B>
+use the exported commodity function <tt>writeToFile</tt>.  you specify the name
+of the file as an extra parameter <tt>file</tt> to the function <tt>addHandler</tt>.
+
+<h4>formatting your log records</h4>
 
 </body>
 </html>
