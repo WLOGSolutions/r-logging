@@ -9,3 +9,5 @@
 }
 \alias{SVNVERSION}
 \alias{SVNDATE}
+\alias{updateOptions}
+\alias{updateOptions.environment}

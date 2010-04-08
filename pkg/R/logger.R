@@ -53,9 +53,11 @@ levellog <- function(level, msg, ..., logger='')
     record$levelname <- paste("NumericLevel(", level, ")", sep='')
 
   ## invoke the action of all handlers associated to logger
-  for (handler in config$handlers) {
-    if (level >= handler$level) {
-      handler$action(handler$formatter(record), handler)
+  for (handler in config[['handlers']]) {
+    if (level >= with(handler, level)) {
+      action <- with(handler, action)
+      formatter <- with(handler, formatter)
+      action(formatter(record), handler)
     }
   }
 
@@ -66,7 +68,7 @@ levellog <- function(level, msg, ..., logger='')
     parent <- paste(removed, collapse='.')
     levellog(level, msg, ..., logger=parent)
   }
-  
+
   invisible()
 }
 
@@ -117,22 +119,22 @@ logerror <- function(msg, ..., logger='')
 }
 
 ## set properties of a logger or a handler
-updateOptions <- function(name, ...) {
-  if(name=='')
-    name <- 'logging.ROOT'
-  else
-    name <- paste('logging.ROOT', name, sep='.')
+updateOptions <- function(container, ...)
+  UseMethod('updateOptions')
 
-  config <- list(...)
+updateOptions.character <- function(container, ...) {
+  ## container is really just the name of the container
+  updateOptions.environment(getLogger(container), ...)
+}
+
+updateOptions.environment <- function(container, ...) {
+  ## the container is a logger
+  config <- list(...);
   if (! 'level' %in% names(config))
     config$level = loglevels['INFO']
-
-  # is there a logger by this name already?
-  if (! exists(name, logging.options))
-    logging.options[[name]] <- new.env()
-
   for (key in names(config))
-    logging.options[[name]][[key]] <- config[[key]]
+    container[[key]] <- config[[key]]
+  invisible()
 }
 
 ## Get a specific logger configuration
@@ -143,19 +145,28 @@ getLogger <- function(name='', ...)
   else
     fullname <- paste('logging.ROOT', name, sep='.')
 
-  if (! exists(fullname, envir=logging.options)){
-    updateOptions(name, ...)
+  if(!exists(fullname, envir=logging.options)) {
+    logging.options[[fullname]] <- new.env()
+    logging.options[[fullname]][['handlers']] <- NULL
+    updateOptions.environment(logging.options[[fullname]], ...)
   }
-
   logging.options[[fullname]]
 }
 
 ## set the level of a handler or a logger
-setLevel <- function(name, level)
-{
-  if (level %in% names(loglevels))
-    level <- loglevels[level]
-  updateOptions(name, level=level)
+setLevel <- function(level, container='')
+  UseMethod('setLevel')
+
+setLevel.character <- function(level, container='') {
+  updateOptions(container, level=loglevels[level])
+}
+
+setLevel.numeric <- function(level, container='') {
+  updateOptions(container, level=level)
+}
+
+setLevel.default <- function(level, container='') {
+  NA
 }
 
 #################################################################################
@@ -200,7 +211,7 @@ defaultFormat <- function(record) {
 
 basicConfig <- function() {
   updateOptions('', level=loglevels['INFO'])
-  addHandler(writeToConsole, name='basic.stdout')
+  addHandler('basic.stdout', writeToConsole)
   invisible()
 }
 
@@ -211,23 +222,60 @@ basicConfig <- function() {
 ##   action - the implementation for the handler. Either a function or a name of
 ##     a function
 ##   ... options to be stored as fields of new handler
-addHandler <- function(name, action, ..., level=20, logger='', formatter=defaultFormat)
+addHandler <- function(handler, ..., level=20, logger='', formatter=defaultFormat)
+  UseMethod('addHandler')
+
+addHandler.default <- function(handler, ..., level=20, logger='', formatter=defaultFormat) {
+  ## action <- handler # parameter 'handler' identifies the action
+  ## user did not provide a name for this handler, extract it from action.
+  addHandler.character(deparse(substitute(handler)), handler, ..., level=level, logger=logger, formatter=formatter)
+}
+
+addHandler.character <- function(handler, action, ..., level=20, logger='', formatter=defaultFormat)
 {
-  handlers <- getLogger(logger)[['handlers']]
+  name <- handler # parameter 'handler' identifies the name
+  handler <- new.env()
+  assign('level', level, handler)
+  assign('action', action, handler)
+  assign('formatter', formatter, handler)
+  handlers <- with(getLogger(logger), handlers)
+  handlers[[name]] <- handler
+  assign('handlers', handlers, envir=getLogger(logger))
 
-  handler <- list(level=level, action=action, formatter=formatter, ...)
-  handlers[name] <- list(handler) # this does not alter the original list
-
-  updateOptions(logger, handlers=handlers) # this replaces the original list
-  
   invisible()
 }
 
-removeHandler <- function(name, logger='') {
-  handlers <- getLogger(logger)[['handlers']]
-  to.keep <- !(names(handlers) == name)
-  updateOptions(logger, handlers=handlers[to.keep])
+removeHandler <- function(handler, logger='')
+  UseMethod('removeHandler')
+
+removeHandler.default <- function(handler, logger='') {
+  ## action <- handler # parameter 'handler' identifies the action
+  removeHandler.character(deparse(substitute(handler)), logger)
+}
+
+removeHandler.character <- function(handler, logger='') {
+  # parameter 'handler' identifies the name
+  handlers <- with(getLogger(logger), handlers)
+  to.keep <- !(names(handlers) == handler)
+  assign('handlers', handlers[to.keep], envir=getLogger(logger))
   invisible()
+}
+
+## retrieve a specific handler out of a logger.  loggers are separated
+## environments and handlers with the same name may be associated to
+## different loggers.
+
+getHandler <- function(handler, logger='')
+  UseMethod('getHandler')
+
+getHandler.default <- function(handler, logger='') {
+  ## action <- handler # assume we got the handler by action
+  getHandler.character(deparse(substitute(handler)), logger)
+}
+
+getHandler.character <- function(handler, logger='') {
+  ## name <- handler # we got the handler by name
+  with(getLogger(logger), handlers)[[handler]]
 }
 
 #################################################################################

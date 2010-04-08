@@ -61,8 +61,6 @@ lines on the console and just one line in the \code{sample.log} file.
 }
 \author{
   Mario Frasca <mariotomo@gmail.com>
-  
-  Brian Lee Yung Rowe <r@nurometic.com>
 
 Maintainer: Mario Frasca <mario.frasca@nelen-schuurmans.nl>
 }
@@ -71,5 +69,7 @@ the python logging module, at http://docs.python.org/library/logging.html
 }
 \keyword{ package }
 \seealso{
-\code{\link[futile:futile-package]{http://cran.r-project.org/web/packages/futile/index.html}}
+  \code{\link[logging @ r-forge]{http://logging.r-forge.r-project.org/}}
+  
+  \code{\link[futile:futile-package]{http://cran.r-project.org/web/packages/futile/index.html}}
 }
