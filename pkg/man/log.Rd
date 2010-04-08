@@ -1,8 +1,7 @@
 % File src/R/man/log.Rd
 % $Id$
 
-\name{levellog}
-\alias{levellog}
+\name{loginfo}
 \alias{logfinest}
 \alias{logfiner}
 \alias{logfine}
@@ -24,8 +23,6 @@ logdebug(msg, ..., logger='')
 loginfo(msg, ..., logger='')
 logwarn(msg, ..., logger='')
 logerror(msg, ..., logger='')
-
-levellog(level, msg, ..., logger='')
 }
 \arguments{
   \item{msg}{the textual message to be output, or the format for the
@@ -33,6 +30,4 @@ levellog(level, msg, ..., logger='')
   \item{...}{if present, msg is interpreted as a format and the
     ... values are passed to it to form the actual message.}
   \item{logger}{the name of the logger to which we pass the record}
-
-  \item{level}{the explicit numeric level of the log record}
 }

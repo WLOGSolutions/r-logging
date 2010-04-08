@@ -11,3 +11,4 @@
 \alias{SVNDATE}
 \alias{updateOptions}
 \alias{updateOptions.environment}
+\alias{levellog}

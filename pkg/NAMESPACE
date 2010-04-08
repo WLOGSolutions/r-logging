@@ -26,6 +26,6 @@ export(loglevels,
        writeToFile,
        writeToConsole,
        updateOptions.environment,
-       updateOptions
-       
+       updateOptions,
+       logReset
        )

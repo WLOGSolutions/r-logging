@@ -33,8 +33,10 @@ names(loglevels) <- c('NOTSET', 'FINEST', 'FINER', 'FINE', 'DEBUG', 'INFO', 'WAR
 
 ## main log function, used by all other ones
 ## (entry points for messages)
-levellog <- function(level, msg, ..., logger='')
+levellog <- function(level, msg, ..., logger=NA, sourcelogger='')
 {
+  if (is.na(logger))
+    logger <- sourcelogger
   ## get the logger of which we have the name.
   config <- getLogger(logger)
   if (level < config$level) return(invisible())
@@ -46,7 +48,7 @@ levellog <- function(level, msg, ..., logger='')
   record$msg <- msg
 
   record$timestamp <- sprintf("%s", Sys.time())
-  record$logger <- logger
+  record$logger <- sourcelogger
   record$level <- level
   record$levelname <- names(which(loglevels == level)[1])
   if(is.na(record$levelname))
@@ -66,7 +68,7 @@ levellog <- function(level, msg, ..., logger='')
     parts <- strsplit(logger, '\\.')[[1]] # split the name on the '.'
     removed <- parts[-length(parts)] # except the last item
     parent <- paste(removed, collapse='.')
-    levellog(level, msg, ..., logger=parent)
+    levellog(level, msg, ..., logger=parent, sourcelogger=sourcelogger)
   }
 
   invisible()
@@ -75,46 +77,46 @@ levellog <- function(level, msg, ..., logger='')
 ## using log
 logdebug <- function(msg, ..., logger='')
 {
-  levellog(loglevels[['DEBUG']], msg, ..., logger=logger)
+  levellog(loglevels[['DEBUG']], msg, ..., sourcelogger=logger)
   invisible()
 }
 
 logfinest <- function(msg, ..., logger='')
 {
-  levellog(loglevels['FINEST'], msg, ..., logger=logger)
+  levellog(loglevels['FINEST'], msg, ..., sourcelogger=logger)
   invisible()
 }
 
 logfiner <- function(msg, ..., logger='')
 {
-  levellog(loglevels['FINER'], msg, ..., logger=logger)
+  levellog(loglevels['FINER'], msg, ..., sourcelogger=logger)
   invisible()
 }
 
 logfine <- function(msg, ..., logger='')
 {
-  levellog(loglevels[['FINE']], msg, ..., logger=logger)
+  levellog(loglevels[['FINE']], msg, ..., sourcelogger=logger)
   invisible()
 }
 
 ## using log
 loginfo <- function(msg, ..., logger='')
 {
-  levellog(loglevels['INFO'], msg, ..., logger=logger)
+  levellog(loglevels['INFO'], msg, ..., sourcelogger=logger)
   invisible()
 }
 
 ## using log
 logwarn <- function(msg, ..., logger='')
 {
-  levellog(loglevels['WARN'], msg, ..., logger=logger)
+  levellog(loglevels['WARN'], msg, ..., sourcelogger=logger)
   invisible()
 }
 
 ## using log
 logerror <- function(msg, ..., logger='')
 {
-  levellog(loglevels['ERROR'], msg, ..., logger=logger)
+  levellog(loglevels['ERROR'], msg, ..., sourcelogger=logger)
   invisible()
 }
 
@@ -186,7 +188,7 @@ setLevel.default <- function(level, container='') {
 
 writeToConsole <- function(msg, handler)
 {
-  cat(msg)
+  cat(paste(msg, '\n', sep=''))
 }
 
 writeToFile <- function(msg, handler)
@@ -196,7 +198,7 @@ writeToFile <- function(msg, handler)
     cat("handler with writeToFile 'action' must have a 'file' element.\n")
     return()
   }
-  cat(msg, file=handler$file, append=TRUE)
+  cat(paste(msg, '\n', sep=''), file=handler$file, append=TRUE)
 }
 
 #################################################################################
@@ -204,7 +206,7 @@ writeToFile <- function(msg, handler)
 ## the single predefined formatter
 
 defaultFormat <- function(record) {
-  paste(record$timestamp, record$levelname, record$msg, '\n')
+  text <- paste(record$timestamp, paste(record$levelname, record$logger, record$msg, sep=':'))
 }
 
 #################################################################################
@@ -280,9 +282,19 @@ getHandler.character <- function(handler, logger='') {
 
 #################################################################################
 
-## initialize the module
+logReset <- function() {
+  ## reinizialize the whole logging system
 
-## The logger options manager
+  ## remove all content from the logging environment
+  rm(list=ls(logging.options), envir=logging.options)
+
+  ## create the root logger
+  getLogger('', handlers=NULL, level=0)
+  invisible()
+}
+
+## create the logging environment
 logging.options <- new.env()
 
-getLogger('', handlers=NULL, level=0)
+## initialize the module
+logReset()

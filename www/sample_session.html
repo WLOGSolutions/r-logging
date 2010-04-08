@@ -23,9 +23,9 @@ will not be logged.</p>
 R> with(getLogger(), names(handlers))
 [1] "basic.stdout"
 R> loginfo('does it work?')
-2010-04-07 11:39:49 INFO does it work?
+2010-04-08 11:28:35 INFO::does it work?
 R> logwarn('%s %d', 'my name is', 5)
-2010-04-07 11:40:38 WARN my name is 5 
+2010-04-08 11:28:48 WARN::my name is 5
 R> logdebug('I am a silent child')
 R>
 </pre>
@@ -40,29 +40,30 @@ R> addHandler(writeToConsole)
 R> with(getLogger(), names(handlers))
 [1] "basic.stdout"   "writeToConsole"
 R> loginfo('test')
-2010-04-07 11:31:06 INFO test 
-2010-04-07 11:31:06 INFO test 
+2010-04-07 11:31:06 INFO::test
+2010-04-07 11:31:06 INFO::test
 R> logwarn('test')
-2010-04-07 11:31:15 WARN test 
-2010-04-07 11:31:15 WARN test 
+2010-04-07 11:31:15 WARN::test
+2010-04-07 11:31:15 WARN::test
 R> removeHandler('writeToConsole')
 R> logwarn('test')
-2010-04-07 11:32:37 WARN test 
+2010-04-07 11:32:37 WARN::test
 R>
 </pre>
 
-<p>handlers are associated to a level.  any logging record passing
-through a handler and having a level lower than the level of the
-handler is ignored.  you can alter the level of a handler.  this is
-what we do here: we alter the level of the default console handler
-'basic.stdout' to 30 (WARNING).  by the way, also handlers are environments.</p>
+<p>handlers have a level associated to them.  any logging record
+passing through a handler and having a level lower than the level of
+the handler is ignored.  you can alter the level of a handler.  this
+is what we do in the following lines: we alter the level of the
+default console handler 'basic.stdout' to 30 (WARNING).  by the way,
+also handlers are environments.</p>
 
 <pre>
 R> addHandler(writeToConsole)
 R> setLevel(30, getHandler('basic.stdout'))
 R> loginfo('test')
 R> logwarn('test')
-2010-04-07 15:17:40 WARN test 
+2010-04-07 15:17:40 WARN::test 
 R> with(getHandler('basic.stdout'), level)
 [1] 30
 R> 
@@ -72,7 +73,9 @@ R>
 
 <p>in the previous section we have worked -implicitly- with one
 logger, the root logger.  we can refer to it explicitly: its name is
-the empty string.</p>
+the empty string.  this also explains that "::" in the messages sent
+to the console, between the first and the second ":" there's the name
+of the logger that is associated to the log record shown.</p>
 
 <pre>
 R> with(getLogger(logger=''), names(handlers))
@@ -89,22 +92,32 @@ organized.  </p>
 their name is, within the logger, unique.  also similarly than to
 directories, all loggers have one parent, except the root logger that
 has none.  the name of the logger specifies the location of the logger
-in this hierarchy.  an example will hopefully clarify.  let's start
-from scratch, a brand new R session.</p>
+in this hierarchy.  an example will hopefully clarify.  </p>
+
+<p>let's start from scratch, either a brand new R session or by
+resetting the logging system.</p>
 
 <pre>
-R> library(logging)
-R> addHandler(writeToConsole, logger='libro.romanzo.campanile')
+R> logReset()
+R> addHandler(writeToConsole, logger='libro.romanzo')
 R> loginfo('chiarastella', logger='libro.romanzo.campanile')
-2010-04-07 17:08:59 INFO chiarastella 
-R> loginfo('talking to the root logger')
+2010-04-08 11:18:59 INFO:libro.romanzo.campanile:chiarastella
+R> loginfo('memories of a survivor', logger='libro.romanzo.lessing')
+2010-04-08 11:22:06 INFO:libro.romanzo.lessing:memories of a survivor
+R> logwarn('talking to a upper level logger', logger='libro')
+R> logerror('talking to an unrelated logger', logger='rivista.cucina')
 R> 
 </pre>
 
-if you define a logger by this name, all record you 
+notice that loggers are automatically defined by the simple action of
+naming them.  what happened above is that the handler we created,
+attached to the 'libro.romanzo' logger, only saw the records going to
+the loggers below its logger.  all records going to upper level
+loggers or to unrelated loggers are not logged, regardless of the
+level.
 
 <h5>logging to file</h5>
-<h5>formatting your log record</h5>
+<h5>formatting your log records</h5>
 
 </body>
 </html>
