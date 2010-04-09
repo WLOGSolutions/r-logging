@@ -1,0 +1,83 @@
+<h4>the basics</h4>
+
+<p>this logging library attempts to be as compatible as possible (that
+is: as it was conceivable to the author) to the
+standard <a href="http://docs.python.org/library/logging.html">Python
+logging</a> library.  if you are accustomed to that logging library,
+this one will look familiar to you.</p>
+
+<p>in this session we work with one single logger, the root logger, and we use only console handlers.</p>
+
+<p>start up R, load the library, use the basic configuration.</p>
+
+<code>
+R> <user>library(logging)</user><br/>
+R> <user>basicConfig()</user><br/>
+R>
+</code>
+
+<p>let's check the effect of the above actions.  our loggers are
+environments, so we can use for example <tt>ls</tt> and <tt>with</tt>
+to inspect them.  after this basic configuration, our logger has
+handlers and a level and it contains one handler.  this is enough for
+some simple logging to the console.  the default logging level of the
+root logger is <tt>INFO</tt> (20).  anything at severity lower
+than <tt>INFO</tt> will not be logged.</p>
+
+<code>
+R> <user>ls(getLogger())</user><br/>
+[1] "handlers" "level"<br/>
+R> <user>with(getLogger(), level)</user><br/>
+INFO <br/>
+&nbsp; 20 <br/>
+R> <user>with(getLogger(), names(handlers))</user><br/>
+[1] "basic.stdout"<br/>
+R> <user>loginfo('does it work?')</user><br/>
+2010-04-08 11:28:35 INFO::does it work?<br/>
+R> <user>logwarn('my %s is %d', 'name', 5)</user><br/>
+2010-04-08 11:28:48 WARN::my name is 5<br/>
+R> <user>logdebug('I am a silent child')</user><br/>
+R>
+</code>
+
+<p>we add an other handler to the console, without specifying its
+name.  it gets one automatically from the name of the function.  you
+can add and remove handlers using their names.  you can also refer to
+them by function, if that is the way you defined it.</p>
+
+<code>
+R> <user>addHandler(writeToConsole)</user><br/>
+R> <user>with(getLogger(), names(handlers))</user><br/>
+[1] "basic.stdout"   "writeToConsole"<br/>
+R> <user>loginfo('test')</user><br/>
+2010-04-07 11:31:06 INFO::test<br/>
+2010-04-07 11:31:06 INFO::test<br/>
+R> <user>logwarn('test')</user><br/>
+2010-04-07 11:31:15 WARN::test<br/>
+2010-04-07 11:31:15 WARN::test<br/>
+R> <user>removeHandler('writeToConsole')</user><br/>
+R> <user>logwarn('test')</user><br/>
+2010-04-07 11:32:37 WARN::test<br/>
+R>
+</code>
+
+<p>handlers have a level associated to them.  any logging record
+passing through a handler and having a severity lower than the level
+of the handler is ignored.  you can alter the level of a handler.
+this is what we do in the following lines: we alter the level of the
+default console handler 'basic.stdout' to 30 (<tt>WARN</tt>).  by the
+way, also handlers are environments.</p>
+
+<code>
+R> <user>addHandler(writeToConsole)</user><br/>
+R> <user>setLevel(30, getHandler('basic.stdout'))</user><br/>
+R> <user>loginfo('test')</user><br/>
+R> <user>logwarn('test')</user><br/>
+2010-04-07 15:17:40 WARN::test <br/>
+R> <user>with(getHandler('basic.stdout'), level)</user><br/>
+WARN <br/>
+&nbsp; 30 <br/>
+R> 
+</code>
+
+<p><a href="the_basics.R">code</a></p>

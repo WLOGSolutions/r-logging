@@ -1,0 +1,51 @@
+
+<h4>writing your own handlers</h4>
+
+<p>differently than in the logging library in Python and in Java,
+handlers in this logging library aren't objects: they are environments
+stored in one of the loggers.  the principal characteristic property
+of a handler is its <tt>action</tt>.  a action is a function that
+specifies what the handler should do with a logrecord that, based on
+all that we have seen above, must be handled.  the two commodity
+functions we have seen in the first two
+sessions, <tt>writeToConsole</tt> and <tt>writeToFile</tt> are action
+functions.</p>
+
+<p>a look at <tt>writeToFile</tt> will help understand the idea
+implemented in this library.</p>
+
+<code>
+<R-global>writeToFile</R-global> <R-operator><-</R-operator> <R-reserved>function</R-reserved>(msg, handler)<br/>
+{<br/>
+&nbsp; <R-reserved>if</R-reserved> (!exists(<R-string>'file'</R-string>, envir=handler))<br/>
+&nbsp; &nbsp; <R-reserved>stop</R-reserved>(<R-string>"handler with writeToFile 'action' must have a 'file' element.\n"</R-string>)<br/>
+&nbsp; cat(paste(msg, <R-string>'\n'</R-string>, sep=<R-string>''</R-string>), file=with(handler, file), append=<R-constant>TRUE</R-constant>)<br/>
+}
+</code>
+
+<p>an action is invoked if a record must be handled.  its result code
+is ignored and all its output goes to the console.  it receives
+exactly two arguments, the formatted message that must be output (the
+string returned by the formatter of the handler) and the handler
+owning the action.  recall that a handler is an environment: in the
+action you can inspect the <tt>handler</tt> environment to perform the
+desired behaviour.</p>
+
+<p>imagine you want a handler to send its messages to a xmlrpc server
+or to a password protected ftp server, you would add these properties
+in the call to addHandler.  addHandler would store them in the new
+handler environment.  your action function would retrieve the values
+from the handler and use them to connect to your hypothetical external
+server.</p>
+
+<p>the structure of your solution might be something like this:</p>
+
+<code>
+<R-global>sendToFtpServer</R-global> <R-operator><-</R-operator> <R-reserved>function</R-reserved>(msg, handler)<br/>
+{<br/>
+&nbsp; proxy <R-operator><-</R-operator> connectToServer(with(handler, server), with(handler, user), with(handler, passwd))<br/>
+&nbsp; do_the_rest()<br/>
+}<br/>
+<br/>
+addHandler(sendToFptServer, user=<R-string>''</R-string>, server=<R-string>''</R-string>, passwd=<R-string>''</R-string>, logger=<R-string>"deep.deeper.deepest"</R-string>)<br/>
+</code>

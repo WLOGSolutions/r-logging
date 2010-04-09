@@ -1,0 +1,58 @@
+
+<h4>hierarchical loggers</h4>
+
+<p>in the previous section we have worked -implicitly- with one
+logger, the root logger.  we can refer to it explicitly by specifying
+the 'logger' parameter in our function calls.  the name of the root
+logger is the empty string.  this also explains that "::" in the
+messages sent to the console, between the first and the second ":"
+there's the name of the logger that is associated to the log record
+shown.</p>
+
+<code>
+R> <user>with(getLogger(logger=''), names(handlers))</user><br/>
+[1] "basic.stdout"<br/>
+R> <user>with(getLogger('libro'), names(handlers))</user><br/>
+NULL
+</code>
+
+<p>when issuing a logging record, you can specify to which logger you
+want to send it.  loggers are created when first needed, so we can
+just assume all loggers we need also exist.  the logger will offer it
+to all its attached handlers and then pass it to its parent logger.
+loggers are organized hierarchically, in a way that is similar to the
+way directories are organized.  </p>
+
+<p>just as directories contain files, loggers contain handlers and
+their name is, within the logger, unique.  also similarly than to
+directories, all loggers have one parent, except the root logger that
+has none.  the name of the logger specifies the location of the logger
+in this hierarchy.  an example will hopefully clarify.  </p>
+
+<p>let's start from scratch, either a brand new R session or by
+resetting the logging system.</p>
+
+<code>
+R> <user>logReset()</user><br/>
+R> <user>addHandler(writeToConsole, logger='libro.romanzo')</user><br/>
+R> <user>loginfo('chiarastella', logger='libro.romanzo.campanile')</user><br/>
+2010-04-08 11:18:59 INFO:libro.romanzo.campanile:chiarastella<br/>
+R> <user>loginfo('memories of a survivor', logger='libro.romanzo.lessing')</user><br/>
+2010-04-08 11:22:06 INFO:libro.romanzo.lessing:memories of a survivor<br/>
+R> <user>logwarn('talking to a hierarchically upper logger', logger='libro')</user><br/>
+R> <user>logerror('talking to an unrelated logger', logger='rivista.cucina')</user><br/>
+R> 
+</code>
+
+<p>notice that loggers are automatically defined by the simple action
+of naming them.  what happened above is that the handler we created,
+attached to the 'libro.romanzo' logger, only saw the records going to
+the loggers below its logger.  all records going to hierarchically
+upper loggers or to unrelated loggers are not logged, regardless of
+their severity.</p>
+
+<p>also notice that the text printed doesn't contain any more that
+"::".  between the two ":" there's the name of the logger that
+received the logging record in the first place.</p>
+
+<p><a href="hierarchical_loggers.R">code</a></p>

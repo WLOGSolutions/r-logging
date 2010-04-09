@@ -1,0 +1,53 @@
+
+<h4>logging to file</h4>
+
+<p>actually the name of this paragraph is misleading.  a more correct
+name would be <em>handling to file</em>, since it's a handler and not
+a logger that is actually writing some representation of your
+logrecords to a file.  </p>
+
+<p>to make sure log records are sent to a file, you choose a logger
+and attach to it a handler with action a function that writes to your
+file.  the logging package exports the commodity
+function <tt>writeToFile</tt> for this purpouse.  the name of the file
+is given as an extra parameter in the call to <tt>addHandler</tt>.</p>
+
+<p>recall that both loggers <em>and</em> handlers have a level.
+records at a specific severity are examined by loggers first; if the
+severity is higher than the level of the logger, they are offered to
+all of the attached handlers.  handlers will again check the level of
+the record before taking action.  in the following example we make
+sure absolutely all logrecords are examined by initializing the root
+logger at the <tt>FINEST</tt> level.  the level of
+the <tt>basic_stdout</tt> console handler is not affected.</p>
+
+<code>
+R> <user>logReset()</user><br/>
+R> <user>basicConfig(level='FINEST')</user><br/>
+R> <user>addHandler(writeToFile, file="~/testing.log", level='DEBUG')</user><br/>
+R> <user>with(getLogger(), names(handlers))</user><br/>
+[1] "basic.stdout"   "writeToFile"<br/>
+R> <user>loginfo('test %d', 1)</user><br/>
+2010-04-07 11:31:06 INFO::test 1<br/>
+R> <user>logdebug('test %d', 2)</user><br/>
+R> <user>logwarn('test %d', 3)</user><br/>
+2010-04-07 11:31:15 WARN::test 3<br/>
+R> <user>logfinest('test %d', 4)</user><br/>
+R> 
+</code>
+
+<p>if the file was not existing or empty, this would be its content after the above steps:</p>
+<code>
+2010-04-07 11:31:06 INFO::test 1<br/>
+2010-04-07 11:31:11 DEBUG::test 2<br/>
+2010-04-07 11:31:15 WARN::test 3<br/>
+</code>
+
+<p>all log records have been passed to both
+handlers <tt>basic.stdout</tt> and <tt>writeToFile</tt>.  the default
+console handler has handled records with severity at or
+above <tt>INFO</tt>, our file handler had threshold <tt>DEBUG</tt> so
+it handled also the second record in the example session.  the fourth
+record was dropped by both handlers.</p>
+
+<p><a href="logging_to_file.R">code</a></p>
