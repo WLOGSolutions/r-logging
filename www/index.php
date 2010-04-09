@@ -59,8 +59,10 @@ echo $contents; } ?>
 
 <p>This package owes a lot to 
 <ul>
-<li>Brian Lee Yung Rowe's futile package (v1.1), </li>
+<li>my employers, who believe in open source, </li>
 <li>the stackoverflow community, </li>
+<li>Brian Lee Yung Rowe's futile package (v1.1), </li>
+<li>the r-forge people, <a href="http://cran.r-project.org/doc/manuals/R-intro.pdf">"introduction to R"</a>, <a href="http://cran.r-project.org/doc/manuals/R-exts.pdf">"writing R extensions"</a>, ...</li>
 <li>the documentation of the Python logging package.</li>
 </ul></p>
 
