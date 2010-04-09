@@ -213,10 +213,7 @@ writeToConsole <- function(msg, handler)
 writeToFile <- function(msg, handler)
 {
   if (!exists('file', envir=handler))
-  {
-    cat("handler with writeToFile 'action' must have a 'file' element.\n")
-    return()
-  }
+    stop("handler with writeToFile 'action' must have a 'file' element.\n")
   cat(paste(msg, '\n', sep=''), file=with(handler, file), append=TRUE)
 }
 
