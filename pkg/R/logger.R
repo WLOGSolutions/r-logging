@@ -28,8 +28,8 @@
 ##
 
 ## TODO: these constants must be exported and documented
-loglevels <- c(0, 1, 4, 7, 10, 20, 30, 40, 50, 50)
-names(loglevels) <- c('NOTSET', 'FINEST', 'FINER', 'FINE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL', 'FATAL')
+loglevels <- c(0, 1, 4, 7, 10, 20, 30, 30, 40, 50, 50)
+names(loglevels) <- c('NOTSET', 'FINEST', 'FINER', 'FINE', 'DEBUG', 'INFO', 'WARNING', 'WARN', 'ERROR', 'CRITICAL', 'FATAL')
 
 namedLevel <- function(value)
   UseMethod('namedLevel')

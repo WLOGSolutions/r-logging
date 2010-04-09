@@ -59,12 +59,14 @@ echo $contents; } ?>
 
 <p>This package owes a lot to 
 <ul>
-<li>Brian Lee Yung Rowe's futile package, </li>
-<li>the stackoverflow community </li>
-<li>and the documentation of the Python logging package.</li>
+<li>Brian Lee Yung Rowe's futile package (v1.1), </li>
+<li>the stackoverflow community, </li>
+<li>the documentation of the Python logging package.</li>
 </ul></p>
 
 <p>The <strong>project summary page</strong> you can find <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
+
+<p>The <strong>released packages</strong> you can find <a href="http://r-forge.r-project.org/R/?group_id=672"><strong>here</strong></a>. </p>
 
 </body>
 </html>

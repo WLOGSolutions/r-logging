@@ -49,7 +49,7 @@ R> <user>with(getLogger(), names(handlers))</user><br/>
 [1] "basic.stdout"<br/>
 R> <user>loginfo('does it work?')</user><br/>
 2010-04-08 11:28:35 INFO::does it work?<br/>
-R> <user>logwarn('%s %d', 'my name is', 5)</user><br/>
+R> <user>logwarn('my %s is %d', 'name', 5)</user><br/>
 2010-04-08 11:28:48 WARN::my name is 5<br/>
 R> <user>logdebug('I am a silent child')</user><br/>
 R>
@@ -100,10 +100,12 @@ R>
 <h4>hierarchical loggers</h4>
 
 <p>in the previous section we have worked -implicitly- with one
-logger, the root logger.  we can refer to it explicitly: its name is
-the empty string.  this also explains that "::" in the messages sent
-to the console, between the first and the second ":" there's the name
-of the logger that is associated to the log record shown.</p>
+logger, the root logger.  we can refer to it explicitly by specifying
+the 'logger' parameter in our function calls.  the name of the root
+logger is the empty string.  this also explains that "::" in the
+messages sent to the console, between the first and the second ":"
+there's the name of the logger that is associated to the log record
+shown.</p>
 
 <code>
 R> <user>with(getLogger(logger=''), names(handlers))</user><br/>
@@ -207,6 +209,71 @@ record was dropped by both handlers.</p>
 <p><a href="logging_to_file.R">code</a></p>
 
 <h4>formatting your log records</h4>
+
+<p>in this session we are going to see how to generate a diagnostics
+file for a system that organizes logrecords in a different way than
+Python.  let's jump into the implementation, if you can write R you
+surely won't need more explaination but will want to tell me how to
+make this function faster, more readable, shorter...</p>
+
+<code>
+<R-global>formatter.fewsdiagnostics</> <R-operator><-</> <R-reserved>function</>(record) {<br/>
+&nbsp; <R-reserved>if</>(record$level <= loglevels[[<R-string>'INFO'</>]])<br/>
+&nbsp; &nbsp; level <R-operator><-</> 3<br/>
+&nbsp; <R-reserved>else if</>(record$level <= loglevels[[<R-string>'WARNING'</>]])<br/>
+&nbsp; &nbsp; level <R-operator><-</> 2<br/>
+&nbsp; <R-reserved>else if</>(record$level <= loglevels[[<R-string>'ERROR'</>]])<br/>
+&nbsp; &nbsp; level <R-operator><-</> 1<br/>
+&nbsp; <R-reserved>else</><br/>
+&nbsp; &nbsp; level <R-operator><-</> 0<br/>
+<br/>
+&nbsp; sprintf(<R-string>'&nbsp; &lt;line level="%d" description="LizardScripter :: %s :: %s"/>\n'</>, level, record$timestamp, record$msg)<br/>
+}
+</code>
+
+<p>notice that the field <tt>$msg</tt> of a record is already
+"formatted", as we have seen with <tt>logwarn('my %s is %d', 'name',
+5)</tt>.  that part can be used but not undone any more.  the
+formatter you can associate to a handler can combine the tags in the
+logrecord to produce a string.</p>
+
+<p>when you add a handler to a logger, you can use
+the <tt>formatter</tt> parameter to associate to the handler a
+function that takes a logrecord and returns a string.  the above
+example function is such a function.  </p>
+
+
+<p>if you don't specify the <tt>formatter</tt> parameter, the default
+formatter is used, which looks like this:</p>
+
+<code>
+<R-global>defaultFormat</> <R-operator><-</> <R-reserved>function</>(record) {<br/>
+&nbsp; text <R-operator><-</> paste(record$timestamp, paste(record$levelname, record$logger, record$msg, sep=<R-string>':'</>))<br/>
+}
+</code>
+
+<p>the rest of the code, just slightly simplified, showing how we (me
+at my company) actually use this capability is this:</p>
+
+<code>
+<R-global>setup.fewsdiagnostics</> <R-operator><-</> <R-reserved>function</>(filename) {<br/>
+&nbsp; cat(<R-string>'&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'</>, file=filename, append=<R-constant>FALSE</>)<br/>
+&nbsp; cat(<R-string>'&lt;Diag version="1.2" xmlns="..." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="...">\n'</>, file=filename, append=<R-constant>FALSE</>)<br/>
+&nbsp; addHandler(<R-string>'diagnostics'</>,<br/>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  writeToFile, file=filename,<br/>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  logger=<R-string>'fews.diagnostics'</>,<br/>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  formatter=formatter.fewsdiagnostics)<br/>
+}<br/>
+<br/>
+<R-global>teardown.fewsdiagnostics</> <R-operator><-</> <R-reserved>function</>(filename) {<br/>
+&nbsp; cat(<R-string>'&lt;/Diag>\n'</>, file=filename, append=<R-constant>TRUE</>)<br/>
+&nbsp; removeHandler(<R-string>'diagnostics'</>, logger=<R-string>'fews.diagnostics'</>)<br/>
+}
+</code>
+
+<p></p>
+<p></p>
+<p></p>
 
 </body>
 </html>

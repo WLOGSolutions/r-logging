@@ -13,6 +13,10 @@ code { display: block;
        line-height: 18px;
        font-weight: normal!important;
 }
+R-global {color: #00f;}
+R-reserved {color: #a0a;}
+R-constant, R-operator {color: #090;}
+R-string {color: #a44;}
 user { font-weight: bold }
 h3, h4, p { font-family: helvetica, sans-serif;} 
 p { line-height: 20pt;
