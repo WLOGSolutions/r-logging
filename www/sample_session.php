@@ -4,7 +4,13 @@
   <link href="additions.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
+
+<blockquote>
+<p><a href="index.php">[project home]</a> &nbsp;</p>
+</blockquote>
+
 <h3>annotated sample sessions</h3>
+
 
 <p>this is a minimal tutorial, showing by example what you can do with
 and expect from this library.  this text is directed to scripts

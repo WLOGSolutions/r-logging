@@ -5,11 +5,13 @@
 </head>
 <body>
 
+<blockquote>
 <p>
-   <a href="sample_session.php">[back to the tutorial]</a> &nbsp;
+<a href="sample_session.php">[back to the tutorial]</a> &nbsp;
 <a href="logging_to_file.php">[previous session]</a> &nbsp;
 <a href="writing_your_own_handlers.php">[next session]</a>
 </p>
+</blockquote>
 
 <?php include("formatting_your_log_records.shtml"); ?> 
 

@@ -5,11 +5,14 @@
 </head>
 <body>
 
+<blockquote>
 <p>
-<a href="sample_session.php">[back to the tutorial]</a>
-<a href="the_basics.php">[previous session]</a>
+<a href="sample_session.php">[back to the tutorial]</a> &nbsp;
+<a href="the_basics.php">[previous session]</a> &nbsp;
 <a href="logging_to_file.php">[next session]</a>
 </p>
+</blockquote>
+
 
 <?php include("hierarchical_loggers.shtml"); ?> 
 
