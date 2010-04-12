@@ -16,13 +16,13 @@ R> <user>basicConfig()</user><br/>
 R>
 </code>
 
-<p>let's check the effect of the above actions.  our loggers are
-environments, so we can use for example <tt>ls</tt> and <tt>with</tt>
-to inspect them.  after this basic configuration, our logger has
-handlers and a level and it contains one handler.  this is enough for
-some simple logging to the console.  the default logging level of the
-root logger is <tt>INFO</tt> (20).  anything at severity lower
-than <tt>INFO</tt> will not be logged.</p>
+<p>let's check the effect of the above actions.  both our loggers and
+handlers are environments, so we can use for example <tt>ls</tt>
+and <tt>with</tt> to inspect them.  after this basic configuration,
+our logger has handlers and a level and it contains one handler.  this
+is enough for some simple logging to the console.  the default logging
+level of the root logger is <tt>INFO</tt> (20).  anything at severity
+lower than <tt>INFO</tt> will not be logged.</p>
 
 <code>
 R> <user>ls(getLogger())</user><br/>
@@ -30,8 +30,10 @@ R> <user>ls(getLogger())</user><br/>
 R> <user>with(getLogger(), level)</user><br/>
 INFO <br/>
 &nbsp; 20 <br/>
-R> <user>with(getLogger(), names(handlers))</user><br/>
-[1] "basic.stdout"<br/>
+R> <user>with(getLogger(), handlers)</user><br/>
+$basic.stdout<br/>
+&lt;environment: 0x........><br/>
+<br/>
 R> <user>loginfo('does it work?')</user><br/>
 2010-04-08 11:28:35 INFO::does it work?<br/>
 R> <user>logwarn('my %s is %d', 'name', 5)</user><br/>
@@ -65,8 +67,7 @@ R>
 passing through a handler and having a severity lower than the level
 of the handler is ignored.  you can alter the level of a handler.
 this is what we do in the following lines: we alter the level of the
-default console handler 'basic.stdout' to 30 (<tt>WARN</tt>).  by the
-way, also handlers are environments.</p>
+default console handler 'basic.stdout' to 30 (<tt>WARN</tt>).  </p>
 
 <code>
 R> <user>addHandler(writeToConsole)</user><br/>

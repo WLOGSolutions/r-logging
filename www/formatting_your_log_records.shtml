@@ -24,15 +24,18 @@ make this function faster, more readable, shorter...</p>
 
 <p>notice that the field <tt>$msg</tt> of a record is already
 "formatted", as we have seen with <tt>logwarn('my %s is %d', 'name',
-5)</tt>.  that part can be used but not undone any more.  the
-formatter you can associate to a handler can combine the tags in the
-logrecord to produce a string.</p>
+5)</tt>.  that part can be used but not undone any more.  </p>
 
 <p>when you add a handler to a logger, you can use
 the <tt>formatter</tt> parameter to associate to the handler a
 function that takes a logrecord and returns a string.  the above
 example function is such a function.  </p>
 
+<p>the formatter you can associate to a handler can combine the tags
+in the logrecord to produce a string.  the tags that are available in
+a logrecord are: <tt>$logger</tt> (the name of the logger which
+produced the record), <tt>$msg</tt>, <tt>$timestamp</tt>, <tt>$level</tt>
+(numeric), <tt>$levelname</tt> (character).</p>
 
 <p>if you don't specify the <tt>formatter</tt> parameter, the default
 formatter is used, which looks like this:</p>
