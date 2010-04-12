@@ -18,6 +18,11 @@
 setLevel(level, container)
 }
 \arguments{
-  \item{level}{the new level for this object.}
+  \item{level}{the new level for this object.  can be numeric or character.}
   \item{container}{a logger or a handler.}
+}
+\examples{
+  basicConfig()
+  setLevel('FINEST')
+  setLevel('DEBUG', getHandler('basic.stdout'))
 }
