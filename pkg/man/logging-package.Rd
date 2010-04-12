@@ -65,11 +65,12 @@ lines on the console and just one line in the \code{sample.log} file.
 Maintainer: Mario Frasca <mario.frasca@nelen-schuurmans.nl>
 }
 \references{
-the python logging module, at http://docs.python.org/library/logging.html
+  the python logging module: \url{http://docs.python.org/library/logging.html}
+
+  this package at r-forge: \url{http://logging.r-forge.r-project.org/}
 }
 \keyword{ package }
+
 \seealso{
-  \code{\link[logging @ r-forge]{http://logging.r-forge.r-project.org/}}
-  
   \code{\link[futile:futile-package]{http://cran.r-project.org/web/packages/futile/index.html}}
 }
