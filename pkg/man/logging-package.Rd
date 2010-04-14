@@ -19,15 +19,16 @@ a tentative logging package
   Python's logging package, a simple logging.BasicConfig function to
   quickly put yourself in a usable situation...
 
-  This package owes a lot to Brian Lee Yung Rowe's
-  \code{\link[futile:futile-package]{futile}} package and the
+  This package owes a lot to my employer, r-forge, the stackoverflow
+  community, Brian Lee Yung Rowe's
+  \code{\link[futile:futile-package]{futile}} package (v1.1) and the
   documentation of the Python logging package.
 
 }
 \details{
 \tabular{ll}{
 Package: \tab logging\cr
-Version: \tab 0.2-9108\cr
+Version: \tab 0.4-35\cr
 Date: \tab 2010-01-14\cr
 License: \tab GPL (>=2)\cr
 Depends: \tab R (>= 2.9.2)\cr
@@ -47,16 +48,20 @@ setLevel                    set logging.level for a logger
 to use this package, include logging instructions in your code, possibly
 like this:
 \preformatted{
-  logging::basicConfig()
-  logging::addHandler(logging::writeToFile, name="company", file="sample.log")
-  logging::info("hello world", logger="")
-  logging::warn("hello company", logger="company.module")
+  library(logging)
+  basicConfig()
+  addHandler(writeToFile, logger="company", file="sample.log")
+  loginfo("hello world", logger="")
+  logwarn("hello company", logger="company.module")
 }
 
 the \code{basicConfig} function adds a console handler to the root
 logger, while the explicitly called \code{addHandler} adds a file
 handler to the 'company' logger.  the effect of the above example is two
 lines on the console and just one line in the \code{sample.log} file.
+
+the web pages for this package on r-forge are kept decently up to date
+and contain a usable tutorial.  check the references.
 
 }
 \author{
