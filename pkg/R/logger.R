@@ -53,7 +53,7 @@ namedLevel.numeric <- function(value) {
 ## (entry points for messages)
 levellog <- function(level, msg, ..., logger=NA, sourcelogger='')
 {
-  if (is.na(logger))
+  if (!is.character(logger))
     logger <- sourcelogger
   ## get the logger of which we have the name.
   config <- getLogger(logger)
@@ -83,7 +83,7 @@ levellog <- function(level, msg, ..., logger=NA, sourcelogger='')
 
   ## if not at root level, check the parent logger
   if(logger != ''){
-    parts <- strsplit(logger, '\\.')[[1]] # split the name on the '.'
+    parts <- strsplit(logger, '.', fixed=TRUE)[[1]] # split the name on the '.'
     removed <- parts[-length(parts)] # except the last item
     parent <- paste(removed, collapse='.')
     levellog(level, msg, ..., logger=parent, sourcelogger=sourcelogger)
