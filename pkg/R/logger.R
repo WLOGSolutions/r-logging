@@ -53,6 +53,8 @@ namedLevel.numeric <- function(value) {
 ## (entry points for messages)
 levellog <- function(level, msg, ..., logger=NA, sourcelogger='')
 {
+  if (!is.character(sourcelogger))
+    sourcelogger <- ''
   if (!is.character(logger))
     logger <- sourcelogger
   ## get the logger of which we have the name.
