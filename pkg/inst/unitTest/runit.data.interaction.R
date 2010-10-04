@@ -1,4 +1,4 @@
-require(RUnit)
+require(svUnit)
 
 # test functions are called in lexicographic order.
 # $Id$
