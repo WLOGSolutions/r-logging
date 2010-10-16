@@ -49,94 +49,94 @@ namedLevel.numeric <- function(value) {
   value
 }
 
-## main log function, used by all other ones
-## (entry points for messages)
-levellog <- function(level, msg, ..., logger=NA, sourcelogger='')
+.logrecord <- function(record, logger)
 {
-  if (!is.character(sourcelogger))
-    sourcelogger <- ''
-  if (!is.character(logger))
-    logger <- sourcelogger
   ## get the logger of which we have the name.
   config <- getLogger(logger)
-  if (level < config$level) return(invisible())
+  
+  if (record$level >= config$level) 
+    for (handler in config[['handlers']])
+      if (record$level >= with(handler, level)) {
+        action <- with(handler, action)
+        formatter <- with(handler, formatter)
+        action(formatter(record), handler)
+      }
 
-  ## what is the record to be logged?
+  if(logger != '') {
+    parts <- strsplit(logger, '.', fixed=TRUE)[[1]] # split the name on the '.'
+    removed <- parts[-length(parts)] # except the last item
+    parent <- paste(removed, collapse='.')
+    levellog(record, logger=parent)
+  }
+  invisible()
+}
+
+## main log function, used by all other ones
+## (entry points for messages)
+levellog <- function(level, msg, ..., logger=NA)
+{
+  if (!is.character(logger))
+    logger <- ''
+
   record <- list()
 
-  if (length(list(...)) > 0) msg <- sprintf(msg, ...)
+  if (length(list(...)) > 0)
+    msg <- sprintf(msg, ...)
   record$msg <- msg
 
   record$timestamp <- sprintf("%s", Sys.time())
-  record$logger <- sourcelogger
+  record$logger <- logger
   record$level <- namedLevel(level)
   record$levelname <- names(which(loglevels == level)[1])
   if(is.na(record$levelname))
     record$levelname <- paste("NumericLevel(", level, ")", sep='')
 
-  ## invoke the action of all handlers associated to logger
-  for (handler in config[['handlers']]) {
-    if (level >= with(handler, level)) {
-      action <- with(handler, action)
-      formatter <- with(handler, formatter)
-      action(formatter(record), handler)
-    }
-  }
-
-  ## if not at root level, check the parent logger
-  if(logger != ''){
-    parts <- strsplit(logger, '.', fixed=TRUE)[[1]] # split the name on the '.'
-    removed <- parts[-length(parts)] # except the last item
-    parent <- paste(removed, collapse='.')
-    levellog(level, msg, ..., logger=parent, sourcelogger=sourcelogger)
-  }
-
-  invisible()
+  .logrecord(record, logger)
 }
 
 ## using log
 logdebug <- function(msg, ..., logger='')
 {
-  levellog(loglevels[['DEBUG']], msg, ..., sourcelogger=logger)
+  levellog(loglevels[['DEBUG']], msg, ..., logger=logger)
   invisible()
 }
 
 logfinest <- function(msg, ..., logger='')
 {
-  levellog(loglevels['FINEST'], msg, ..., sourcelogger=logger)
+  levellog(loglevels['FINEST'], msg, ..., logger=logger)
   invisible()
 }
 
 logfiner <- function(msg, ..., logger='')
 {
-  levellog(loglevels['FINER'], msg, ..., sourcelogger=logger)
+  levellog(loglevels['FINER'], msg, ..., logger=logger)
   invisible()
 }
 
 logfine <- function(msg, ..., logger='')
 {
-  levellog(loglevels[['FINE']], msg, ..., sourcelogger=logger)
+  levellog(loglevels[['FINE']], msg, ..., logger=logger)
   invisible()
 }
 
 ## using log
 loginfo <- function(msg, ..., logger='')
 {
-  levellog(loglevels['INFO'], msg, ..., sourcelogger=logger)
+  levellog(loglevels['INFO'], msg, ..., logger=logger)
   invisible()
 }
 
 ## using log
 logwarn <- function(msg, ..., logger='')
 {
-  levellog(loglevels['WARN'], msg, ..., sourcelogger=logger)
+  levellog(loglevels['WARN'], msg, ..., logger=logger)
   invisible()
 }
 
 ## using log
 logerror <- function(msg, ..., logger='')
 {
-  levellog(loglevels['ERROR'], msg, ..., sourcelogger=logger)
+  levellog(loglevels['ERROR'], msg, ..., logger=logger)
   invisible()
 }
 
