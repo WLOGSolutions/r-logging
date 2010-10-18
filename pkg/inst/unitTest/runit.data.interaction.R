@@ -59,3 +59,71 @@ test.canSetLoggerLevelByName <- function() {
   expect <- logging:::loglevels['DEBUG']
   checkEquals(rootLogger[['level']], expect)
 }
+
+logged <- NULL
+mockAction <- function(msg, handler) {
+  logged <<- c(logged, msg)
+}
+
+test.recordIsEmitted.rootToRoot <- function() {
+  logReset()
+  addHandler(mockAction)
+  logged <<- NULL
+  logdebug('test')
+  loginfo('test')
+  logerror('test')
+  checkEquals(length(logged), 2)
+}
+
+test.recordIsEmitted.tooDeep <- function() {
+  logReset()
+  addHandler(mockAction, logger='too.deep')
+  logged <<- NULL
+  logdebug('test')
+  loginfo('test')
+  logerror('test')
+  checkEquals(length(logged), 0)
+}
+
+test.recordIsEmitted.unrelated <- function() {
+  logReset()
+  addHandler(mockAction, logger='too.deep')
+  logged <<- NULL
+  logdebug('test', logger='other.branch')
+  loginfo('test', logger='other.branch')
+  logerror('test', logger='other.branch')
+  checkEquals(length(logged), 0)
+}
+
+test.recordIsEmitted.deepToRoot <- function() {
+  logReset()
+  addHandler(mockAction, logger='')
+  logged <<- NULL
+  logdebug('test', logger='other.branch')
+  loginfo('test', logger='other.branch')
+  logerror('test', logger='other.branch')
+  checkEquals(length(logged), 2)
+}
+
+test.recordIsEmitted.deepToRoot.DI.dropped <- function() {
+  logReset()
+  addHandler(mockAction, level='DEBUG', logger='')
+  logged <<- NULL
+  setLevel('other.branch', 'INFO')
+  logdebug('test', logger='other.branch')
+  loginfo('test', logger='other.branch')
+  logerror('test', logger='other.branch')
+  checkEquals(length(logged), 2)
+}
+
+test.recordIsEmitted.deepToRoot.DD.passed <- function() {
+  logReset()
+  addHandler(mockAction, level='DEBUG', logger='')
+  logged <<- NULL
+  setLevel('DEBUG', 'other.branch')
+  setLevel('DEBUG', '')
+  logdebug('test', logger='other.branch')
+  loginfo('test', logger='other.branch')
+  logerror('test', logger='other.branch')
+  checkEquals(length(logged), 3)
+}

@@ -66,18 +66,22 @@ namedLevel.numeric <- function(value) {
     parts <- strsplit(logger, '.', fixed=TRUE)[[1]] # split the name on the '.'
     removed <- parts[-length(parts)] # except the last item
     parent <- paste(removed, collapse='.')
-    levellog(record, logger=parent)
+    .logrecord(record, logger=parent)
   }
-  invisible()
+  invisible(TRUE)
 }
 
 ## main log function, used by all other ones
 ## (entry points for messages)
-levellog <- function(level, msg, ..., logger=NA)
+levellog <- function(level, msg, ..., logger='')
 {
-  if (!is.character(logger))
-    logger <- ''
+  ## does the logger just drop the record?
+  config <- getLogger(logger)
+  if (level < config$level) 
+    return(invisible(FALSE))
 
+  ## fine, we create the record and pass it to all handlers attached to the
+  ## loggers from here up to the root.
   record <- list()
 
   if (length(list(...)) > 0)
@@ -91,6 +95,7 @@ levellog <- function(level, msg, ..., logger=NA)
   if(is.na(record$levelname))
     record$levelname <- paste("NumericLevel(", level, ")", sep='')
 
+  ## action is taken in private function.
   .logrecord(record, logger)
 }
 
