@@ -65,6 +65,10 @@ mockAction <- function(msg, handler) {
   logged <<- c(logged, msg)
 }
 
+mockFormatter <- function(record) {
+  paste(record$levelname, record$logger, record$msg, sep = ":")
+}
+
 test.recordIsEmitted.rootToRoot <- function() {
   logReset()
   addHandler(mockAction)
@@ -72,7 +76,7 @@ test.recordIsEmitted.rootToRoot <- function() {
   logdebug('test')
   loginfo('test')
   logerror('test')
-  checkEquals(length(logged), 2)
+  checkEquals(2, length(logged))
 }
 
 test.recordIsEmitted.tooDeep <- function() {
@@ -82,7 +86,7 @@ test.recordIsEmitted.tooDeep <- function() {
   logdebug('test')
   loginfo('test')
   logerror('test')
-  checkEquals(length(logged), 0)
+  checkEquals(0, length(logged))
 }
 
 test.recordIsEmitted.unrelated <- function() {
@@ -92,7 +96,7 @@ test.recordIsEmitted.unrelated <- function() {
   logdebug('test', logger='other.branch')
   loginfo('test', logger='other.branch')
   logerror('test', logger='other.branch')
-  checkEquals(length(logged), 0)
+  checkEquals(0, length(logged))
 }
 
 test.recordIsEmitted.deepToRoot <- function() {
@@ -102,7 +106,7 @@ test.recordIsEmitted.deepToRoot <- function() {
   logdebug('test', logger='other.branch')
   loginfo('test', logger='other.branch')
   logerror('test', logger='other.branch')
-  checkEquals(length(logged), 2)
+  checkEquals(2, length(logged))
 }
 
 test.recordIsEmitted.deepToRoot.DI.dropped <- function() {
@@ -113,7 +117,7 @@ test.recordIsEmitted.deepToRoot.DI.dropped <- function() {
   logdebug('test', logger='other.branch')
   loginfo('test', logger='other.branch')
   logerror('test', logger='other.branch')
-  checkEquals(length(logged), 2)
+  checkEquals(2, length(logged))
 }
 
 test.recordIsEmitted.deepToRoot.DD.passed <- function() {
@@ -125,5 +129,29 @@ test.recordIsEmitted.deepToRoot.DD.passed <- function() {
   logdebug('test', logger='other.branch')
   loginfo('test', logger='other.branch')
   logerror('test', logger='other.branch')
-  checkEquals(length(logged), 3)
+  checkEquals(3, length(logged))
+}
+
+test.formattingRecord.lengthZero <- function() {
+  logReset()
+  addHandler(mockAction, level='DEBUG', logger='', formatter=mockFormatter)
+  logged <<- NULL
+  loginfo("test '%s'", numeric(0))
+  checkEquals("INFO::test ''", logged)
+}
+
+test.formattingRecord.lengthOne <- function() {
+  logReset()
+  addHandler(mockAction, level='DEBUG', logger='', formatter=mockFormatter)
+  logged <<- NULL
+  loginfo("test '%s'", 12)
+  checkEquals("INFO::test '12'", logged)
+}
+
+test.formattingRecord.lengthMore <- function() {
+  logReset()
+  addHandler(mockAction, level='DEBUG', logger='', formatter=mockFormatter)
+  logged <<- NULL
+  loginfo("test '%s'", c(0, 1, 2))
+  checkEquals("INFO::test '0,1,2'", logged)
 }
