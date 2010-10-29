@@ -155,3 +155,22 @@ test.formattingRecord.lengthMore <- function() {
   loginfo("test '%s'", c(0, 1, 2))
   checkEquals("INFO::test '0,1,2'", logged)
 }
+
+test.formattingRecord.moreArguments <- function() {
+  logReset()
+  addHandler(mockAction, level='DEBUG', logger='', formatter=mockFormatter)
+  logged <<- NULL
+  loginfo("%s: %d", 'name', 123)
+  checkEquals("INFO::name: 123", logged)
+  logged <<- NULL
+  loginfo("%s: %0.2f", 'name', 123.0)
+  checkEquals("INFO::name: 123.00", logged)
+}
+
+test.formattingRecord.moreArguments.lengthMore <- function() {
+  logReset()
+  addHandler(mockAction, level='DEBUG', logger='', formatter=mockFormatter)
+  logged <<- NULL
+  loginfo("%s '%s'", 'name', c(0, 1, 2))
+  checkEquals("INFO::name '0,1,2'", logged)
+}

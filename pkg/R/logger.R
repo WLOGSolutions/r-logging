@@ -85,7 +85,7 @@ levellog <- function(level, msg, ..., logger='')
   record <- list()
 
   if (length(list(...)) > 0)
-    msg <- sprintf(msg, lapply(list(...), function(x) paste(x, collapse=',')))
+    msg <- do.call("sprintf", c(msg, lapply(list(...), function(x) if(length(x)==1) x else paste(x, collapse=','))))
   record$msg <- msg
 
   record$timestamp <- sprintf("%s", Sys.time())
