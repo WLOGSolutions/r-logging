@@ -4,19 +4,19 @@
 <blockquote><font size=-1>thanks Henrico Witvliet for this hint</font></blockquote>
 
 <p>you can instruct R to send its text to a logger using the function
-<code>withCallingHandlers</code>.  combine this with
-<code>options(warn=-1)</code> and you have replaced the R built in
+<tt>withCallingHandlers</tt>.  combine this with
+<tt>options(warn=-1)</tt> and you have replaced the R built in
 warning logic with the logging package.
 
-<p>imagine you want all warnings in function <code>F</code> go to
-logger <code>L</code>, you use this construction:
+<p>imagine you want all warnings in function <tt>F</tt> go to
+logger <tt>L</tt>, you use this construction:
 
 <p><code>
-<R-global>withCallingHandlers</R-global>(<R-global>F</R-global>(), <br/>
-&nbsp; &nbsp; warning=<R-reserved>function</R-reserved>(w) { <R-global>logwarn</R-global>(w, logger=L) })
+withCallingHandlers(F(), <br/>
+&nbsp; &nbsp; <R-reserved>warning</R-reserved>=<R-reserved>function</R-reserved>(w) { logwarn(w, logger=L) })
 </code>
 
-<p>try it with, for example, <code>log(-1)</code>.
+<p>try it with, for example, <tt>log(-1)</tt>.
 
 <p><code>
 > <user>withCallingHandlers(log(-1), warning = function(w){logwarn(w, logger='mylogger')})</user><br/>
