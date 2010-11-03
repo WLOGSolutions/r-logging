@@ -1,0 +1,24 @@
+
+<h4>integration with R</h4>
+
+<blockquote><font size=-1>thanks Henrico Witvliet for this hint</font></blockquote>
+
+<p>you can instruct R to send its text to a logger using the function
+<code>withCallingHandlers</code>.  combine this with
+<code>options(warn=-1)</code> and you have replaced the R built in
+warning logic with the logging package.
+
+<p>imagine you want all warnings in function <code>F</code> go to
+logger <code>L</code>, you use this construction:
+
+<p><code>
+<R-global>withCallingHandlers</R-global>(<R-global>F</R-global>(), <br/>
+&nbsp; &nbsp; warning=<R-reserved>function</R-reserved>(w) { <R-global>logwarn</R-global>(w, logger=L) })
+</code>
+
+<p>try it with, for example, <code>log(-1)</code>.
+
+<p><code>
+> <user>withCallingHandlers(log(-1), warning = function(w){logwarn(w, logger='mylogger')})</user><br/>
+2010-11-03 09:24:04 WARNING:mylogger:simpleWarning in log(-1): NaNs produced
+</code>
