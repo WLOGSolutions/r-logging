@@ -56,6 +56,7 @@ echo $contents; } ?>
 </ul></p>
 
 <p>have a look at a short introductory <a href="sample_session.php">sample session</a>.</p>
+<p>or check a small collections of <a href="user_hints.php">user hints</a>.</p>
 
 <p>This package owes a lot to 
 <ul>

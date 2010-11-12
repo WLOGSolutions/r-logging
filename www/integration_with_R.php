@@ -12,7 +12,7 @@
 </blockquote>
 
 
-<?php include("integration_with_R.shtml"); ?> 
+<?php include("user_hints.shtml"); ?> 
 
 </body>
 </html>
