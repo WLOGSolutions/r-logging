@@ -1,14 +1,18 @@
 <h4>the basics</h4>
 
-<p>this logging library attempts to be as compatible as possible (that
-is: as it was conceivable to the author) to the
-standard <a href="http://docs.python.org/library/logging.html">Python
-logging</a> library.  if you are accustomed to that logging library,
-this one will look familiar to you.</p>
+<p>This logging library attempts to be as compatible as possible (that
+is: as it was conceivable to the author) to the standard <a
+href="http://docs.python.org/library/logging.html">Python logging</a>
+library.  If you are accustomed to that logging library, this one will
+look familiar to you, otherwise have a look at this <a
+href="python-logging-excerpt.php">excerpt</a>, then decide if you want
+to come back here and read further or go to the python documentation
+and read deeper.</p>
 
-<p>in this session we work with one single logger, the root logger, and we use only console handlers.</p>
+<p>In this session we work with one single logger, the root logger,
+and we use only console handlers.</p>
 
-<p>start up R, load the library, use the basic configuration.</p>
+<p>Start up R, load the library, use the basic configuration.</p>
 
 <code>
 R> <user>library(logging)</user><br/>
@@ -16,12 +20,12 @@ R> <user>basicConfig()</user><br/>
 R>
 </code>
 
-<p>let's check the effect of the above actions.  both our loggers and
+<p>Let's check the effect of the above actions.  Both our loggers and
 handlers are environments, so we can use for example <tt>ls</tt>
-and <tt>with</tt> to inspect them.  after this basic configuration,
-our logger has handlers and a level and it contains one handler.  this
-is enough for some simple logging to the console.  the default logging
-level of the root logger is <tt>INFO</tt> (20).  anything at severity
+and <tt>with</tt> to inspect them.  After this basic configuration,
+our logger has handlers and a level and it contains one handler.  This
+is enough for some simple logging to the console.  The default logging
+level of the root logger is <tt>INFO</tt> (20).  Anything at severity
 lower than <tt>INFO</tt> will not be logged.</p>
 
 <code>
@@ -42,9 +46,9 @@ R> <user>logdebug('I am a silent child')</user><br/>
 R>
 </code>
 
-<p>we add an other handler to the console, without specifying its
-name.  it gets one automatically from the name of the function.  you
-can add and remove handlers using their names.  you can also refer to
+<p>We add an other handler to the console, without specifying its
+name.  It gets one automatically from the name of the function.  You
+can add and remove handlers using their names.  You can also refer to
 them by function, if that is the way you defined it.</p>
 
 <code>
@@ -63,9 +67,9 @@ R> <user>logwarn('test')</user><br/>
 R>
 </code>
 
-<p>handlers have a level associated to them.  any logging record
+<p>Handlers have a level associated to them.  Any logging record
 passing through a handler and having a severity lower than the level
-of the handler is ignored.  you can alter the level of a handler.
+of the handler is ignored.  You can alter the level of a handler.
 this is what we do in the following lines: we alter the level of the
 default console handler 'basic.stdout' to 30 (<tt>WARN</tt>).  </p>
 
