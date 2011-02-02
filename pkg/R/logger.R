@@ -86,6 +86,10 @@ levellog <- function(level, msg, ..., logger='')
 
   if (length(list(...)) > 0)
     msg <- do.call("sprintf", c(msg, lapply(list(...), function(x) if(length(x)==1) x else paste(x, collapse=','))))
+
+  ## strip leading and trailing whitespace from the final message.
+  msg <- sub("[[:space:]]+$", '', msg)
+  msg <- sub("^[[:space:]]+", '', msg)
   record$msg <- msg
 
   record$timestamp <- sprintf("%s", Sys.time())

@@ -174,3 +174,14 @@ test.formattingRecord.moreArguments.lengthMore <- function() {
   loginfo("%s '%s'", 'name', c(0, 1, 2))
   checkEquals("INFO::name '0,1,2'", logged)
 }
+
+test.formattingRecord.strips.whitespace <- function() {
+  logReset()
+  addHandler(mockAction, level='DEBUG', logger='', formatter=mockFormatter)
+  logged <<- NULL
+  loginfo("a string with trailing whitespace \n")
+  checkEquals("INFO::a string with trailing whitespace", logged)
+  logged <<- NULL
+  loginfo("  this string has also leading whitespace   ")
+  checkEquals("INFO::this string has also leading whitespace", logged)
+}

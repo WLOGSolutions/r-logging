@@ -17,6 +17,8 @@
   a log record gets timestamped and will be independently formatted by
   each of the handlers handling it.
 
+  leading and trailing whitespace is stripped from the final message.
+
 }
 \usage{
 logdebug(msg, ..., logger='')
