@@ -177,9 +177,9 @@ getLogger <- function(name='', ...)
     fullname <- paste('logging.ROOT', name, sep='.')
 
   if(!exists(fullname, envir=logging.options)) {
-    logging.options[[fullname]] <- new.env()
-    logging.options[[fullname]][['handlers']] <- NULL
-    updateOptions.environment(logging.options[[fullname]], ...)
+    logger <- logging.options[[fullname]] <- new.env()
+    logger[['handlers']] <- NULL
+    updateOptions.environment(logger, ...)
   }
   logging.options[[fullname]]
 }
