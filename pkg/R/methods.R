@@ -27,14 +27,18 @@
 ##
 
 Logger <- setRefClass("Logger",
-                      fields=list(name = "character"),
+                      fields=list(
+                        name = "character"),
                       methods=list(
                         log = function(...) { levellog(..., logger=name) },
+
+                        setLevel = function(newLevel) { logging::setLevel(newLevel, container=name) },
+                        addHandler = function(...) { logging::addHandler(..., logger=name) },
+
                         finest = function(...) { log(loglevels['FINEST'], ...) },
                         finer = function(...) { log(loglevels['FINER'], ...) },
                         fine = function(...) { log(loglevels['FINE'], ...) },
                         debug = function(...) { log(loglevels['DEBUG'], ...) },
                         info = function(...) { log(loglevels["INFO"], ...) },
                         warn = function(...) { log(loglevels["WARN"], ...) },
-                        error = function(...) { log(loglevels["ERROR"], ...) }
-                        ))
+                        error = function(...) { log(loglevels["ERROR"], ...) }))
