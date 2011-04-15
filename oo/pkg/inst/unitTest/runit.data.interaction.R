@@ -1,40 +1,55 @@
 require(svUnit)
+require(logging.oo)
 
 # test functions are called in lexicographic order.
 # $Id$
 
 test.000.getLoggerWithoutInitializingDoesNotCrash <- function() {
-  rootLogger <- Logger$new("")
+  rootLogger <- Logger$new(name="")
 }
 
 test.001.defaultLoggingLevelIsINFO <- function() {
   basicConfig()
-  root <- Logger$new('')
+  root <- Logger$new(name='')
   expect <- logging:::loglevels['INFO']
-  checkEquals(root[['level']], expect)
+  checkEquals(expect, root$getLevel())
 }
 
 test.002.canInitializeTwice <- function() {
   basicConfig()
-  root <- Logger$new('')
+  root <- Logger$new(name='')
   expect <- logging:::loglevels['INFO']
-  checkEquals(root[['level']], expect)
+  checkEquals(expect, root$getLevel())
+}
+
+test.003.canUseGetLoggerOnRoot <- function() {
+  basicConfig()
+  root1 <- Logger$new(name='')
+  root2 <- getLogger()
+  checkEquals(root1, root2)
+}
+
+test.004.canUseGetLogger <- function() {
+  basicConfig()
+  root1 <- Logger$new(name='abc')
+  root2 <- getLogger("abc")
+  checkEquals(root1, root2)
 }
 
 # end of functions that must be tested first
 
 test.canGetRootLoggerWithoutName <- function() {
-  root1 <- Logger$new('')
-  root2 <- Logger$new()
+  root1 <- getLogger('')
+  root2 <- getLogger()
   checkEquals(root1, root2)
 }
 
 test.canSetLoggerLevelByNamedValue <- function() {
   basicConfig()
-  root <- Logger$new('')
+  root <- getLogger('')
   root$setLevel(logging:::loglevels['DEBUG'])
   expect <- logging:::loglevels['DEBUG']
-  checkEquals(root[['level']], expect)
+  checkEquals(root$getLevel(), expect)
 }
 
 test.canSetLoggerLevelByName <- function() {
@@ -42,7 +57,7 @@ test.canSetLoggerLevelByName <- function() {
   root <- getLogger('')
   root$setLevel('DEBUG')
   expect <- logging:::loglevels['DEBUG']
-  checkEquals(root[['level']], expect)
+  checkEquals(root$getLevel(), expect)
 }
 
 logged <- NULL

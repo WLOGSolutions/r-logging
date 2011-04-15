@@ -33,6 +33,7 @@ Logger <- setRefClass("Logger",
                         log = function(...) { levellog(..., logger=name) },
 
                         setLevel = function(newLevel) { logging::setLevel(newLevel, container=name) },
+                        getLevel = function() { logging::getLogger(name)[['level']] },
                         addHandler = function(...) { logging::addHandler(..., logger=name) },
 
                         finest = function(...) { log(loglevels['FINEST'], ...) },
@@ -44,4 +45,4 @@ Logger <- setRefClass("Logger",
                         error = function(...) { log(loglevels["ERROR"], ...) }))
 
 getLogger <- function(name = "")
-  Logger$new(name)
+  Logger$new(name=name)
