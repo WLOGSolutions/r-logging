@@ -3,6 +3,7 @@
 
 \name{Logger}
 \alias{Logger}
+\alias{getLogger}
 \title{the `Logger` reference class}
 \description{
 
@@ -11,6 +12,7 @@
 }
 \usage{
 logger <- Logger$new(name=name)
+logger <- getLogger(name=name)
 }
 \arguments{
   \item{name}{the name of the logger}

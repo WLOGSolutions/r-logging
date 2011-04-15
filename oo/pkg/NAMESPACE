@@ -1,3 +1,4 @@
 # $Id: NAMESPACE 61 2011-02-11 11:34:43Z mariotomo $
-export(Logger
+export(Logger,
+       getLogger
        )
