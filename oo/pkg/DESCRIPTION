@@ -1,10 +1,10 @@
-Package: logging
+Package: logging.oo
 Version: 0.5-65
 Date: 2010-06-17
-Title: a tentative logging package
+Title: oo interface for the logging package
 Author: Mario Frasca <mariotomo@gmail.com>
 Maintainer: Mario Frasca <mario.frasca@nelen-schuurmans.nl>
 Description: a logging package emulating the python logging package.
 License: GPL (>=2)
-Depends: R (>= 2.11.0)
+Depends: R (>= 2.12.0), logging, methods
 Suggests: svUnit

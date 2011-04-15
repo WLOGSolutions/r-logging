@@ -6,7 +6,7 @@
 \title{the `Logger` reference class}
 \description{
 
-  Logger is a quick and dirty adoption of the reference class paradigm.
+  Logger is a quick and dirty adoption of the proto class paradigm.
 
 }
 \usage{
@@ -16,7 +16,6 @@ logger <- Logger$new(name=name)
   \item{name}{the name of the logger}
 }
 \examples{
-library(logging)
 basicConfig()
 
 log <- Logger$new(name="")

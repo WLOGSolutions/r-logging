@@ -51,7 +51,7 @@ namedLevel.numeric <- function(value) {
 
 .logrecord <- function(record, logger)
 {
-  ## get the logger of which we have the name.
+  ## 
   config <- getLogger(logger)
   
   if (record$level >= config$level) 
@@ -95,7 +95,7 @@ levellog <- function(level, msg, ..., logger='')
   record$timestamp <- sprintf("%s", Sys.time())
   record$logger <- logger
   record$level <- namedLevel(level)
-  record$levelname <- names(which(loglevels == level)[1])
+  record$levelname <- names(which(loglevels == record$level)[1])
   if(is.na(record$levelname))
     record$levelname <- paste("NumericLevel(", level, ")", sep='')
 
