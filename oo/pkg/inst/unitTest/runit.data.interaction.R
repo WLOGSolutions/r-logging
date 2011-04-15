@@ -6,6 +6,7 @@ require(logging.oo)
 
 test.000.getLoggerWithoutInitializingDoesNotCrash <- function() {
   rootLogger <- Logger$new(name="")
+  checkTrue(TRUE)
 }
 
 test.001.defaultLoggingLevelIsINFO <- function() {
@@ -99,9 +100,9 @@ test.recordIsEmitted.unrelated <- function() {
   log2 <- getLogger('too.deep')
   log2$addHandler(mockAction)
   logged <<- NULL
-  log1$debug('test', logger='other.branch')
-  log1$info('test', logger='other.branch')
-  log1$error('test', logger='other.branch')
+  log1$debug('test')
+  log1$info('test')
+  log1$error('test')
   checkEquals(0, length(logged))
 }
 
