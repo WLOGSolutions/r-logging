@@ -5,6 +5,7 @@ require(svUnit)
 
 test.000.getLoggerWithoutInitializingDoesNotCrash <- function() {
   rootLogger <- getLogger("")
+  checkTrue(TRUE) # this is reached if the previous does not crash.
 }
 
 test.001.defaultLoggingLevelIsINFO <- function() {
