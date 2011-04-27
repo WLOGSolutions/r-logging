@@ -49,7 +49,7 @@ sentryAction <- function(msg, conf, record) {
                message=msg,
                view=deparse(functionCallStack[length(functionCallStack) - 1][[1]]),
                message_id=as.character(getuuid()),
-               logger_name=record$logger
+               logger_name=record$logger,
                metadata=list())
   repr <- as.character(base64(toJSON(data)))
 

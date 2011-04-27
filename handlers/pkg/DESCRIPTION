@@ -6,5 +6,5 @@ Author: Mario Frasca <mariotomo@gmail.com>
 Maintainer: Mario Frasca <mario.frasca@nelen-schuurmans.nl>
 Description: this package defines some useful actions for logging handlers.
 License: GPL (>=2)
-Depends: R (>= 2.12.0), logging.oo
+Depends: R (>= 2.12.0), logging
 Suggests: svUnit, RCurl, Ruuid, rjson
