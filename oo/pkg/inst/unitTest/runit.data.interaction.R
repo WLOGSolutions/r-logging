@@ -63,7 +63,7 @@ test.canSetLoggerLevelByName <- function() {
 
 logged <- NULL
 
-mockAction <- function(msg, handler) {
+mockAction <- function(msg, handler, ...) {
   logged <<- c(logged, msg)
 }
 
