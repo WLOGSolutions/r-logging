@@ -30,8 +30,10 @@ sentryAction <- function(msg, conf, record) {
   if (!exists('server', envir=conf))
     stop("handler with sentryAction must have a 'server' element.\n")
 
-  stopifnot(require(RCurl),
-            require(rjson))
+  if(!all(c(require(RCurl),
+            require(Ruuid),
+            require(rjson))))
+    stop("sentryAction depends on RCurl, Ruuid, rjson.")
 
   if(missing(record))
     stop("sentryAction needs to receive the logging record.\n")
@@ -40,6 +42,8 @@ sentryAction <- function(msg, conf, record) {
   ## biocLite("Ruuid")
 
   functionCallStack = sys.calls()
+  print(functionCallStack)
+
   data <- list(timestamp=record$timestamp,
                level=record$level,
                message=msg,
