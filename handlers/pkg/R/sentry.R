@@ -31,6 +31,8 @@ sentryAction <- function(msg, conf, record, ...) {
     stop("handler with sentryAction must have a 'server' element.\n")
   if (!exists('sentry.key', envir=conf))
     stop("handler with sentryAction must have a 'sentry.key' element.\n")
+  sentry.server <- with(conf, server)
+  sentry.key <- with(conf, sentry.key)
 
   if(!all(c(require(RCurl),
             require(Ruuid),
@@ -45,23 +47,16 @@ sentryAction <- function(msg, conf, record, ...) {
     stop("sentryAction needs to receive the logging record.\n")
 
   functionCallStack = sys.calls()
-  print(dput(functionCallStack))
-  print(functionCallStack[length(functionCallStack) - 1][[1]])
 
-  data <- list(timestamp=record$timestamp,
-               level=as.numeric(record$level),
+  data <- list(level=as.numeric(record$level),
                message=msg,
                view=deparse(functionCallStack[length(functionCallStack) - 4][[1]]),
                message_id=as.character(getuuid()),
-               logger_name=record$logger,
+               logger=record$logger,
                data=list(sentry=""))
   repr <- as.character(base64(toJSON(data)))
-  print(repr)
 
-  ## TODO: this command line must be made R
-  ## curl -d key=lizard12345 -d format=json -d data=repr http://sentry.lizardsystem.nl/store/
-  url <- paste(with(conf, server), "store", "", sep="/")
+  url <- paste(sentry.server, "store", "", sep="/")
 
-  reply <- postForm(url, style="POST", format="json", key=with(conf, sentry.key), data=repr)
-  print(reply)
+  postForm(url, style="POST", format="json", key=sentry.key, data=repr)
 }
