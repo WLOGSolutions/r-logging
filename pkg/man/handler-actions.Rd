@@ -14,12 +14,13 @@
 
 }
 \usage{
-writeToFile(msg, handler)
-writeToConsole(msg, handler)
+writeToFile(msg, handler, ...)
+writeToConsole(msg, handler, ...)
 }
 \arguments{
   \item{msg}{the final formatted message to be output}
   \item{handler}{the handler owning this action}
+  \item{...}{placeholder: accept any extra future parameter.}
 }
 \details{
 

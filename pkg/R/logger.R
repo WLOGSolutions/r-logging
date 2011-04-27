@@ -59,7 +59,7 @@ namedLevel.numeric <- function(value) {
       if (record$level >= with(handler, level)) {
         action <- with(handler, action)
         formatter <- with(handler, formatter)
-        action(formatter(record), handler)
+        action(formatter(record), handler, record)
       }
 
   if(logger != '') {
@@ -216,12 +216,12 @@ setLevel.default <- function(level, container='') {
 ## with level equal or higher than that are taken into account), an
 ## action (writing the formatted record to a stream).
 
-writeToConsole <- function(msg, handler)
+writeToConsole <- function(msg, handler, ...)
 {
   cat(paste(msg, '\n', sep=''))
 }
 
-writeToFile <- function(msg, handler)
+writeToFile <- function(msg, handler, ...)
 {
   if (!exists('file', envir=handler))
     stop("handler with writeToFile 'action' must have a 'file' element.\n")
