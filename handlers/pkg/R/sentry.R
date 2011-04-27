@@ -54,6 +54,9 @@ sentryAction <- function(msg, conf, record, ...) {
                message_id=as.character(getuuid()),
                logger=record$logger,
                data=list(sentry=""))
+  if (exists('app_name', envir=conf))
+    data$server_name <- with(conf, app_name)
+
   repr <- as.character(base64(toJSON(data)))
 
   url <- paste(sentry.server, "store", "", sep="/")
