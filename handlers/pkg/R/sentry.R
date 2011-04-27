@@ -19,39 +19,49 @@
 ##
 ## Usage      : library(logging.handlers)
 ##
-## $Id: logger.R 60 2011-02-02 09:47:04Z mariotomo $
+## $Id$
 ##
 ## initial programmer :  Mario Frasca
 ##
 ## initial date       :  20110426
 ##
 
-sentryAction <- function(msg, conf, record) {
+sentryAction <- function(msg, conf, record, ...) {
   if (!exists('server', envir=conf))
     stop("handler with sentryAction must have a 'server' element.\n")
+  if (!exists('sentry.key', envir=conf))
+    stop("handler with sentryAction must have a 'sentry.key' element.\n")
 
   if(!all(c(require(RCurl),
             require(Ruuid),
             require(rjson))))
     stop("sentryAction depends on RCurl, Ruuid, rjson.")
 
-  if(missing(record))
-    stop("sentryAction needs to receive the logging record.\n")
-
+  ## you install Ruuid this way (not with install.packages).
   ## source("http://bioconductor.org/biocLite.R")
   ## biocLite("Ruuid")
 
+  if(missing(record))
+    stop("sentryAction needs to receive the logging record.\n")
+
   functionCallStack = sys.calls()
-  print(functionCallStack)
+  print(dput(functionCallStack))
+  print(functionCallStack[length(functionCallStack) - 1][[1]])
 
   data <- list(timestamp=record$timestamp,
-               level=record$level,
+               level=as.numeric(record$level),
                message=msg,
-               view=deparse(functionCallStack[length(functionCallStack) - 1][[1]]),
+               view=deparse(functionCallStack[length(functionCallStack) - 4][[1]]),
                message_id=as.character(getuuid()),
                logger_name=record$logger,
-               metadata=list())
+               data=list(sentry=""))
   repr <- as.character(base64(toJSON(data)))
+  print(repr)
 
-  
+  ## TODO: this command line must be made R
+  ## curl -d key=lizard12345 -d format=json -d data=repr http://sentry.lizardsystem.nl/store/
+  url <- paste(with(conf, server), "store", "", sep="/")
+
+  reply <- postForm(url, style="POST", format="json", key=with(conf, sentry.key), data=repr)
+  print(reply)
 }

@@ -1,5 +1,5 @@
 % File man/sentry.Rd
-% $Id: getLogger.Rd 11 2010-04-03 18:54:20Z mariotomo $
+% $Id$
 
 \name{sentry}
 \alias{sentryAction}
@@ -17,12 +17,13 @@
   sentry server.
 }
 \usage{
-sentryAction(msg, conf, record)
+sentryAction(msg, conf, record, ...)
 }
 \arguments{
   \item{msg}{the formatted record}
   \item{conf}{the handler environment}
   \item{record}{the full unformatted record}
+  \item{...}{left open for future enhancements}
 }
 \examples{
 library(logging)
@@ -30,8 +31,8 @@ library(logging.handlers)
 
 basicConfig()
 
-addHandler("sentry", sentryAction, server="http://sentry.somedomain.com/")
+addHandler("sentry", sentryAction, server="http://sentry.lizardsystem.nl/", sentry.key="ben niet gek")
 
-logdebug("not sent, basic is INFO")
-logwarn("sent and timestamped")
+\dontrun{logdebug("not sent, basic is INFO")}
+\dontrun{logwarn("sent and timestamped")}
 }
