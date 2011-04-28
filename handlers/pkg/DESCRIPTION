@@ -1,5 +1,5 @@
 Package: logging.handlers
-Version: 0.5-68
+Version: 0.5-80
 Date: 2011-04-27
 Title: extra logging handlers
 Author: Mario Frasca <mariotomo@gmail.com>

@@ -27,13 +27,6 @@
 ##
 
 sentryAction <- function(msg, conf, record, ...) {
-  if (!exists('server', envir=conf))
-    stop("handler with sentryAction must have a 'server' element.\n")
-  if (!exists('sentry.key', envir=conf))
-    stop("handler with sentryAction must have a 'sentry.key' element.\n")
-  sentry.server <- with(conf, server)
-  sentry.key <- with(conf, sentry.key)
-
   if(!all(c(require(RCurl),
             require(Ruuid),
             require(rjson))))
@@ -43,19 +36,36 @@ sentryAction <- function(msg, conf, record, ...) {
   ## source("http://bioconductor.org/biocLite.R")
   ## biocLite("Ruuid")
 
-  if(missing(record))
+  if (!exists('server', envir=conf))
+    stop("handler with sentryAction must have a 'server' element.\n")
+  if (!exists('sentry.key', envir=conf))
+    stop("handler with sentryAction must have a 'sentry.key' element.\n")
+
+  sentry.server <- with(conf, server)
+  sentry.key <- with(conf, sentry.key)
+  client.name <- tryCatch(with(conf, client.name), error = function(e) "r.logging")
+
+  if(missing(record))  # needed for `level` and `timestamp` fields.
     stop("sentryAction needs to receive the logging record.\n")
 
-  functionCallStack = sys.calls()
+  ## `view.name`: the name of the function where the log record was generated.
+  functionCallStack <- sys.calls()
+  view.name <- tryCatch({
+    perpretator.call <- functionCallStack[length(functionCallStack) - 4][[1]]
+    perpretator.name <- as.character(perpretator.call)[[1]]
+    view.name <- perpretator.name
+  }, error = function(e) "fired at command line")
 
-  data <- list(level=as.numeric(record$level),
-               message=msg,
-               view=deparse(functionCallStack[length(functionCallStack) - 4][[1]]),
-               message_id=as.character(getuuid()),
-               logger=record$logger,
-               data=list(sentry=""))
-  if (exists('app_name', envir=conf))
-    data$server_name <- with(conf, app_name)
+  data <- list("level" = as.numeric(record$level),
+               "message" = msg,
+               "view" = view.name,
+               "message_id" = as.character(getuuid()),
+               "logger" = record$logger,
+               "server_name" = client.name)
+
+  metadata <- list()
+  metadata$call_stack <- paste(lapply(functionCallStack, deparse), collapse=" || ")
+  data$data <- metadata
 
   repr <- as.character(base64(toJSON(data)))
 
