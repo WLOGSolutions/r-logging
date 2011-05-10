@@ -32,6 +32,11 @@ sentryAction <- function(msg, conf, record, ...) {
             require(rjson))))
     stop("sentryAction depends on RCurl, Ruuid, rjson.")
 
+  if (exists('psk', envir=conf)) {
+    if(!require(digest))
+      stop("authenticating sentryAction depends on digest.")
+  }  
+
   ## you install Ruuid this way (not with install.packages).
   ## source("http://bioconductor.org/biocLite.R")
   ## biocLite("Ruuid")
@@ -54,7 +59,7 @@ sentryAction <- function(msg, conf, record, ...) {
     perpretator.call <- functionCallStack[length(functionCallStack) - 4][[1]]
     perpretator.name <- as.character(perpretator.call)[[1]]
     view.name <- perpretator.name
-  }, error = function(e) "fired at command line")
+  }, error = function(e) "<interactive>")
 
   data <- list("level" = as.numeric(record$level),
                "message" = msg,
@@ -71,5 +76,16 @@ sentryAction <- function(msg, conf, record, ...) {
 
   url <- paste(sentry.server, "store", "", sep="/")
 
-  postForm(url, style="POST", format="json", key=sentry.key, data=repr)
+  if (exists('psk', envir=conf)) {
+    ## we do not send the sentry.key but we authenticate the message
+    ## with a hmac value.
+
+    timestamp <- format(Sys.time(), "%Y-%m-%dT%X")
+    to.sign <- paste(timestamp, repr, sep=' ')
+    authentication <- hmac(with(conf, psk), to.sign, "SHA1")
+
+    postForm(url, style="POST", format="json", key=sentry.key, data=repr, authentication=authentication)
+  } else {
+    postForm(url, style="POST", format="json", key=sentry.key, data=repr)
+  }
 }
