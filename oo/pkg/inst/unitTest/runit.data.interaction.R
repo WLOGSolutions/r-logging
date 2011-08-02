@@ -40,14 +40,14 @@ test.004.canUseGetLogger <- function() {
 # end of functions that must be tested first
 
 test.canGetRootLoggerWithoutName <- function() {
-  root1 <- getLogger('')
-  root2 <- getLogger()
+  root1 <- Logger$new('')
+  root2 <- Logger$new()
   checkEquals(root1, root2)
 }
 
 test.canSetLoggerLevelByNamedValue <- function() {
   basicConfig()
-  root <- getLogger('')
+  root <- Logger$new('')
   root$setLevel(logging:::loglevels['DEBUG'])
   expect <- logging:::loglevels['DEBUG']
   checkEquals(root$getLevel(), expect)
@@ -55,7 +55,7 @@ test.canSetLoggerLevelByNamedValue <- function() {
 
 test.canSetLoggerLevelByName <- function() {
   basicConfig()
-  root <- getLogger('')
+  root <- Logger$new('')
   root$setLevel('DEBUG')
   expect <- logging:::loglevels['DEBUG']
   checkEquals(root$getLevel(), expect)
@@ -73,7 +73,7 @@ mockFormatter <- function(record) {
 
 test.recordIsEmitted.rootToRoot <- function() {
   logReset()
-  log <- getLogger('test')
+  log <- Logger$new('test')
   log$addHandler(mockAction)
   logged <<- NULL
   log$debug('test')
@@ -84,8 +84,8 @@ test.recordIsEmitted.rootToRoot <- function() {
 
 test.recordIsEmitted.tooDeep <- function() {
   logReset()
-  root <- getLogger('')
-  log2 <- getLogger('too.deep')
+  root <- Logger$new('')
+  log2 <- Logger$new('too.deep')
   log2$addHandler(mockAction)
   logged <<- NULL
   root$debug('test')
@@ -96,8 +96,8 @@ test.recordIsEmitted.tooDeep <- function() {
 
 test.recordIsEmitted.unrelated <- function() {
   logReset()
-  log1 <- getLogger('other.branch')
-  log2 <- getLogger('too.deep')
+  log1 <- Logger$new('other.branch')
+  log2 <- Logger$new('too.deep')
   log2$addHandler(mockAction)
   logged <<- NULL
   log1$debug('test')
@@ -108,8 +108,8 @@ test.recordIsEmitted.unrelated <- function() {
 
 test.recordIsEmitted.deepToRoot <- function() {
   logReset()
-  root <- getLogger('')
-  log <- getLogger('other.branch')
+  root <- Logger$new('')
+  log <- Logger$new('other.branch')
   root$addHandler(mockAction)
   logged <<- NULL
   log$debug('test')
@@ -120,8 +120,8 @@ test.recordIsEmitted.deepToRoot <- function() {
 
 test.recordIsEmitted.deepToRoot.DI.dropped <- function() {
   logReset()
-  root <- getLogger('')
-  log <- getLogger('other.branch')
+  root <- Logger$new('')
+  log <- Logger$new('other.branch')
   root$addHandler(mockAction, level='DEBUG')
   logged <<- NULL
   log$setLevel('INFO')
@@ -133,8 +133,8 @@ test.recordIsEmitted.deepToRoot.DI.dropped <- function() {
 
 test.recordIsEmitted.deepToRoot.DD.passed <- function() {
   logReset()
-  root <- getLogger('')
-  log <- getLogger('other.branch')
+  root <- Logger$new('')
+  log <- Logger$new('other.branch')
   root$addHandler(mockAction, level='DEBUG')
   logged <<- NULL
   log$setLevel('DEBUG')
@@ -147,7 +147,7 @@ test.recordIsEmitted.deepToRoot.DD.passed <- function() {
 
 test.formattingRecord.lengthZero <- function() {
   logReset()
-  log <- getLogger('')
+  log <- Logger$new('')
   log$addHandler(mockAction, level='DEBUG', formatter=mockFormatter)
   logged <<- NULL
   log$info("test '%s'", numeric(0))
@@ -156,7 +156,7 @@ test.formattingRecord.lengthZero <- function() {
 
 test.formattingRecord.lengthOne <- function() {
   logReset()
-  log <- getLogger()
+  log <- Logger$new()
   log$addHandler(mockAction, level='DEBUG', formatter=mockFormatter)
   logged <<- NULL
   log$info("test '%s'", 12)
@@ -165,7 +165,7 @@ test.formattingRecord.lengthOne <- function() {
 
 test.formattingRecord.lengthMore <- function() {
   logReset()
-  log <- getLogger()
+  log <- Logger$new()
   addHandler(mockAction, level='DEBUG', formatter=mockFormatter)
   logged <<- NULL
   log$info("test '%s'", c(0, 1, 2))
@@ -174,7 +174,7 @@ test.formattingRecord.lengthMore <- function() {
 
 test.formattingRecord.moreArguments <- function() {
   logReset()
-  log <- getLogger()
+  log <- Logger$new()
   log$addHandler(mockAction, level='DEBUG', formatter=mockFormatter)
   logged <<- NULL
   log$info("%s: %d", 'name', 123)
@@ -186,7 +186,7 @@ test.formattingRecord.moreArguments <- function() {
 
 test.formattingRecord.moreArguments.lengthMore <- function() {
   logReset()
-  log <- getLogger()
+  log <- Logger$new()
   log$addHandler(mockAction, level='DEBUG', formatter=mockFormatter)
   logged <<- NULL
   log$info("%s '%s'", 'name', c(0, 1, 2))
@@ -195,7 +195,7 @@ test.formattingRecord.moreArguments.lengthMore <- function() {
 
 test.formattingRecord.strips.whitespace <- function() {
   logReset()
-  log <- getLogger()
+  log <- Logger$new()
   log$addHandler(mockAction, level='DEBUG', formatter=mockFormatter)
   logged <<- NULL
   log$info("a string with trailing whitespace \n")

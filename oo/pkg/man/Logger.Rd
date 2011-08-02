@@ -3,7 +3,6 @@
 
 \name{Logger}
 \alias{Logger}
-\alias{getLogger}
 \alias{\S4method{new}{Logger}}
 \alias{\S4method{log}{Logger}}
 \alias{\S4method{setLevel}{Logger}}
@@ -24,7 +23,6 @@
 }
 \usage{
 \S4method{new}{Logger}(name)
-getLogger(name="")
 \S4method{log}{Logger}(...)
 \S4method{setLevel}{Logger}(newLevel)
 \S4method{getLevel}{Logger}()

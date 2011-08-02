@@ -43,6 +43,3 @@ Logger <- setRefClass("Logger",
                         info = function(...) { log(loglevels["INFO"], ...) },
                         warn = function(...) { log(loglevels["WARN"], ...) },
                         error = function(...) { log(loglevels["ERROR"], ...) }))
-
-getLogger <- function(name = "")
-  Logger$new(name=name)
