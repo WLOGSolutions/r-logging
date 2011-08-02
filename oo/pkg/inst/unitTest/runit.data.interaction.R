@@ -23,18 +23,26 @@ test.002.canInitializeTwice <- function() {
   checkEquals(expect, root$getLevel())
 }
 
-test.003.canUseGetLoggerOnRoot <- function() {
+test.003.sameNameMeansSameObject <- function() {
   basicConfig()
-  root1 <- Logger$new(name='')
-  root2 <- getLogger()
-  checkEquals(root1, root2)
+  root1 <- Logger$new(name='abc')
+  root2 <- Logger$new(name="abc")
+  checkIdentical(root1, root2)
 }
 
-test.004.canUseGetLogger <- function() {
+test.004.noNameMeansRoot <- function() {
+  basicConfig()
+  root1 <- Logger$new(name='')
+  root2 <- Logger$new()
+  checkIdentical(root1, root2)
+}
+
+test.005.canUseGetLogger <- function() {
+  library(logging)
   basicConfig()
   root1 <- Logger$new(name='abc')
   root2 <- getLogger("abc")
-  checkEquals(root1, root2)
+  checkIdentical(root1, root2)
 }
 
 # end of functions that must be tested first
