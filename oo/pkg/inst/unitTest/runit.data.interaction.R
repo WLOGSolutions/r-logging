@@ -40,14 +40,14 @@ test.004.canUseGetLogger <- function() {
 # end of functions that must be tested first
 
 test.canGetRootLoggerWithoutName <- function() {
-  root1 <- Logger$new('')
+  root1 <- Logger$new(name='')
   root2 <- Logger$new()
   checkEquals(root1, root2)
 }
 
 test.canSetLoggerLevelByNamedValue <- function() {
   basicConfig()
-  root <- Logger$new('')
+  root <- Logger$new(name='')
   root$setLevel(logging:::loglevels['DEBUG'])
   expect <- logging:::loglevels['DEBUG']
   checkEquals(root$getLevel(), expect)
@@ -55,7 +55,7 @@ test.canSetLoggerLevelByNamedValue <- function() {
 
 test.canSetLoggerLevelByName <- function() {
   basicConfig()
-  root <- Logger$new('')
+  root <- Logger$new(name='')
   root$setLevel('DEBUG')
   expect <- logging:::loglevels['DEBUG']
   checkEquals(root$getLevel(), expect)
@@ -73,7 +73,7 @@ mockFormatter <- function(record) {
 
 test.recordIsEmitted.rootToRoot <- function() {
   logReset()
-  log <- Logger$new('test')
+  log <- Logger$new(name='test')
   log$addHandler(mockAction)
   logged <<- NULL
   log$debug('test')
@@ -84,8 +84,8 @@ test.recordIsEmitted.rootToRoot <- function() {
 
 test.recordIsEmitted.tooDeep <- function() {
   logReset()
-  root <- Logger$new('')
-  log2 <- Logger$new('too.deep')
+  root <- Logger$new(name='')
+  log2 <- Logger$new(name='too.deep')
   log2$addHandler(mockAction)
   logged <<- NULL
   root$debug('test')
@@ -96,8 +96,8 @@ test.recordIsEmitted.tooDeep <- function() {
 
 test.recordIsEmitted.unrelated <- function() {
   logReset()
-  log1 <- Logger$new('other.branch')
-  log2 <- Logger$new('too.deep')
+  log1 <- Logger$new(name='other.branch')
+  log2 <- Logger$new(name='too.deep')
   log2$addHandler(mockAction)
   logged <<- NULL
   log1$debug('test')
@@ -108,8 +108,8 @@ test.recordIsEmitted.unrelated <- function() {
 
 test.recordIsEmitted.deepToRoot <- function() {
   logReset()
-  root <- Logger$new('')
-  log <- Logger$new('other.branch')
+  root <- Logger$new(name='')
+  log <- Logger$new(name='other.branch')
   root$addHandler(mockAction)
   logged <<- NULL
   log$debug('test')
@@ -120,8 +120,8 @@ test.recordIsEmitted.deepToRoot <- function() {
 
 test.recordIsEmitted.deepToRoot.DI.dropped <- function() {
   logReset()
-  root <- Logger$new('')
-  log <- Logger$new('other.branch')
+  root <- Logger$new(name='')
+  log <- Logger$new(name='other.branch')
   root$addHandler(mockAction, level='DEBUG')
   logged <<- NULL
   log$setLevel('INFO')
@@ -133,8 +133,8 @@ test.recordIsEmitted.deepToRoot.DI.dropped <- function() {
 
 test.recordIsEmitted.deepToRoot.DD.passed <- function() {
   logReset()
-  root <- Logger$new('')
-  log <- Logger$new('other.branch')
+  root <- Logger$new(name='')
+  log <- Logger$new(name='other.branch')
   root$addHandler(mockAction, level='DEBUG')
   logged <<- NULL
   log$setLevel('DEBUG')
@@ -147,7 +147,7 @@ test.recordIsEmitted.deepToRoot.DD.passed <- function() {
 
 test.formattingRecord.lengthZero <- function() {
   logReset()
-  log <- Logger$new('')
+  log <- Logger$new(name='')
   log$addHandler(mockAction, level='DEBUG', formatter=mockFormatter)
   logged <<- NULL
   log$info("test '%s'", numeric(0))
