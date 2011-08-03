@@ -123,7 +123,21 @@ logReset <- function() {
 addHandler <- function(handler, ..., logger='') {
   if(is.character(logger))
     logger <- getLogger(logger)
-  logger$addHandler(handler, ...)
+
+  ## this part has to be repeated here otherwise the called function
+  ## will deparse the argument to 'handler', the formal name given
+  ## here to the parameter
+  if(is.character(handler)) {
+    params <- list(...)
+    if('action' %in% names(params))
+      action <- params[['action']]
+    else
+      action <- params[[1]]
+  } else {
+    action <- handler
+    handler <- deparse(substitute(handler))
+  }
+  logger$addHandler(handler, action, ...)
 }
 
 removeHandler <- function(handler, logger='') {
