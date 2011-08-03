@@ -92,11 +92,9 @@ getLogger <- function(name='', ...)
     fullname <- paste('logging.ROOT', name, sep='.')
 
   if(!exists(fullname, envir=logging.options)) {
-    logger <- Logger$new(name=name)
-    assign(fullname, logger, envir=logging.options)
-    logger[['handlers']] <- list()
-    logger[['level']] <- namedLevel('INFO')
+    logger <- Logger$new(name=name, handlers=list(), level=namedLevel('INFO'))
     updateOptions.environment(logger, ...)
+    logging.options[[fullname]] <- logger
   }
   logging.options[[fullname]]
 }

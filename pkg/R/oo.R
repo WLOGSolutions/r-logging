@@ -26,7 +26,9 @@
 
 Logger <- setRefClass("Logger",
                       fields=list(
-                        name = "character"),
+                        name = "character",
+                        handlers="list",
+                        level="numeric"),
                       methods=list(
 
                         getParent = function() {
@@ -86,7 +88,7 @@ Logger <- setRefClass("Logger",
                           else if(is.numeric(newLevel))
                             newLevel <- namedLevel(level)
                           else newLevel <- NA
-                          level <- newLevel
+                          level <<- newLevel
                         },
                         
                         getLevel = function() level,
