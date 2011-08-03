@@ -22,13 +22,20 @@ test.002.canInitializeTwice <- function() {
   checkEquals(rootLogger[['level']], expect)
 }
 
-# end of functions that must be tested first
+test.003.sameNameMeansSameObject <- function() {
+  basicConfig()
+  root1 <- getLogger('abc')
+  root2 <- getLogger("abc")
+  checkIdentical(root1, root2)
+}
 
-test.canGetRootLoggerWithoutName <- function() {
+test.004.noNameMeansRoot <- function() {
   rootLogger1 <- getLogger('')
   rootLogger2 <- getLogger()
-  checkEquals(rootLogger1, rootLogger2)
+  checkIdentical(rootLogger1, rootLogger2)
 }
+
+# end of functions that must be tested first
 
 test.canFindLoggingLevels <- function() {
   checkEquals(logging:::loglevels[['NOTSET']], 0)
