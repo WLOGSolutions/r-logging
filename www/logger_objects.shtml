@@ -27,3 +27,24 @@ attr(,"package")<br/>
 > 
 </code>
 
+<p>let me keep it compact, I'm just giving you the code that will
+produce the same logging as in the previous example.  do notice that
+you can mix invoking object methods with usage of the global
+functions.
+
+<code>
+R> <user>logReset()</user><br/>
+R> <user>getLogger('libro.romanzo')$addHandler(writeToConsole)</user><br/>
+R> <user>lrc <- getLogger('libro.romanzo.campanile')</user><br/>
+R> <user>lrc$info('Ma cos\'&egrave; questo amore?')</user><br/>
+2010-04-08 11:18:59 INFO:libro.romanzo.campanile:Ma cos'&egrave; questo amore?<br/>
+R> <user>lrc$info('Se la luna mi porta fortuna')</user><br/>
+2010-04-08 11:19:05 INFO:libro.romanzo.campanile:Se la luna mi porta fortuna<br/>
+R> <user>lrc$info('Giovanotti, non esageriamo!')</user><br/>
+2010-04-08 11:19:12 INFO:libro.romanzo.campanile:Giovanotti, non esageriamo!<br/>
+R> <user>loginfo('memories of a survivor', logger='libro.romanzo.lessing')</user><br/>
+2010-04-08 11:22:06 INFO:libro.romanzo.lessing:memories of a survivor<br/>
+R> <user>getLogger('libro')$warn('talking to a hierarchically upper logger')</user><br/>
+R> <user>logerror('talking to an unrelated logger', logger='rivista.cucina')</user><br/>
+R> 
+</code>

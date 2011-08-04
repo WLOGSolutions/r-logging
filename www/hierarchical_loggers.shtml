@@ -35,8 +35,8 @@ resetting the logging system.</p>
 <code>
 R> <user>logReset()</user><br/>
 R> <user>addHandler(writeToConsole, logger='libro.romanzo')</user><br/>
-R> <user>loginfo('Ma cos'è questo amore?', logger='libro.romanzo.campanile')</user><br/>
-2010-04-08 11:18:59 INFO:libro.romanzo.campanile:Ma cos'è questo amore?<br/>
+R> <user>loginfo('Ma cos\'&egrave; questo amore?', logger='libro.romanzo.campanile')</user><br/>
+2010-04-08 11:18:59 INFO:libro.romanzo.campanile:Ma cos'&egrave; questo amore?<br/>
 R> <user>loginfo('Se la luna mi porta fortuna', logger='libro.romanzo.campanile')</user><br/>
 2010-04-08 11:19:05 INFO:libro.romanzo.campanile:Se la luna mi porta fortuna<br/>
 R> <user>loginfo('Giovanotti, non esageriamo!', logger='libro.romanzo.campanile')</user><br/>
