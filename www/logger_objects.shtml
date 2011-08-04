@@ -1,0 +1,29 @@
+
+<h4>logger objects</h4>
+
+<p>in the last example box in the previous section we have sent
+logging records to the 'libro.romanzo.campanile' logger.  we have done
+this by invoking the global loginfo function, passing it the name of
+the logger.  this is only practical if you are logging to the root
+logger or if you are using many different loggers, not if you are
+sending, as in our example, more records to the same logger.  if you
+are talking the whole time to the same logger, you do not want to have
+to repeat the name of the logger each time you send it a record.
+
+<p>the solution to this is in the object oriented approach taken in
+this logging library.  the getLogger() function returns a Logger
+object, which, since we are using Reference Classes, is itself an
+environment.  in the previous examples we have only used the fact that
+Logger objects are environments, let's now have a look at what more
+they offer.
+
+<code>
+> <user>class(getLogger())</user><br/>
+[1] "Logger"<br/>
+attr(,"package")<br/>
+[1] "logging"<br/>
+> <user>is.environment(getLogger())</user><br/>
+[1] TRUE<br/>
+> 
+</code>
+

@@ -21,15 +21,17 @@ tried out as a separate R session.  at the end of the section there's
 a link to a R script with the R instructions tried in the section.</p>
 
 <p>the same information, one page at a time:
-<a href="the_basics.php">[the basics]</a>
-<a href="hierarchical_loggers.php">[hierarchical loggers]</a>
-<a href="logging_to_file.php">[logging to file]</a>
-<a href="formatting_your_log_records.php">[formatting your log records]</a>
-<a href="writing_your_own_handlers.php">[writing your own handlers]</a>
+<a href="section.php?page=1">[the basics]</a>
+<a href="section.php?page=2">[hierarchical loggers]</a>
+<a href="section.php?page=3">[logger objects]</a>
+<a href="section.php?page=4">[logging to file]</a>
+<a href="section.php?page=5">[formatting your log records]</a>
+<a href="section.php?page=6">[writing your own handlers]</a>
 </p>
 
 <?php include("the_basics.shtml"); ?> 
 <?php include("hierarchical_loggers.shtml"); ?> 
+<?php include("logger_objects.shtml"); ?> 
 <?php include("logging_to_file.shtml"); ?> 
 <?php include("formatting_your_log_records.shtml"); ?> 
 <?php include("writing_your_own_handlers.shtml"); ?> 

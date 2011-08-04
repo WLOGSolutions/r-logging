@@ -22,7 +22,10 @@ R>
 
 <p>Let's check the effect of the above actions.  Both our loggers and
 handlers are environments, so we can use for example <tt>ls</tt>
-and <tt>with</tt> to inspect them.  After this basic configuration,
+and <tt>with</tt> to inspect them (don't worry if you get more
+elements than shown here, I'll come back to them later).
+
+After this basic configuration,
 our logger has handlers and a level and it contains one handler.  This
 is enough for some simple logging to the console.  The default logging
 level of the root logger is <tt>INFO</tt> (20).  Anything at severity
@@ -31,10 +34,10 @@ lower than <tt>INFO</tt> will not be logged.</p>
 <code>
 R> <user>ls(getLogger())</user><br/>
 [1] "handlers" "level"<br/>
-R> <user>with(getLogger(), level)</user><br/>
+R> <user>getLogger()[['level']]</user><br/>
 INFO <br/>
 &nbsp; 20 <br/>
-R> <user>with(getLogger(), handlers)</user><br/>
+R> <user>getLogger()[['handlers']]</user><br/>
 $basic.stdout<br/>
 &lt;environment: 0x........><br/>
 <br/>
@@ -53,7 +56,7 @@ them by function, if that is the way you defined it.</p>
 
 <code>
 R> <user>addHandler(writeToConsole)</user><br/>
-R> <user>with(getLogger(), names(handlers))</user><br/>
+R> <user>names(getLogger()[['handlers']])</user><br/>
 [1] "basic.stdout"   "writeToConsole"<br/>
 R> <user>loginfo('test')</user><br/>
 2010-04-07 11:31:06 INFO::test<br/>
@@ -81,10 +84,10 @@ R> <user>logwarn('test')</user><br/>
 2011-08-03 15:59:13 WARNING::test<br/>
 R> <user>loginfo('test')</user><br/>
 2011-08-03 15:59:18 INFO::test<br/>
-R> <user>with(getHandler('basic.stdout'), level)</user><br/>
+R> <user>getHandler('basic.stdout')[['level']]</user><br/>
 WARN <br/>
   30 <br/>
-R> <user>with(getHandler('writeToConsole'), level)</user><br/>
+R> <user>getHandler('writeToConsole')[['level']]</user><br/>
 INFO <br/>
   20 <br/>
 </code>
