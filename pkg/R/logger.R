@@ -128,16 +128,10 @@ addHandler <- function(handler, ..., logger='') {
   ## will deparse the argument to 'handler', the formal name given
   ## here to the parameter
   if(is.character(handler)) {
-    params <- list(...)
-    if('action' %in% names(params))
-      action <- params[['action']]
-    else
-      action <- params[[1]]
+    logger$addHandler(handler, ...)
   } else {
-    action <- handler
-    handler <- deparse(substitute(handler))
+    logger$addHandler(handler=deparse(substitute(handler)), action=handler, ...)
   }
-  logger$addHandler(handler, action, ...)
 }
 
 removeHandler <- function(handler, logger='') {

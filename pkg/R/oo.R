@@ -116,7 +116,7 @@ Logger <- setRefClass("Logger",
                               assign('action', params[[1]], handlerEnv)
                           } else  {
                             ## first parameter is handler action, from which we extract the name
-                            assign('action', handler, handlerEnv)
+                            updateOptions.environment(handlerEnv, action=handler)
                             handlerName <- deparse(substitute(handler))
                           }
                           updateOptions.environment(handlerEnv, ...)
