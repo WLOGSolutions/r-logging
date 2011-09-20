@@ -11,3 +11,7 @@
   names and values are the same as in the python standard logging module.
 
 }
+\examples{
+loglevels['INFO']
+loglevels['DEBUG']
+}

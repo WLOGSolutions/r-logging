@@ -33,3 +33,9 @@ logerror(msg, ..., logger='')
     ... values are passed to it to form the actual message.}
   \item{logger}{the name of the logger to which we pass the record}
 }
+\examples{
+logReset()
+addHandler(writeToConsole)
+loginfo('this goes to console')
+logdebug('this stays silent')
+}
