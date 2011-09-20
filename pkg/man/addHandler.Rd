@@ -3,14 +3,13 @@
 
 \name{addHandler}
 \alias{addHandler}
-\title{add a handler to a logger}
+\alias{removeHandler}
 \description{
   
-  creates a new named handler list, attaches it to the specified logger
-  and registers a defines a function as a handler of log records going through the
-  specified logger.
+  use these functions to maintain the list of handlers attached to a logger.
   
 }
+\title{add a handler to or remove one from a logger}
 \details{
 
   \dots may contain extra parameters that will be passed to the handler
@@ -29,10 +28,19 @@
 }
 \usage{
 addHandler(handler, ..., logger = "")
+removeHandler(handler, logger='')
 }
 \arguments{
   \item{handler}{the name of the handler, or its action}
   \item{...}{extra parameters for the action, to be stored in the handler list}
   \item{logger}{the name of the logger to which to attach the new
     handler, defaults to the root logger}
+}
+\examples{
+logReset()
+addHandler(writeToConsole)
+names(getLogger()[['handlers']])
+loginfo('test')
+removeHandler('writeToConsole')
+logwarn('test')
 }

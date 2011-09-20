@@ -23,3 +23,8 @@ getHandler(handler, logger='')
   \item{handler}{the name of the handler, or its action.}
   \item{logger}{optional: the name of the logger.  defaults to the root logger.}
 }
+\examples{
+logReset()
+addHandler(writeToConsole)
+getHandler('writeToConsole')
+}
