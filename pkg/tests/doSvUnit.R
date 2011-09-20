@@ -1,7 +1,7 @@
 #! /usr/bin/Rscript
 require(svUnit)  # Needed if run from R CMD BATCH
+require(logging)
 pkg <- "logging"
-require(pkg)
 unlink("report.xml")  # Make sure we generate a new report
 mypkgSuite <- svSuiteList(pkg, dirs="../../pkg/inst/unitTest")  # List all our test suites
 runTest(mypkgSuite, name = pkg)  # Run them...
