@@ -2,6 +2,7 @@
 % $Id$
 
 \name{logging-internal}
+\alias{logging-internal}
 \title{undocumented internal functions and variables}
 \description{
   you hit this page because the function or variable
@@ -12,3 +13,6 @@
 \alias{updateOptions}
 \alias{updateOptions.environment}
 \alias{levellog}
+\examples{
+## no examples for undocumented functions
+}

@@ -19,3 +19,8 @@ getLogger(name, ...)
   \item{...}{any properties you may want to set in the newly created
     logger.  these have no effect if the logger is already present.}
 }
+\examples{
+ getLogger()  # returns the root logger
+ getLogger('test.sub')  # constructs a new logger and returns it
+ getLogger('test.sub')  # returns it again
+}
