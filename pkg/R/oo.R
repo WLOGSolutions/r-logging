@@ -13,6 +13,8 @@
 ## along with the nens libraray.  If not, see
 ## <http://www.gnu.org/licenses/>.
 ##
+## Copyright © 2011, 2012 by Mario Frasca
+##
 ## Library    : logging
 ##
 ## Purpose    : the object oriented interface

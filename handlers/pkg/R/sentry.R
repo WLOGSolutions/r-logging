@@ -13,6 +13,8 @@
 ## along with the nens libraray.  If not, see
 ## <http://www.gnu.org/licenses/>.
 ##
+## Copyright © 2011, 2012 by Mario Frasca
+##
 ## Library    : logging
 ##
 ## Purpose    : implement a sentry logging handler
@@ -29,25 +31,23 @@
 sentryAction <- function(msg, conf, record, ...) {
   if(!all(c(require(RCurl),
             require(Ruuid),
-            require(rjson))))
-    stop("sentryAction depends on RCurl, Ruuid, rjson.")
-
-  if (exists('psk', envir=conf)) {
-    if(!require(digest))
-      stop("authenticating sentryAction depends on digest.")
-  }  
+            require(rjson),
+            require(digest))))
+    stop("sentryAction depends on RCurl, Ruuid, rjson, digest.")
 
   ## you install Ruuid this way (not with install.packages).
   ## source("http://bioconductor.org/biocLite.R")
   ## biocLite("Ruuid")
 
-  if (!exists('server', envir=conf))
-    stop("handler with sentryAction must have a 'server' element.\n")
-  if (!exists('sentry.key', envir=conf))
-    stop("handler with sentryAction must have a 'sentry.key' element.\n")
+  for(k in c("server", "sentry.private.key", "sentry.public.key", "project")) {
+    if (!exists(k, envir=conf))
+      stop(paste("handler with sentryAction must have a '", k, "' element.\n", sep=""))
+  }
 
   sentry.server <- with(conf, server)
-  sentry.key <- with(conf, sentry.key)
+  sentry.private.key <- with(conf, sentry.private.key)
+  sentry.public.key <- with(conf, sentry.public.key)
+  project <-  with(conf, project)
   client.name <- tryCatch(with(conf, client.name), error = function(e) "r.logging")
 
   if(missing(record))  # needed for `level` and `timestamp` fields.
@@ -61,31 +61,49 @@ sentryAction <- function(msg, conf, record, ...) {
     view.name <- perpretator.name
   }, error = function(e) "<interactive>")
 
-  data <- list("level" = as.numeric(record$level),
+  params <- list("project" = project,
+               "event_id" = gsub("-", "", as.character(getuuid())),
+               "culprit" = view.name,
+               "timestamp" = format(record$timestamp, "%Y-%m-%dT%H:%M:%S"),
                "message" = msg,
-               "view" = view.name,
-               "message_id" = as.character(getuuid()),
+               "level" = as.numeric(record$level),
                "logger" = record$logger,
                "server_name" = client.name)
 
   metadata <- list()
   metadata$call_stack <- paste(lapply(functionCallStack, deparse), collapse=" || ")
-  data$data <- metadata
+  params$extra <- metadata
 
-  repr <- as.character(base64(toJSON(data)))
+  repr <- as.character(toJSON(params))
 
-  url <- paste(sentry.server, "store", "", sep="/")
+  url <- paste(sentry.server, "api", "store", "", sep="/")
 
-  if (exists('psk', envir=conf)) {
-    ## we do not send the sentry.key but we authenticate the message
-    ## with a hmac value.
+  timestamp <- Sys.time()
+  timestampSeconds <- format(timestamp, "%s")
+  to.sign <- paste(timestampSeconds, repr, sep=' ')
+  signature <- hmac(sentry.private.key, to.sign, "sha1")
 
-    timestamp <- format(Sys.time(), "%Y-%m-%dT%X")
-    to.sign <- paste(timestamp, repr, sep=' ')
-    authentication <- hmac(with(conf, psk), to.sign, "SHA1")
+  x.sentry.auth.parts <- c(paste("sentry_version", "2.0", sep="="),
+                           paste("sentry_signature", signature, sep="="),
+                           paste("sentry_timestamp", timestampSeconds, sep="="),
+                           paste("sentry_key", sentry.public.key, sep="="),
+                           paste("sentry_client", "r-logging.handler", sep="="))
+  x.sentry.auth <- paste("Sentry", paste(x.sentry.auth.parts, collapse=", "))
+  hdr <- c('Content-Type' = 'application/octet-stream', 'X-Sentry-Auth' = x.sentry.auth)
 
-    postForm(url, style="POST", format="json", key=sentry.key, data=repr, authentication=authentication)
-  } else {
-    postForm(url, style="POST", format="json", key=sentry.key, data=repr)
-  }
+  httpPOST(url, httpheader = hdr, postfields = toJSON(params), verbose = TRUE)
+  
+}
+
+dotest <- function() {
+  conf <- environment()
+  assign('server', 'http://localhost:9000', envir=conf) 
+  assign('sentry.public.key', '654877c851f9499a951486fd7a0ae5e6', envir=conf) 
+  assign('sentry.private.key', 'ba71e150ed854b2088c48295e39bf3ca', envir=conf) 
+  assign('project', 1, envir=conf) 
+  assign('client.name', 'raven-R', envir=conf) 
+
+  record <- list(timestamp=Sys.time(), level=30, logger="root")
+
+  sentryAction("dotest", conf, record)
 }

@@ -1,10 +1,10 @@
 Package: logging.handlers
-Version: 0.5-80
+Version: 0.5-99
 Date: 2011-04-27
 Title: extra logging handlers
 Author: Mario Frasca <mariotomo@gmail.com>
-Maintainer: Mario Frasca <mario.frasca@nelen-schuurmans.nl>
+Maintainer: Mario Frasca <mariotomo@gmail.com>
 Description: this package defines some useful actions for logging handlers.
 License: GPL (>=2)
 Depends: R (>= 2.12.0), logging
-Suggests: svUnit, RCurl, Ruuid, rjson
+Suggests: svUnit, RCurl, Ruuid, rjson, digest

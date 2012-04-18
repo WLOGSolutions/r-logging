@@ -13,6 +13,8 @@
 ## along with the nens libraray.  If not, see
 ## <http://www.gnu.org/licenses/>.
 ##
+## Copyright © 2009-2012 by Mario Frasca
+##
 ## Library    : logging
 ##
 ## Purpose    : emulate the python standard logging package
