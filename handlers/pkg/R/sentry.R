@@ -94,16 +94,3 @@ sentryAction <- function(msg, conf, record, ...) {
   httpPOST(url, httpheader = hdr, postfields = toJSON(params), verbose = TRUE)
   
 }
-
-dotest <- function() {
-  conf <- environment()
-  assign('server', 'http://localhost:9000', envir=conf) 
-  assign('sentry.public.key', '654877c851f9499a951486fd7a0ae5e6', envir=conf) 
-  assign('sentry.private.key', 'ba71e150ed854b2088c48295e39bf3ca', envir=conf) 
-  assign('project', 1, envir=conf) 
-  assign('client.name', 'raven-R', envir=conf) 
-
-  record <- list(timestamp=Sys.time(), level=30, logger="root")
-
-  sentryAction("dotest", conf, record)
-}
