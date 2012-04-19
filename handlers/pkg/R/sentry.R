@@ -39,9 +39,23 @@ sentryAction <- function(msg, conf, record, ...) {
   ## source("http://bioconductor.org/biocLite.R")
   ## biocLite("Ruuid")
 
-  for(k in c("server", "sentry.private.key", "sentry.public.key", "project")) {
-    if (!exists(k, envir=conf))
-      stop(paste("handler with sentryAction must have a '", k, "' element.\n", sep=""))
+  if(exists('dsn', envir=conf)) {
+    ## first time doing something with this handler: parse the dsn 
+    glued <- gsub('(.*)://(.*):(.*)@([^/]+)(.*)/(\\w)', '\\1://\\4\\5::\\2::\\3::\\6',
+                  with(conf, dsn), perl=TRUE)
+    parts <- strsplit(glued, "::")[[1]]
+    assign('server', parts[1], envir=conf)
+    assign('sentry.public.key', parts[2], envir=conf)
+    assign('sentry.private.key', parts[3], envir=conf)
+    assign('project', parts[4], envir=conf)
+    rm('dsn', envir=conf)
+  }
+
+  anythingMissing <- !sapply(c("server", "sentry.private.key", "sentry.public.key", "project"), exists, envir=conf)
+
+  if(any(anythingMissing)) {
+    missing <- names(anythingMissing)[anythingMissing]
+    stop(paste("this handler with sentryAction misses ", paste(missing, collapse=", "), ".\n", sep=""))
   }
 
   sentry.server <- with(conf, server)
@@ -64,7 +78,7 @@ sentryAction <- function(msg, conf, record, ...) {
   params <- list("project" = project,
                "event_id" = gsub("-", "", as.character(getuuid())),
                "culprit" = view.name,
-               "timestamp" = format(record$timestamp, "%Y-%m-%dT%H:%M:%S"),
+               "timestamp" = record$timestamp,
                "message" = msg,
                "level" = as.numeric(record$level),
                "logger" = record$logger,
@@ -91,6 +105,6 @@ sentryAction <- function(msg, conf, record, ...) {
   x.sentry.auth <- paste("Sentry", paste(x.sentry.auth.parts, collapse=", "))
   hdr <- c('Content-Type' = 'application/octet-stream', 'X-Sentry-Auth' = x.sentry.auth)
 
-  httpPOST(url, httpheader = hdr, postfields = toJSON(params), verbose = TRUE)
+  httpPOST(url, httpheader = hdr, postfields = toJSON(params))
   
 }
