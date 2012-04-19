@@ -40,7 +40,7 @@ sentryAction <- function(msg, conf, record, ...) {
   ## biocLite("Ruuid")
 
   if(exists('dsn', envir=conf)) {
-    ## first time doing something with this handler: parse the dsn 
+    ## first time doing something with this handler: parse the dsn
     glued <- gsub('(.*)://(.*):(.*)@([^/]+)(.*)/(\\w)', '\\1://\\4\\5::\\2::\\3::\\6',
                   with(conf, dsn), perl=TRUE)
     parts <- strsplit(glued, "::")[[1]]
@@ -51,7 +51,12 @@ sentryAction <- function(msg, conf, record, ...) {
     rm('dsn', envir=conf)
   }
 
-  anythingMissing <- !sapply(c("server", "sentry.private.key", "sentry.public.key", "project"), exists, envir=conf)
+  anythingMissing <- !sapply(c("server", "sentry.private.key", "sentry.public.key", "project"),
+                             exists, envir=conf)
+
+  if(length(list(...)) && 'dry' %in% names(list(...))) {
+    return(all(!anythingMissing))
+  }
 
   if(any(anythingMissing)) {
     missing <- names(anythingMissing)[anythingMissing]
@@ -106,5 +111,5 @@ sentryAction <- function(msg, conf, record, ...) {
   hdr <- c('Content-Type' = 'application/octet-stream', 'X-Sentry-Auth' = x.sentry.auth)
 
   httpPOST(url, httpheader = hdr, postfields = toJSON(params))
-  
+
 }

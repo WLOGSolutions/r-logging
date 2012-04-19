@@ -16,13 +16,15 @@
 
 writeToConsole <- function(msg, handler, ...)
 {
+  if(length(list(...)) && 'dry' %in% names(list(...)))
+    return(TRUE)
   cat(paste(msg, '\n', sep=''))
 }
 
 writeToFile <- function(msg, handler, ...)
 {
-  if (!exists('file', envir=handler))
-    stop("handler with writeToFile 'action' must have a 'file' element.\n")
+  if(length(list(...)) && 'dry' %in% names(list(...)))
+    return(exists('file', envir=handler))
   cat(paste(msg, '\n', sep=''), file=with(handler, file), append=TRUE)
 }
 

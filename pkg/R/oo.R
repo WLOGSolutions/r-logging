@@ -125,7 +125,9 @@ Logger <- setRefClass("Logger",
                           assign('level', namedLevel(level), handlerEnv)
                           assign('formatter', formatter, handlerEnv)
                           removeHandler(handlerName)
-                          handlers[[handlerName]] <<- handlerEnv
+                          if(with(handlerEnv, action)(NA, handlerEnv, dry=TRUE) == TRUE) {
+                            handlers[[handlerName]] <<- handlerEnv
+                          }
                         },
 
                         finest = function(...) { log(loglevels['FINEST'], ...) },

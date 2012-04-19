@@ -69,7 +69,10 @@ test.canSetLoggerLevelByName <- function() {
 }
 
 logged <- NULL
+
 mockAction <- function(msg, handler, ...) {
+  if(length(list(...)) && 'dry' %in% names(list(...)))
+    return(TRUE)
   logged <<- c(logged, msg)
 }
 
