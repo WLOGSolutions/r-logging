@@ -15,6 +15,6 @@ Far from being comparable to a Python standard module, this tiny logging module 
  - same levels (names and numeric values) as Python's logging package,
  - a simple basicConfig function to quickly put yourself in a usable situation...
 
-for more information, have a look at the (online
-tutorial)[http://logging.r-forge.r-project.org/sample_session.php] on
+for more information, have a look at the [online
+tutorial] (http://logging.r-forge.r-project.org/sample_session.php) on
 r-forge.
