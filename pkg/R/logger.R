@@ -42,7 +42,7 @@ levellog <- function(level, msg, ..., logger=getLogger())
 ## using log
 logdebug <- function(msg, ..., logger='')
 {
-  levellog(loglevels[['DEBUG']], msg, ..., logger=logger)
+  levellog(loglevels['DEBUG'], msg, ..., logger=logger)
   invisible()
 }
 
@@ -60,7 +60,7 @@ logfiner <- function(msg, ..., logger='')
 
 logfine <- function(msg, ..., logger='')
 {
-  levellog(loglevels[['FINE']], msg, ..., logger=logger)
+  levellog(loglevels['FINE'], msg, ..., logger=logger)
   invisible()
 }
 
@@ -93,18 +93,18 @@ getLogger <- function(name='', ...)
   else
     fullname <- paste('logging.ROOT', name, sep='.')
 
-  if(!exists(fullname, envir=logging.options)) {
+  if(!exists(fullname, envir=logging.options)) {   
     logger <- Logger$new(name=name, handlers=list(), level=namedLevel('INFO'))
     updateOptions.environment(logger, ...)
     logging.options[[fullname]] <- logger
-  }
+  } 
   logging.options[[fullname]]
 }
 
 basicConfig <- function(level=20) {
   rootLogger <- getLogger()
   updateOptions(rootLogger, level=namedLevel(level))
-  rootLogger$addHandler('basic.stdout', writeToConsole)
+  rootLogger$addHandler('basic.stdout', writeToConsole, level=level)
   invisible()
 }
 
