@@ -6,7 +6,7 @@ href="http://docs.python.org/library/logging.html">Python logging</a>
 library.  If you are accustomed to that logging library, this one will
 look familiar to you, otherwise have a look at this <a
 href="python-logging-excerpt.php">excerpt</a>, then decide if you want
-to come back here and read further or go to the python documentation
+to come back here and read further or go to the Python documentation
 and read deeper.</p>
 
 <p>In this session we work with one single logger, the root logger,
@@ -26,9 +26,11 @@ and <tt>with</tt> to inspect them (don't worry if you get more
 elements than shown here, I'll come back to them later).
 
 After this basic configuration,
-our logger has handlers and a level and it contains one handler.  This
+our logger has handlers and a level, and it contains one handler
+which <em>also</em> has a level.  This
 is enough for some simple logging to the console.  The default logging
-level of the root logger is <tt>INFO</tt> (20).  Anything at severity
+level of both the root logger and its handler
+is <tt>INFO</tt> (20).  Anything at severity
 lower than <tt>INFO</tt> will not be logged.</p>
 
 <code>
@@ -90,6 +92,24 @@ WARN <br/>
 R> <user>getHandler('writeToConsole')[['level']]</user><br/>
 INFO <br/>
   20 <br/>
+</code>
+
+<p>This means that, in order to obtain output on any level below
+<tt>INFO</tt> (e.g., 
+<tt>DEBUG</tt> or even 
+<tt>FINEST</tt>),
+you need to lower the level of both the root logger
+and its handler:</p>
+
+<code>
+R> <user>basicConfig()</user><br/>
+R> <user>logdebug('I am a silent child')</user><br/>
+R> <user>setLevel('DEBUG')</user><br/>
+R> <user>logdebug('Still no output shown')</user><br/>
+R> <user>setLevel('DEBUG', getHandler('basic.stdout'))</user><br/>
+R> <user>logdebug('Only now the output is visible')</user><br/>
+2011-08-03 15:59:23 DEBUG::Only now the output is visible<br/>
+R> 
 </code>
 
 <p><a href="the_basics.R">code</a></p>
