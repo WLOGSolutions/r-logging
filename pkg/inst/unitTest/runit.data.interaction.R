@@ -1,7 +1,7 @@
 require(svUnit)
 
 # test functions are called in lexicographic order.
-# $Id$
+# $Id: runit.data.interaction.R 102 2012-04-19 11:28:35Z mariotomo $
 
 test.000.getLoggerWithoutInitializingDoesNotCrash <- function() {
   rootLogger <- getLogger("")
@@ -33,6 +33,22 @@ test.004.noNameMeansRoot <- function() {
   rootLogger1 <- getLogger('')
   rootLogger2 <- getLogger()
   checkIdentical(rootLogger1, rootLogger2)
+}
+
+test.500.basicConfigSetsLevelOfHandler <- function() {
+  logReset()
+  basicConfig('DEBUG')
+  rootLogger <- getLogger('')
+  expect <- logging:::loglevels['DEBUG']
+  current <- rootLogger$getHandler('basic.stdout')[['level']]
+  checkEquals(current, expect)
+  logReset()
+  basicConfig('ERROR')
+  rootLogger <- getLogger('')  ## needed, because `logReset` unlinked the old one
+  expect <- logging:::loglevels['ERROR']
+  current <- rootLogger$getHandler('basic.stdout')[['level']]
+  checkEquals(current, expect)
+  logReset()
 }
 
 # end of functions that must be tested first

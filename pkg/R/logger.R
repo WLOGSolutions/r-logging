@@ -21,7 +21,7 @@
 ##
 ## Usage      : library(logging)
 ##
-## $Id$
+## $Id: logger.R 99 2012-04-18 06:16:45Z mariotomo $
 ##
 ## initial programmer :  Mario Frasca
 ## based on:             Brian Lee Yung Rowe's futile library
@@ -104,7 +104,7 @@ getLogger <- function(name='', ...)
 basicConfig <- function(level=20) {
   rootLogger <- getLogger()
   updateOptions(rootLogger, level=namedLevel(level))
-  rootLogger$addHandler('basic.stdout', writeToConsole)
+  rootLogger$addHandler('basic.stdout', writeToConsole, level=namedLevel(level))
   invisible()
 }
 
