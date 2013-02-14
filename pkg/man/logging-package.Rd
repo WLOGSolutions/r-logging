@@ -1,5 +1,5 @@
 % File src/R/man/logging-package.Rd
-% $Id$
+% $Id: logging-package.Rd 39 2010-04-14 13:47:47Z mariotomo $
 
 \name{logging-package}
 \Rdversion{1.1}
@@ -21,7 +21,7 @@ a tentative logging package
 
   This package owes a lot to my employer, r-forge, the stackoverflow
   community, Brian Lee Yung Rowe's
-  \code{\link[futile:futile-package]{futile}} package (v1.1) and the
+  futile package (v1.1) and the
   documentation of the Python logging package.
 
 }
@@ -75,7 +75,3 @@ Maintainer: Mario Frasca <mario.frasca@nelen-schuurmans.nl>
   this package at r-forge: \url{http://logging.r-forge.r-project.org/}
 }
 \keyword{ package }
-
-\seealso{
-  \code{\link[futile:futile-package]{http://cran.r-project.org/web/packages/futile/index.html}}
-}

@@ -7,4 +7,4 @@ Maintainer: Mario Frasca <mariotomo@gmail.com>
 Description: logging is a pure R package that implements the ubiquitous log4j package.
 License: GPL (>=2)
 Depends: R (>= 2.12.0), methods
-Suggests: svUnit
+Suggests: svUnit, XML
