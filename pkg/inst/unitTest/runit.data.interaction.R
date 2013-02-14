@@ -140,7 +140,7 @@ test.recordIsEmitted.deepToRoot.DI.dropped <- function() {
   logReset()
   addHandler(mockAction, level='DEBUG', logger='')
   logged <<- NULL
-  setLevel('other.branch', 'INFO')
+  setLevel('INFO', 'other.branch')
   logdebug('test', logger='other.branch')
   loginfo('test', logger='other.branch')
   logerror('test', logger='other.branch')
