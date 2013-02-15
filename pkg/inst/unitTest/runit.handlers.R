@@ -46,7 +46,7 @@ test.loggingToFile <- function() {
   file.remove(test.fileName)
 
   getLogger()$setLevel('FINEST')
-  addHandler(writeToFile, file=test.fileName, level='DEBUG')
+  addHandler(writeToFile, file=test.fileName[[1]], level='DEBUG')
   checkEquals(c("writeToFile"), with(getLogger(), names(handlers)))
   loginfo('test %d', 1)
   logdebug('test %d', 2)
@@ -60,7 +60,7 @@ test.loggingToFile.oo <- function() {
 
   log <- getLogger()
   log$setLevel('FINEST')
-  log$addHandler(writeToFile, file=test.fileName, level='DEBUG')
+  log$addHandler(writeToFile, file=test.fileName[[1]], level='DEBUG')
   checkEquals(c("writeToFile"), with(log, names(handlers)))
   log$info('test %d', 1)
   log$debug('test %d', 2)
