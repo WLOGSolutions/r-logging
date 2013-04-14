@@ -30,7 +30,7 @@ logReset()
 }
 \arguments{
   \item{level}{the logging level of the root logger.  defaults to INFO.
-  please do notice that this has no effect on the handling level of the
+  please do notice that, as of version 0.7-103, this also sets the handling level of the
   handler that basicConfig attaches to the root logger.}
   }
 \examples{
