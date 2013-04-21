@@ -30,9 +30,8 @@ Logger <- setRefClass("Logger",
                       fields=list(
                         name = "character",
                         handlers="list",
-                        level="numeric"),
+                        level="numeric"),                      
                       methods=list(
-
                         getParent = function() {
                           parts <- strsplit(name, '.', fixed=TRUE)[[1]] # split the name on the '.'
                           removed <- parts[-length(parts)] # except the last item
@@ -41,15 +40,16 @@ Logger <- setRefClass("Logger",
                         },
 
                         .logrecord = function(record) {
-                          ## 
-                          if (record$level >= level) 
-                            for (handler in handlers)
+                          if (record$level >= level) {
+                            for (handler in handlers) {
                               if (record$level >= with(handler, level)) {
                                 action <- with(handler, action)
                                 formatter <- with(handler, formatter)
                                 action(formatter(record), handler, record)
                               }
-
+                            }
+                          }
+                          
                           if(name != '') {
                             parentLogger <- getParent()
                             parentLogger$.logrecord(record)
@@ -58,9 +58,9 @@ Logger <- setRefClass("Logger",
                         },
                         
                         log = function(msglevel, msg, ...) {
-                          if (msglevel < level) 
+                          if (msglevel < level) {
                             return(invisible(FALSE))
-
+                          }
                           ## fine, we create the record and pass it to all handlers attached to the
                           ## loggers from here up to the root.
                           record <- list()
@@ -79,7 +79,6 @@ Logger <- setRefClass("Logger",
                           record$levelname <- names(which(loglevels == record$level)[1])
                           if(is.na(record$levelname))
                             record$levelname <- paste("NumericLevel(", msglevel, ")", sep='')
-
                           ## cascade action in private method.
                           .logrecord(record)
                         },
@@ -116,7 +115,7 @@ Logger <- setRefClass("Logger",
                             params <- list(...)
                             if(!'action' %in% names(params) && is.null(names(params)[[1]]))
                               assign('action', params[[1]], handlerEnv)
-                          } else  {
+                          } else {
                             ## first parameter is handler action, from which we extract the name
                             updateOptions.environment(handlerEnv, action=handler)
                             handlerName <- deparse(substitute(handler))
@@ -129,11 +128,11 @@ Logger <- setRefClass("Logger",
                             handlers[[handlerName]] <<- handlerEnv
                           }
                         },
-
-                        finest = function(...) { log(loglevels['FINEST'], ...) },
-                        finer = function(...) { log(loglevels['FINER'], ...) },
-                        fine = function(...) { log(loglevels['FINE'], ...) },
-                        debug = function(...) { log(loglevels['DEBUG'], ...) },
+                        
+                        finest = function(...) { log(loglevels["FINEST"], ...) },
+                        finer = function(...) { log(loglevels["FINER"], ...) },
+                        fine = function(...) { log(loglevels["FINE"], ...) },
+                        debug = function(...) { log(loglevels["DEBUG"], ...) },
                         info = function(...) { log(loglevels["INFO"], ...) },
                         warn = function(...) { log(loglevels["WARN"], ...) },
                         error = function(...) { log(loglevels["ERROR"], ...) }))
