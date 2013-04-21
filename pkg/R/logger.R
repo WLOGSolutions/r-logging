@@ -1,8 +1,8 @@
-##***********************************************************************
-## this program is free software: you can redistribute it and/or
-## modify it under the terms of the GNU General Public License as
-## published by the Free Software Foundation, either version 3 of the
-## License, or (at your option) any later version.
+##
+## this is part of the R-logging package. the R-logging package is free
+## software: you can redistribute it and/or modify it under the terms of the
+## GNU General Public License as published by the Free Software Foundation,
+## either version 3 of the License, or (at your option) any later version.
 ##
 ## this program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -13,20 +13,7 @@
 ## along with the nens libraray.  If not, see
 ## <http://www.gnu.org/licenses/>.
 ##
-## Copyright © 2009-2012 by Mario Frasca
-##
-## Library    : logging
-##
-## Purpose    : emulate the python standard logging package
-##
-## Usage      : library(logging)
-##
-## $Id: logger.R 99 2012-04-18 06:16:45Z mariotomo $
-##
-## initial programmer :  Mario Frasca
-## based on:             Brian Lee Yung Rowe's futile library
-##
-## initial date       :  20100105
+## Copyright © 2009-2013 by Mario Frasca
 ##
 
 ## main log function, used by all other ones
@@ -93,11 +80,11 @@ getLogger <- function(name='', ...)
   else
     fullname <- paste('logging.ROOT', name, sep='.')
 
-  if(!exists(fullname, envir=logging.options)) {   
+  if(!exists(fullname, envir=logging.options)) {
     logger <- Logger$new(name=name, handlers=list(), level=namedLevel('INFO'))
     updateOptions.environment(logger, ...)
     logging.options[[fullname]] <- logger
-  } 
+  }
   logging.options[[fullname]]
 }
 

@@ -1,4 +1,4 @@
-##***********************************************************************
+##
 ## this program is free software: you can redistribute it and/or
 ## modify it under the terms of the GNU General Public License as
 ## published by the Free Software Foundation, either version 3 of the
@@ -13,24 +13,14 @@
 ## along with the nens libraray.  If not, see
 ## <http://www.gnu.org/licenses/>.
 ##
-## Copyright © 2011, 2012 by Mario Frasca
-##
-## Library    : logging
-##
-## Purpose    : the object oriented interface
-##
-## $Id: logger.R 75 2011-04-27 07:22:02Z mariotomo $
-##
-## initial programmer :  Mario Frasca
-##
-## initial date       :  20100105
+## Copyright © 2011-2013 by Mario Frasca
 ##
 
 Logger <- setRefClass("Logger",
                       fields=list(
                         name = "character",
                         handlers="list",
-                        level="numeric"),                      
+                        level="numeric"),
                       methods=list(
                         getParent = function() {
                           parts <- strsplit(name, '.', fixed=TRUE)[[1]] # split the name on the '.'
@@ -49,14 +39,14 @@ Logger <- setRefClass("Logger",
                               }
                             }
                           }
-                          
+
                           if(name != '') {
                             parentLogger <- getParent()
                             parentLogger$.logrecord(record)
                           }
                           invisible(TRUE)
                         },
-                        
+
                         log = function(msglevel, msg, ...) {
                           if (msglevel < level) {
                             return(invisible(FALSE))
@@ -91,7 +81,7 @@ Logger <- setRefClass("Logger",
                           else newLevel <- NA
                           level <<- newLevel
                         },
-                        
+
                         getLevel = function() level,
 
                         getHandler = function(handler) {
@@ -128,7 +118,7 @@ Logger <- setRefClass("Logger",
                             handlers[[handlerName]] <<- handlerEnv
                           }
                         },
-                        
+
                         finest = function(...) { log(loglevels["FINEST"], ...) },
                         finer = function(...) { log(loglevels["FINER"], ...) },
                         fine = function(...) { log(loglevels["FINE"], ...) },
