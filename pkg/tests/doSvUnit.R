@@ -3,6 +3,11 @@ require(svUnit)  # Needed if run from R CMD BATCH
 require(logging)
 pkg <- "logging"
 unlink("report.xml")  # Make sure we generate a new report
+
+# Must be ran from within the "tests" subdirectory
+stopifnot("pkg" %in% list.dirs(file.path("..", ".."), full.names=FALSE,
+                               recursive=FALSE))
+
 mypkgSuite <- svSuiteList(pkg, dirs="../../pkg/inst/unitTest")  # List all our test suites
 runTest(mypkgSuite, name = pkg)  # Run them...
 runTest(makeTestListFromExamples(pkg, "../../pkg/man/"))
