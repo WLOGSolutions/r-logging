@@ -44,3 +44,34 @@ test.autoformat.one_numeric_variable<- function() {
   checkEquals("INFO::a: 1", logged)
 }
 
+test.autoformat.one_numeric_expression<- function() {
+  logReset()
+  addHandler(mockAction, level='DEBUG', logger='', formatter=mockFormatter)
+  logged <<- NULL
+  loginfo(3 + 5)
+  checkEquals("INFO::3 + 5: 8", logged)
+}
+
+test.autoformat.explicit_msg_parameter<- function() {
+  logReset()
+  addHandler(mockAction, level='DEBUG', logger='', formatter=mockFormatter)
+  logged <<- NULL
+  loginfo(logger=getLogger(), msg=3 + 5)
+  checkEquals("INFO::3 + 5: 8", logged)
+}
+
+test.autoformat.shifted_msg_parameter<- function() {
+  logReset()
+  addHandler(mockAction, level='DEBUG', logger='', formatter=mockFormatter)
+  logged <<- NULL
+  loginfo(logger=getLogger(), 3 + 5)
+  checkEquals("INFO::3 + 5: 8", logged)
+}
+
+test.autoformat.levellog<- function() {
+  logReset()
+  addHandler(mockAction, level='DEBUG', logger='', formatter=mockFormatter)
+  logged <<- NULL
+  levellog("INFO", 3 + 5)
+  checkEquals("INFO::3 + 5: 8", logged)
+}
