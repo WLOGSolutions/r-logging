@@ -56,13 +56,15 @@ Logger <- setRefClass("Logger",
                           record <- list()
 
                           optargs <- list(...)
-                          label <- deparse(as.list(sys.call(-2))[[2]])
                           if (is.character(msg)) {
+                            ## invoked as ("printf format", arguments_for_format)
                             if (length(optargs) > 0)
                               msg <- do.call("sprintf", c(msg, lapply(optargs, function(x) if(length(x)==1) x else paste(x, collapse=','))))
                           } else {
+                            ## invoked as list of expressions
+                            label <- deparse(as.list(sys.call(-2))[[2]])
                             msg <- sprintf("%s: %s", label, msg)
-                            # Additional treatment for optargs
+                            # TODO: Additional treatment for optargs
                           }
 
                           ## strip leading and trailing whitespace from the final message.
