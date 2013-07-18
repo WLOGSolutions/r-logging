@@ -12,4 +12,5 @@ exitCode <- 0
 if (results['**ERROR**']) exitCode <- exitCode + 1
 if (results['**FAILS**']) exitCode <- exitCode + 2
 if (results['DEACTIVATED']) exitCode <- exitCode + 4
+results
 quit(status=exitCode)
