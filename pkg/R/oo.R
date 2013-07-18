@@ -62,9 +62,23 @@ Logger <- setRefClass("Logger",
                               msg <- do.call("sprintf", c(msg, lapply(optargs, function(x) if(length(x)==1) x else paste(x, collapse=','))))
                           } else {
                             ## invoked as list of expressions
-                            label <- deparse(as.list(sys.call(-2))[[2]])
-                            msg <- sprintf("%s: %s", label, msg)
-                            # TODO: Additional treatment for optargs
+                            ## this assumes that the function the user calls is two levels up, e.g.:
+                            ## loginfo -> .levellog -> logger$log
+                            ## levellog -> .levellog -> logger$log
+                            external.call <- sys.call(-2)
+                            external.fn <- eval(external.call[[1]])
+                            matched.call <- match.call(external.fn, external.call)
+                            matched.call <- matched.call[-1]
+                            matched.call.names <- names(matched.call)
+
+                            ## We are interested only in the msg and ... parameters,
+                            ## i.e. in msg and all parameters not explicitly declared
+                            ## with the function
+                            is.output.param <- matched.call.names == "msg" |
+                              !(matched.call.names %in% c(setdiff(names(formals(external.fn)), "...")))
+
+                            label <- lapply(matched.call[is.output.param], deparse)
+                            msg <- sprintf("%s: %s", label, c(msg, optargs))
                           }
 
                           ## strip leading and trailing whitespace from the final message.

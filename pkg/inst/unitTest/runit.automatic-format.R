@@ -27,12 +27,11 @@ test.autoformat.one_numeric_literal<- function() {
 }
 
 test.autoformat.more_numeric_literals<- function() {
-  ## TODO
   logReset()
   addHandler(mockAction, level='DEBUG', logger='', formatter=mockFormatter)
   logged <<- NULL
-  loginfo(12, 2, 4)
-  checkEquals("INFO::12: 12, 2: 2, 4: 4", logged)
+  loginfo(12, 1+1, 2*2)
+  checkEquals(c("INFO::12: 12", "INFO::1 + 1: 2", "INFO::2 * 2: 4"), logged)
 }
 
 test.autoformat.one_numeric_variable<- function() {
