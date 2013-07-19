@@ -16,9 +16,9 @@
 ## Copyright © 2009-2013 by Mario Frasca
 ##
 
-## main log function, used by all other ones
+## internal main log function, used by all other ones
 ## (entry points for messages)
-levellog <- function(level, msg, ..., logger=getLogger())
+.levellog <- function(level, msg, ..., logger=getLogger())
 {
   if(is.character(logger))
     logger <- getLogger(logger)
@@ -26,49 +26,53 @@ levellog <- function(level, msg, ..., logger=getLogger())
   logger$log(level, msg, ...)
 }
 
+## exported main log function
+levellog <- function(level, msg, ..., logger=getLogger())
+  .levellog(level, msg, ..., logger=logger)
+
 ## using log
 logdebug <- function(msg, ..., logger='')
 {
-  levellog(loglevels['DEBUG'], msg, ..., logger=logger)
+  .levellog(loglevels['DEBUG'], msg, ..., logger=logger)
   invisible()
 }
 
 logfinest <- function(msg, ..., logger='')
 {
-  levellog(loglevels['FINEST'], msg, ..., logger=logger)
+  .levellog(loglevels['FINEST'], msg, ..., logger=logger)
   invisible()
 }
 
 logfiner <- function(msg, ..., logger='')
 {
-  levellog(loglevels['FINER'], msg, ..., logger=logger)
+  .levellog(loglevels['FINER'], msg, ..., logger=logger)
   invisible()
 }
 
 logfine <- function(msg, ..., logger='')
 {
-  levellog(loglevels['FINE'], msg, ..., logger=logger)
+  .levellog(loglevels['FINE'], msg, ..., logger=logger)
   invisible()
 }
 
 ## using log
 loginfo <- function(msg, ..., logger='')
 {
-  levellog(loglevels['INFO'], msg, ..., logger=logger)
+  .levellog(loglevels['INFO'], msg, ..., logger=logger)
   invisible()
 }
 
 ## using log
 logwarn <- function(msg, ..., logger='')
 {
-  levellog(loglevels['WARN'], msg, ..., logger=logger)
+  .levellog(loglevels['WARN'], msg, ..., logger=logger)
   invisible()
 }
 
 ## using log
 logerror <- function(msg, ..., logger='')
 {
-  levellog(loglevels['ERROR'], msg, ..., logger=logger)
+  .levellog(loglevels['ERROR'], msg, ..., logger=logger)
   invisible()
 }
 
