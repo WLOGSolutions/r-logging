@@ -71,7 +71,7 @@ Handlers have a level associated to them. Any logging record passing through a h
 hierarchical loggers
 ~~~~~~~~~~~~~~~~~~~~
 
-in the previous section we have worked -implicitly- with one logger, the root logger. we can refer to it explicitly by specifying the 'logger' parameter in our function calls. the name of the root logger is the empty string. this also explains that "::" in the messages sent to the console, between the first and the second ":" there's the name of the logger that is associated to the log record shown.::
+in the previous section we have worked -implicitly- with one logger, the root logger. we can refer to it explicitly by specifying the 'logger' parameter in our function calls. the name of the root logger is the empty string. this also explains that "::" in the messages sent to the console, between the first and the second ":" there's the name of the logger that is associated to the log record shown. ::
 
   R> with(getLogger(logger=''), names(handlers))
   [1] "basic.stdout"
@@ -82,7 +82,7 @@ when issuing a logging record, you can specify to which logger you want to send 
 
 just as directories contain files, loggers contain handlers and their name is, within the logger, unique. also similarly than to directories, all loggers have one parent, except the root logger that has none. the name of the logger specifies the location of the logger in this hierarchy. an example will hopefully clarify.
 
-let's start from scratch, either a brand new R session or by resetting the logging system.::
+let's start from scratch, either a brand new R session or by resetting the logging system. ::
 
   R> logReset()
   R> addHandler(writeToConsole, logger='libro.romanzo')
@@ -107,7 +107,7 @@ logger objects
 
 in the last example box in the previous section we have sent logging records to the 'libro.romanzo.campanile' logger. we have done this by invoking the global loginfo function, passing it the name of the logger. this is only practical if you are logging to the root logger or if you are using many different loggers, not if you are sending, as in our example, more records to the same logger. if you are talking the whole time to the same logger, you do not want to have to repeat the name of the logger each time you send it a record.
 
-the solution to this is in the object oriented approach taken in this logging library. the getLogger() function returns a Logger object, which, since we are using Reference Classes, is itself an environment. in the previous examples we have only used the fact that Logger objects are environments, let's now have a look at what more they offer.::
+the solution to this is in the object oriented approach taken in this logging library. the getLogger() function returns a Logger object, which, since we are using Reference Classes, is itself an environment. in the previous examples we have only used the fact that Logger objects are environments, let's now have a look at what more they offer. ::
 
   > class(getLogger())
   [1] "Logger"
@@ -117,7 +117,7 @@ the solution to this is in the object oriented approach taken in this logging li
   [1] TRUE
   >
 
-let me keep it compact, I'm just giving you the code that will produce the same logging as in the previous example. do notice that you can mix invoking object methods with usage of the global functions.::
+let me keep it compact, I'm just giving you the code that will produce the same logging as in the previous example. do notice that you can mix invoking object methods with usage of the global functions. ::
 
   R> logReset()
   R> getLogger('libro.romanzo')$addHandler(writeToConsole)
@@ -141,7 +141,7 @@ actually the name of this paragraph is misleading. a more correct name would be 
 
 to make sure log records are sent to a file, you choose a logger and attach to it a handler with action a function that writes to your file. the logging package exports the commodity function writeToFile for this purpouse. the name of the file is given as an extra parameter in the call to addHandler.
 
-recall that both loggers and handlers have a level. records at a specific severity are examined by loggers first; if the severity is higher than the level of the logger, they are offered to all of the attached handlers. handlers will again check the level of the record before taking action. in the following example we make sure absolutely all logrecords are examined by initializing the root logger at the FINEST level. the level of the basic_stdout console handler is not affected.::
+recall that both loggers and handlers have a level. records at a specific severity are examined by loggers first; if the severity is higher than the level of the logger, they are offered to all of the attached handlers. handlers will again check the level of the record before taking action. in the following example we make sure absolutely all logrecords are examined by initializing the root logger at the FINEST level. the level of the basic_stdout console handler is not affected. ::
 
   R> logReset()
   R> basicConfig(level='FINEST')
@@ -167,7 +167,7 @@ all log records have been passed to both handlers basic.stdout and writeToFile. 
 formatting your log records
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-in this session we are going to see how to generate a diagnostics file for a system that organizes logrecords in a different way than Python. let's jump into the implementation, if you can write R you surely won't need more explaination but will want to tell me how to make this function faster, more readable, shorter...::
+in this session we are going to see how to generate a diagnostics file for a system that organizes logrecords in a different way than Python. let's jump into the implementation, if you can write R you surely won't need more explaination but will want to tell me how to make this function faster, more readable, shorter... ::
 
   formatter.fewsdiagnostics <- function(record) {
     if(record$level <= loglevels[['INFO']])
@@ -196,7 +196,7 @@ if you don't specify the formatter parameter, the default formatter is used, whi
 
 the rest of the code, just slightly simplified, showing how we (me at my company) actually use this capability is given here.
 
-notice that the 'diagnostics' handler we add will not handle DEBUG logrecords.::
+notice that the 'diagnostics' handler we add will not handle DEBUG logrecords. ::
 
   setup.fewsdiagnostics <- function(filename) {
     cat('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n', file=filename, append=FALSE)
@@ -217,7 +217,7 @@ writing your own handlers
 
 differently than in the logging library in Python and in Java, handlers in this logging library aren't objects: they are environments stored in one of the loggers. the principal characteristic property of a handler is its action. a action is a function that specifies what the handler should do with a logrecord that, based on all that we have seen above, must be handled. the two commodity functions we have seen in the first two sessions, writeToConsole and writeToFile are action functions.
 
-a look at writeToFile will help understand the idea implemented in this library.::
+a look at writeToFile will help understand the idea implemented in this library. ::
 
   writeToFile <- function(msg, handler)
   {
