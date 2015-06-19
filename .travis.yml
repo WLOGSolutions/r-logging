@@ -7,8 +7,7 @@
 language: r
 
 env:
-  - global:
-    - WARNINGS_ARE_ERRORS=1
+  - WARNINGS_ARE_ERRORS=1
 
 notifications:
   email:
