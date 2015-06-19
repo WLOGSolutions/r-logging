@@ -5,6 +5,7 @@
 #   https://github.com/craigcitro/r-travis/wiki
 
 language: r
+sudo: required
 
 env:
   - WARNINGS_ARE_ERRORS=1
