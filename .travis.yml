@@ -7,6 +7,11 @@
 language: r
 sudo: required
 
+r_binary_packages:
+ - svUnit
+ - methods
+ - XML
+
 env:
   - WARNINGS_ARE_ERRORS=1
 
@@ -14,3 +19,4 @@ notifications:
   email:
     on_success: change
     on_failure: change
+
