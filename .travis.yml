@@ -9,8 +9,9 @@ sudo: required
 
 r_binary_packages:
  - svUnit
- - methods
  - XML
+r_packages:
+ - methods
 
 env:
   - WARNINGS_ARE_ERRORS=1
