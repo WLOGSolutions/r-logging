@@ -27,15 +27,22 @@ logwarn(msg, ..., logger='')
 logerror(msg, ..., logger='')
 }
 \arguments{
-  \item{msg}{the textual message to be output, or the format for the
-    ... arguments}
-  \item{...}{if present, msg is interpreted as a format and the
-    ... values are passed to it to form the actual message.}
-  \item{logger}{the name of the logger to which we pass the record}
+  \item{msg}{if character, the textual message to be output,
+    or the format for the ... arguments; if of any other
+    type, will be output as is prefixed by the expression
+    that was used for the function call}
+  \item{...}{if present, and msg is ofcharacter, msg is
+    interpreted as a format and the \code{...} values are
+    passed to it to form the actual message; if msg is any
+    other type, all \code{...} values are output the same
+    way like \code{msg}}
+  \item{logger}{the name of the logger to which we pass the
+    record}
 }
 \examples{
 logReset()
 addHandler(writeToConsole)
 loginfo('this goes to console')
 logdebug('this stays silent')
+loginfo(3 + 5, 2 * 3)
 }

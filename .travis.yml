@@ -1,0 +1,23 @@
+# Sample .travis.yml for R projects.
+#
+# See README.md for instructions, or for more configuration options,
+# see the wiki:
+#   https://github.com/craigcitro/r-travis/wiki
+
+language: r
+sudo: required
+
+r_binary_packages:
+ - svUnit
+ - XML
+r_packages:
+ - methods
+
+env:
+  - WARNINGS_ARE_ERRORS=1
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
+
