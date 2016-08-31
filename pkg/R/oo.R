@@ -47,7 +47,7 @@ Logger <- setRefClass("Logger",
                           invisible(TRUE)
                         },
 
-                        log = function(msglevel, msg, ...) {
+                        log = function(msglevel, msg, keep.space = FALSE, ...) {
                           if (msglevel < level) {
                             return(invisible(FALSE))
                           }
@@ -82,8 +82,10 @@ Logger <- setRefClass("Logger",
                           }
 
                           ## strip leading and trailing whitespace from the final message.
-                          msg <- sub("[[:space:]]+$", '', msg)
-                          msg <- sub("^[[:space:]]+", '', msg)
+                          if (!keep.space) {
+                              msg <- sub("[[:space:]]+$", '', msg)
+                              msg <- sub("^[[:space:]]+", '', msg)
+                          }
                           record$msg <- msg
 
                           record$timestamp <- sprintf("%s", Sys.time())
