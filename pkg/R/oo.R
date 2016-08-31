@@ -47,7 +47,7 @@ Logger <- setRefClass("Logger",
                           invisible(TRUE)
                         },
 
-                        log = function(msglevel, msg, keep.space = FALSE, ...) {
+                        log = function(msglevel, msg, ..., keep.space = FALSE) {
                           if (msglevel < level) {
                             return(invisible(FALSE))
                           }
