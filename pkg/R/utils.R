@@ -50,7 +50,10 @@ writeToFile <- function(msg, handler, ...)
 ## the single predefined formatter
 
 defaultFormat <- function(record) {
-  text <- paste(record$timestamp, paste(record$levelname, record$logger, record$msg, sep=':'))
+  ## strip leading and trailing whitespace from the final message.
+  msg <- sub("[[:space:]]+$", '', record$msg)
+  msg <- sub("^[[:space:]]+", '', msg)
+  text <- paste(record$timestamp, paste(record$levelname, record$logger, msg, sep=':'))
 }
 
 #################################################################################

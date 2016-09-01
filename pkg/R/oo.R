@@ -81,9 +81,6 @@ Logger <- setRefClass("Logger",
                             msg <- sprintf("%s: %s", label, c(msg, optargs))
                           }
 
-                          ## strip leading and trailing whitespace from the final message.
-                          msg <- sub("[[:space:]]+$", '', msg)
-                          msg <- sub("^[[:space:]]+", '', msg)
                           record$msg <- msg
 
                           record$timestamp <- sprintf("%s", Sys.time())
