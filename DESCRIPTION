@@ -7,5 +7,5 @@ Description: logging is mostly based on Python logging, it offers
              hierarchic loggers, multiple handlers per logger,
              level based filtering, space for custom formatters.
 Depends: R (>= 3.1.0)
-License: GPL 3+
+License: GPL-3
 LazyData: true
