@@ -3,3 +3,5 @@
 */*/*~
 */*/*/*~
 pkg.Rcheck
+.Rproj.user
+report.xml
