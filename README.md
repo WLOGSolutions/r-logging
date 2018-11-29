@@ -1,3 +1,7 @@
+ |       Travis       |   Total downloads   |      Downloads     |     CRAN version   |
+| :----------------: | :----------------: | :----------------: | :----------------: |
+| [![Travis build status](https://travis-ci.com/WLOGSolutions/r-logging.svg?branch=master)](https://travis-ci.com/WLOGSolutions/r-logging) | [![CRAN total downloads](http://cranlogs.r-pkg.org/badges/grand-total/logging)](http://cranlogs.r-pkg.org/badges/grand-total/logging)| [![CRAN downloads](https://cranlogs.r-pkg.org/badges/logging)](https://cranlogs.r-pkg.org/badges/logging)| [![CRAN version](http://www.r-pkg.org/badges/version/logging)](http://www.r-pkg.org/badges/version/logging)|
+ 
 r-logging
 =========
 
