@@ -13,7 +13,7 @@
 ## along with the nens libraray.  If not, see
 ## <http://www.gnu.org/licenses/>.
 ##
-## Copyright © 2009-2013 by Mario Frasca
+## Copyright (c) 2009-2013 by Mario Frasca
 ##
 
 ## TODO: these constants must be exported and documented

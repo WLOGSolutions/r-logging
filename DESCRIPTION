@@ -1,8 +1,10 @@
 Package: logging
 Title: A Logging Package
 Version: 0.1
-Authors@R: person("Mario", "Frasca", email = "mariotomo@gmail.com",
-                  role = c("aut", "cre"))
+Authors@R: c(
+  person("Mario", "Frasca", email = "mariotomo@gmail.com", role = c("aut")),
+  person("Walerian", "Sokolowski", email = "w.sokolowski@wlogsolutions.com", role = c("cre"))
+  )
 Description: logging is mostly based on Python logging, it offers
              hierarchic loggers, multiple handlers per logger,
              level based filtering, space for custom formatters.

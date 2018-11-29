@@ -1,4 +1,5 @@
 # $Id$
+importFrom(methods, new)
 export(loglevels,
        logfinest,
        logfiner,
@@ -16,7 +17,7 @@ export(loglevels,
        setLevel,
        writeToFile,
        writeToConsole,
-       updateOptions.environment,
        updateOptions,
        logReset
        )
+S3method(updateOptions, environment)

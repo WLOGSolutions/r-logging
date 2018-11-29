@@ -93,7 +93,8 @@ mockAction <- function(msg, handler, ...) {
 }
 
 mockFormatter <- function(record) {
-  paste(record$levelname, record$logger, record$msg, sep = ":")
+  msg <- trimws(record$msg)
+  paste(record$levelname, record$logger, msg, sep = ":")
 }
 
 test.recordIsEmitted.rootToRoot <- function() {
