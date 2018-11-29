@@ -3,11 +3,11 @@ Version: 0.8-104
 Title: R Logging Package
 Authors@R: c(
   person("Mario", "Frasca", email = "mariotomo@gmail.com", role = c("aut")),
-  person("Walerian", "Sokolowski", email = "w.sokolowski@wlogsolutions.com", role = c("cre"))
+  person("Walerian", "Sokolowski", email = "r-logging@wlogsolutions.com", role = c("cre"))
   )
 Description: logging is a pure R package that implements the ubiquitous
              log4j package. It offers hierarchic loggers, multiple handlers 
-             per logger, level based filtering, space handling and custom formating.
+             per logger, level based filtering, space handling and custom formatting.
 URL: https://github.com/WLOGSolutions/r-logging
 BugReports: https://github.com/WLOGSolutions/r-logging/issues
 License: GPL-3
