@@ -15,6 +15,20 @@ r:
 env:
 - TravisCI=true
 
+before_install:
+- cd pkg
+- if [ "$TRAVIS_OS_NAME" == "osx" ]; then sudo chown -R $(whoami) /usr/local/share/man/man7; brew install libgit2; fi
+
+addons:
+  apt:
+    packages:
+    - libgit2-dev
+
+install:
+- Rscript -e 'install.packages(c("devtools"));if (!all(c("devtools") %in% installed.packages())) { q(status = 1, save = "no")}' --no-init-file
+- Rscript -e 'devtools::install_deps(dep = T)' --no-init-file
+- Rscript -e 'devtools::document()'
+
 script:
 - R CMD build .
 - R CMD check *tar.gz
