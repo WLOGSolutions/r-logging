@@ -15,6 +15,9 @@ r:
 env:
 - TravisCI=true
 
+cache: packages
+warnings_are_errors: true
+
 matrix:
   exclude:
   - os: osx
