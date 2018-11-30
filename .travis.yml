@@ -1,20 +1,22 @@
-# Sample .travis.yml for R projects.
-#
-# See README.md for instructions, or for more configuration options,
-# see the wiki:
-#   https://github.com/craigcitro/r-travis/wiki
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: r
 
 os:
- - linux
- - osx
+- linux
+- osx
 
 r:
- - oldrel
- - release
- - devel
- - 3.3.0
+- oldrel
+- release
+- devel
+- 3.3.0
+
+env:
+- TravisCI=true
+
+cache: packages
+warnings_are_errors: true
 
  matrix:
   exclude:
@@ -22,20 +24,19 @@ r:
     r: devel
 
 r_binary_packages:
- - svUnit
- - XML
+- svUnit
+- XML
 r_packages:
- - methods
-
-env:
-  - TravisCI=true
-
-cache: packages
-warnings_are_errors: true
+- methods
 
 before_install:
 - cd pkg
 - if [ "$TRAVIS_OS_NAME" == "osx" ]; then sudo chown -R $(whoami) /usr/local/share/man/man7; brew install libgit2; fi
+
+addons:
+  apt:
+    packages:
+    - libgit2-dev
 
 install:
 - Rscript -e 'install.packages(c("devtools"));if (!all(c("devtools") %in% installed.packages())) { q(status = 1, save = "no")}' --no-init-file
