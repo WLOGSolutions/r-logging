@@ -23,12 +23,6 @@ warnings_are_errors: true
   - os: osx
     r: devel
 
-r_binary_packages:
-- svUnit
-- XML
-r_packages:
-- methods
-
 before_install:
 - cd pkg
 - if [ "$TRAVIS_OS_NAME" == "osx" ]; then sudo chown -R $(whoami) /usr/local/share/man/man7; brew install libgit2; fi
