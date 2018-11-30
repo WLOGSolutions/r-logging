@@ -15,6 +15,11 @@ r:
 env:
 - TravisCI=true
 
+matrix:
+  exclude:
+  - os: osx
+    r: devel
+
 before_install:
 - cd pkg
 - if [ "$TRAVIS_OS_NAME" == "osx" ]; then sudo chown -R $(whoami) /usr/local/share/man/man7; brew install libgit2; fi
