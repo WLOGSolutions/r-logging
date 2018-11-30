@@ -1,5 +1,6 @@
 # $Id$
 importFrom(methods, new)
+importFrom(methods, setRefClass)
 export(loglevels,
        logfinest,
        logfiner,
