@@ -33,6 +33,7 @@ addons:
     - libgit2-dev
 
 install:
+- Rscript -e 'install.packages(c("roxygen2"));if (!all(c("roxygen2") %in% installed.packages())) { q(status = 1, save = "no")}' --no-init-file
 - Rscript -e 'install.packages(c("devtools"));if (!all(c("devtools") %in% installed.packages())) { q(status = 1, save = "no")}' --no-init-file
 - Rscript -e 'devtools::install_deps(dep = T)' --no-init-file
 - Rscript -e 'devtools::document()'
