@@ -11,10 +11,10 @@ writeToConsole(msg, handler, ...)
 writeToFile(msg, handler, ...)
 }
 \arguments{
-\item{msg}{A \var{logging.record} to handle}
+\item{msg}{A formated message to handle.}
 
-\item{handler}{The handler environment containing its options. You can register the
-same action to handlers with different properties.}
+\item{handler}{The handler environment containing its options. You can
+register the same action to handlers with different properties.}
 
 \item{...}{parameters provided by logger system to interact with the action.}
 }
@@ -23,9 +23,16 @@ When you define a handler, you specify its name and the associated action.
 A few predefined actions described below are provided.
 }
 \details{
-A handler is a function that accepts a \var{logging.record} and handler
+A handler action is a function that accepts a formated message and handler
 configuration.
 
+Messages passed are filtered already regarding loglevel.
+
+\dots parameters are used by logging system to interact with the action. \dots can
+contain \var{dry} key to inform action that it meant to initialize itself. In the case
+action should return TRUE if initialization succeded.
+
+If it's not a dry run \dots contain the whole preformated \var{logging.record}.
 A \var{logging.record} is a named list and has following structure:
 \describe{
   \item{msg}{contains the real formatted message}
@@ -34,11 +41,10 @@ A \var{logging.record} is a named list and has following structure:
   \item{logger}{name of the logger that generated it}
   \item{timestamp}{formatted message timestamp}
 }
-Messages passed are filtered already regarding loglevel.
 
-\dots parameters are used by logging system to interact with the action. \dots can
-contain \var{dry} key to inform action that it meant to initialize itself. In the case
-action sould return TRUE if initialization succeded.
+\code{writeToConsole} detects if crayon package is available and uses it
+to color messages. The coloring can be switched off by means of configuring
+the handler with \var{color_output} option set to FALSE.
 
 \code{writeToFile} action expects file path to write to under
  \var{file} key in handler options.
