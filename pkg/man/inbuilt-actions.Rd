@@ -29,6 +29,7 @@ configuration.
 A \var{logging.record} is a named list and has following structure:
 \describe{
   \item{msg}{contains the real formatted message}
+  \item{level}{message level as numeric}
   \item{levelname}{message level name}
   \item{logger}{name of the logger that generated it}
   \item{timestamp}{formatted message timestamp}

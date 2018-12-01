@@ -1,23 +1,25 @@
 library(testthat)
 library(logging)
 
-context("Testing formatting of messages and expressions [test.automatic-format]")
+context("Testing formatting of mess and exprs [test.automatic-format]")
 
 test_setup <- function() {
   test_env <- new.env(parent = emptyenv())
   test_env$logged <- NULL
 
-  mockAction <- function(msg, handler, ...) {
-    if(length(list(...)) && 'dry' %in% names(list(...)))
+  mock_action <- function(msg, handler, ...) {
+    if (length(list(...)) && "dry" %in% names(list(...)))
       return(TRUE)
     test_env$logged <- c(test_env$logged, msg)
   }
-  mockFormatter <- function(record) {
+  mock_formatter <- function(record) {
     paste(record$levelname, record$logger, record$msg, sep = ":")
   }
 
   logReset()
-  addHandler(mockAction, level='DEBUG', logger='', formatter=mockFormatter)
+  addHandler(mock_action,
+             level = "DEBUG",
+             formatter = mock_formatter)
 
   return(test_env)
 }
@@ -35,9 +37,10 @@ test_that("autoformat/one_numeric_literal", {
 test_that("autoformat/more_numeric_literals", {
   env <- test_setup()
 
-  loginfo(12, 1+1, 2*2)
+  loginfo(12, 1 + 1, 2 * 2)
 
-  expect_equal(env$logged, c("INFO::12: 12", "INFO::1 + 1: 2", "INFO::2 * 2: 4"))
+  expect_equal(env$logged,
+               c("INFO::12: 12", "INFO::1 + 1: 2", "INFO::2 * 2: 4"))
 })
 
 test_that("autoformat/one_numeric_variable", {
@@ -60,7 +63,7 @@ test_that("autoformat/one_numeric_expression", {
 test_that("autoformat/explicit_msg_parameter", {
   env <- test_setup()
 
-  loginfo(logger=getLogger(), msg=3 + 5)
+  loginfo(logger = getLogger(), msg = 3 + 5)
 
   expect_equal(env$logged, "INFO::3 + 5: 8")
 })
@@ -68,7 +71,7 @@ test_that("autoformat/explicit_msg_parameter", {
 test_that("autoformat/shifted_msg_parameter", {
   env <- test_setup()
 
-  loginfo(logger=getLogger(), 3 + 5)
+  loginfo(logger = getLogger(), 3 + 5)
 
   expect_equal(env$logged, "INFO::3 + 5: 8")
 })

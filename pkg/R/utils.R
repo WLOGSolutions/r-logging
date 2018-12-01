@@ -1,8 +1,9 @@
 ##
-## this is part of the R-logging package. the R-logging package is free
-## software: you can redistribute it and/or modify it under the terms of the
-## GNU General Public License as published by the Free Software Foundation,
-## either version 3 of the License, or (at your option) any later version.
+## this is part of the logging package. the logging package is free
+## software: you can redistribute it as well as modify it under the terms of
+## the GNU General Public License as published by the Free Software
+## Foundation, either version 3 of the License, or (at your option) any later
+## version.
 ##
 ## this program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -10,10 +11,9 @@
 ## General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with the nens libraray.  If not, see
-## <http://www.gnu.org/licenses/>.
+## along with the nens libraray.  If not, see http://www.gnu.org/licenses/.
 ##
-## Copyright (c) 2009-2013 by Mario Frasca
+## Copyright (c) 2009..2013 by Mario Frasca
 ##
 
 
@@ -29,6 +29,7 @@
 #' A \var{logging.record} is a named list and has following structure:
 #' \describe{
 #'   \item{msg}{contains the real formatted message}
+#'   \item{level}{message level as numeric}
 #'   \item{levelname}{message level name}
 #'   \item{logger}{name of the logger that generated it}
 #'   \item{timestamp}{formatted message timestamp}
@@ -56,9 +57,9 @@ NULL
 #' @export
 #'
 writeToConsole <- function(msg, handler, ...) {
-  if(length(list(...)) && 'dry' %in% names(list(...)))
+  if (length(list(...)) && "dry" %in% names(list(...)))
     return(TRUE)
-  cat(paste(msg, '\n', sep=''))
+  cat(paste0(msg, "\n"))
 }
 
 #' @rdname inbuilt-actions
@@ -69,15 +70,16 @@ writeToConsole <- function(msg, handler, ...) {
 #' @export
 #'
 writeToFile <- function(msg, handler, ...) {
-  if(length(list(...)) && 'dry' %in% names(list(...)))
-    return(exists('file', envir=handler))
-  cat(paste(msg, '\n', sep=''), file=with(handler, file), append=TRUE)
+  if (length(list(...)) && "dry" %in% names(list(...)))
+    return(exists("file", envir = handler))
+  cat(paste0(msg, "\n"), file = with(handler, file), append = TRUE)
 }
 
 ## the single predefined formatter
 defaultFormat <- function(record) {
   ## strip leading and trailing whitespace from the final message.
-  msg <- sub("[[:space:]]+$", '', record$msg)
-  msg <- sub("^[[:space:]]+", '', msg)
-  text <- paste(record$timestamp, paste(record$levelname, record$logger, msg, sep=':'))
+  msg <- trimws(record$msg)
+  text <- paste(record$timestamp,
+                paste(record$levelname, record$logger, msg, sep = ":"))
+  return(text)
 }

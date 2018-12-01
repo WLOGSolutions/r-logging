@@ -1,8 +1,9 @@
 ##
-## this is part of the R-logging package. the R-logging package is free
-## software: you can redistribute it and/or modify it under the terms of the
-## GNU General Public License as published by the Free Software Foundation,
-## either version 3 of the License, or (at your option) any later version.
+## this is part of the logging package. the logging package is free
+## software: you can redistribute it as well as modify it under the terms of
+## the GNU General Public License as published by the Free Software
+## Foundation, either version 3 of the License, or (at your option) any later
+## version.
 ##
 ## this program is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -10,10 +11,9 @@
 ## General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with the nens libraray.  If not, see
-## <http://www.gnu.org/licenses/>.
+## along with the nens libraray.  If not, see http://www.gnu.org/licenses/.
 ##
-## Copyright (c) 2009-2013 by Mario Frasca
+## Copyright (c) 2009..2013 by Mario Frasca
 ##
 
 #'
@@ -45,66 +45,67 @@ NULL
 #' @rdname logging-entrypoints
 #' @export
 #'
-logdebug <- function(msg, ..., logger='') {
-  .levellog(loglevels['DEBUG'], msg, ..., logger=logger)
+logdebug <- function(msg, ..., logger = "") {
+  .levellog(loglevels["DEBUG"], msg, ..., logger = logger)
 }
 
 #' @rdname logging-entrypoints
 #' @export
 #'
-logfinest <- function(msg, ..., logger='') {
-  .levellog(loglevels['FINEST'], msg, ..., logger=logger)
+logfinest <- function(msg, ..., logger = "") {
+  .levellog(loglevels["FINEST"], msg, ..., logger = logger)
 }
 
 #' @rdname logging-entrypoints
 #' @export
 #'
-logfiner <- function(msg, ..., logger='') {
-  .levellog(loglevels['FINER'], msg, ..., logger=logger)
+logfiner <- function(msg, ..., logger = "") {
+  .levellog(loglevels["FINER"], msg, ..., logger = logger)
 }
 
 #' @rdname logging-entrypoints
 #' @export
 #'
-logfine <- function(msg, ..., logger='') {
-  .levellog(loglevels['FINE'], msg, ..., logger=logger)
+logfine <- function(msg, ..., logger = "") {
+  .levellog(loglevels["FINE"], msg, ..., logger = logger)
 }
 
 #' @rdname logging-entrypoints
 #' @export
 #'
-loginfo <- function(msg, ..., logger='') {
-  .levellog(loglevels['INFO'], msg, ..., logger=logger)
+loginfo <- function(msg, ..., logger = "") {
+  .levellog(loglevels["INFO"], msg, ..., logger = logger)
 }
 
 #' @rdname logging-entrypoints
 #' @export
 #'
-logwarn <- function(msg, ..., logger='') {
-  .levellog(loglevels['WARN'], msg, ..., logger=logger)
+logwarn <- function(msg, ..., logger = "") {
+  .levellog(loglevels["WARN"], msg, ..., logger = logger)
 }
 
 #' @rdname logging-entrypoints
 #' @export
 #'
-logerror <- function(msg, ..., logger='') {
-  .levellog(loglevels['ERROR'], msg, ..., logger=logger)
+logerror <- function(msg, ..., logger = "") {
+  .levellog(loglevels["ERROR"], msg, ..., logger = logger)
 }
 
 #' @rdname logging-entrypoints
 #'
 #' @param level The logging level
 #' @export
-levellog <- function(level, msg, ..., logger='') {
+levellog <- function(level, msg, ..., logger = "") {
   # just calling .levellog
   # do not simplify it as call sequence sould be same
   #   as for other logX functions
   .levellog(level, msg, ..., logger = logger)
 }
 
-.levellog <- function(level, msg, ..., logger='') {
-  if(is.character(logger))
+.levellog <- function(level, msg, ..., logger = "") {
+  if (is.character(logger)) {
     logger <- getLogger(logger)
+  }
   logger$log(level, msg, ...)
 }
 
@@ -131,13 +132,16 @@ levellog <- function(level, msg, ..., logger='') {
 #' @export
 #'
 getLogger <- function(name = "", ...) {
-  if(name=='')
-    fullname <- 'logging.ROOT'
-  else
-    fullname <- paste('logging.ROOT', name, sep='.')
+  if (name == "") {
+    fullname <- "logging.ROOT"
+  } else {
+    fullname <- paste("logging.ROOT", name, sep = ".")
+  }
 
-  if(!exists(fullname, envir=logging.options)) {
-    logger <- Logger$new(name=name, handlers=list(), level=namedLevel('INFO'))
+  if (!exists(fullname, envir = logging.options)) {
+    logger <- Logger$new(name = name,
+                         handlers = list(),
+                         level = namedLevel("INFO"))
     updateOptions.environment(logger, ...)
     logging.options[[fullname]] <- logger
   }
@@ -176,10 +180,11 @@ NULL
 #'
 #' @export
 #'
-basicConfig <- function(level=20) {
-  rootLogger <- getLogger()
-  updateOptions(rootLogger, level=namedLevel(level))
-  rootLogger$addHandler('basic.stdout', writeToConsole, level=namedLevel(level))
+basicConfig <- function(level = 20) {
+  root_logger <- getLogger()
+  updateOptions(root_logger, level = namedLevel(level))
+  root_logger$addHandler("basic.stdout", writeToConsole,
+                         level = namedLevel(level))
   invisible()
 }
 
@@ -197,10 +202,10 @@ logReset <- function() {
   ## reinizialize the whole logging system
 
   ## remove all content from the logging environment
-  rm(list=ls(logging.options), envir=logging.options)
+  rm(list = ls(logging.options), envir = logging.options)
 
-  rootLogger <- getLogger()
-  rootLogger$setLevel(0)
+  root_logger <- getLogger()
+  root_logger$setLevel(0)
 
   invisible()
 }
@@ -257,16 +262,18 @@ NULL
 #' @export
 #'
 addHandler <- function(handler, ..., logger = "") {
-  if(is.character(logger))
+  if (is.character(logger)) {
     logger <- getLogger(logger)
+  }
 
   ## this part has to be repeated here otherwise the called function
   ## will deparse the argument to 'handler', the formal name given
   ## here to the parameter
-  if(is.character(handler)) {
+  if (is.character(handler)) {
     logger$addHandler(handler, ...)
   } else {
-    logger$addHandler(handler=deparse(substitute(handler)), action=handler, ...)
+    handler_name <- deparse(substitute(handler))
+    logger$addHandler(handler = handler_name, action = handler, ...)
   }
 }
 
@@ -274,8 +281,12 @@ addHandler <- function(handler, ..., logger = "") {
 #' @export
 #'
 removeHandler <- function(handler, logger = "") {
-  if(is.character(logger))
+  if (is.character(logger)) {
     logger <- getLogger(logger)
+  }
+  if (!is.character(handler)) { # handler was passed as its action
+    handler <- deparse(substitute(handler))
+  }
   logger$removeHandler(handler)
 }
 
@@ -293,7 +304,7 @@ removeHandler <- function(handler, logger = "") {
 #' @param handler The name of the handler, or its action.
 #' @param logger Optional: the name of the logger. Defaults to the root logger.
 #'
-#' @return The retrieved handler object.
+#' @return The retrieved handler object. It returns NULL if handler is not registerd.
 #'
 #' @examples
 #' logReset()
@@ -303,8 +314,12 @@ removeHandler <- function(handler, logger = "") {
 #' @export
 #'
 getHandler <- function(handler, logger = "") {
-  if(is.character(logger))
+  if (is.character(logger)) {
     logger <- getLogger(logger)
+  }
+  if (!is.character(handler)) { # handler was passed as its action
+    handler <- deparse(substitute(handler))
+  }
   logger$getHandler(handler)
 }
 
@@ -332,7 +347,8 @@ setLevel <- function(level, container = "") {
     stop("NULL container provided: cannot set level for NULL container")
   }
 
-  if(is.character(container))
+  if (is.character(container)) {
     container <- getLogger(container)
+  }
   assign("level", namedLevel(level), container)
 }
