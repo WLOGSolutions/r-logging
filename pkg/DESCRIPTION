@@ -17,5 +17,6 @@ Depends:
   R (>= 3.1.0)
 Imports: 
   methods
-Suggests: svUnit, XML
+Suggests:
+  testthat
 RoxygenNote: 6.1.1
