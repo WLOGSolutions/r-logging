@@ -16,9 +16,26 @@
 ## Copyright (c) 2009-2013 by Mario Frasca
 ##
 
-## TODO: these constants must be exported and documented
-loglevels <- c(0, 1, 4, 7, 10, 20, 30, 30, 40, 50, 50)
-names(loglevels) <- c('NOTSET', 'FINEST', 'FINER', 'FINE', 'DEBUG', 'INFO', 'WARNING', 'WARN', 'ERROR', 'CRITICAL', 'FATAL')
+## TODO: these constants must be documented
+#'
+#' The logging levels, names and values
+#'
+#' This list associates names to values and vice versa.\cr
+#' Names and values are the same as in the python standard logging module.
+#'
+#' @export
+#'
+loglevels <- c(NOTSET = 0,
+               FINEST = 1,
+               FINER = 4,
+               FINE = 7,
+               DEBUG = 10,
+               INFO = 20,
+               WARNING = 30,
+               WARN = 30,
+               ERROR = 40,
+               CRITICAL = 50,
+               FATAL = 50)
 
 namedLevel <- function(value)
   UseMethod('namedLevel')

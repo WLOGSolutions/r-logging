@@ -16,46 +16,68 @@
 ## Copyright (c) 2009-2013 by Mario Frasca
 ##
 
-#################################################################################
 
-## sample actions for handlers
+#'
+#' Predefined(sample) handler actions
+#'
+#' When you define a handler, you specify its name and the associated action.
+#' A few predefined actions described below are provided.
+#'
+#' A handler is a function that accepts a \var{logging.record} and handler
+#' configuration.
+#'
+#' A \var{logging.record} is a named list and has following structure:
+#' \describe{
+#'   \item{msg}{contains the real formatted message}
+#'   \item{levelname}{message level name}
+#'   \item{logger}{name of the logger that generated it}
+#'   \item{timestamp}{formatted message timestamp}
+#' }
+#' Messages passed are filtered already regarding loglevel.
+#'
+#' \dots parameters are used by logging system to interact with the action. \dots can
+#' contain \var{dry} key to inform action that it meant to initialize itself. In the case
+#' action sould return TRUE if initialization succeded.
+#'
+#' @param msg A \var{logging.record} to handle
+#' @param handler The handler environment containing its options. You can register the
+#'   same action to handlers with different properties.
+#' @param ... parameters provided by logger system to interact with the action.
+#'
+#' @examples
+#' ## define your own function and register it with a handler.
+#' ## author is planning a sentry client function.  please send
+#' ## any interesting function you may have written!
+#'
+#' @name inbuilt-actions
+NULL
 
-## a handler is a function that accepts a logging.record and a
-## configuration.
-
-## a logging.record contains the real message, its level, the name of the
-## logger that generated it, a timestamp.
-
-## a configuration contains a formatter (a function taking a
-## logging.record and returning a string), a numeric level (only records
-## with level equal or higher than that are taken into account), an
-## action (writing the formatted record to a stream).
-
-writeToConsole <- function(msg, handler, ...)
-{
+#' @rdname inbuilt-actions
+#' @export
+#'
+writeToConsole <- function(msg, handler, ...) {
   if(length(list(...)) && 'dry' %in% names(list(...)))
     return(TRUE)
   cat(paste(msg, '\n', sep=''))
 }
 
-writeToFile <- function(msg, handler, ...)
-{
+#' @rdname inbuilt-actions
+#'
+#' @details \code{writeToFile} action expects file path to write to under
+#'  \var{file} key in handler options.
+#'
+#' @export
+#'
+writeToFile <- function(msg, handler, ...) {
   if(length(list(...)) && 'dry' %in% names(list(...)))
     return(exists('file', envir=handler))
   cat(paste(msg, '\n', sep=''), file=with(handler, file), append=TRUE)
 }
 
-#################################################################################
-
 ## the single predefined formatter
-
 defaultFormat <- function(record) {
   ## strip leading and trailing whitespace from the final message.
   msg <- sub("[[:space:]]+$", '', record$msg)
   msg <- sub("^[[:space:]]+", '', msg)
   text <- paste(record$timestamp, paste(record$levelname, record$logger, msg, sep=':'))
 }
-
-#################################################################################
-
-#################################################################################

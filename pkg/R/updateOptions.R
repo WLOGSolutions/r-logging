@@ -16,21 +16,41 @@
 ## Copyright (c) 2009-2013 by Mario Frasca
 ##
 
-## set properties of a logger or a handler
+#'
+#' Changes settings of logger or handler.
+#'
+#' @param container a logger, its name or a handler.
+#' @param ... options to set for the container.
+#'
+#' @export
+#'
 updateOptions <- function(container, ...)
   UseMethod('updateOptions')
 
+#' @describeIn updateOptions Update options for logger identified
+#'   by name.
+#' @export
+#'
 updateOptions.character <- function(container, ...) {
   ## container is really just the name of the container
   updateOptions.environment(getLogger(container), ...)
 }
 
+#' @describeIn updateOptions Update options of logger or handler
+#'   passed by reference.
+#' @export
+#'
 updateOptions.environment <- function(container, ...) {
   ## the container is a logger
   config <- list(...);
-  if (! 'level' %in% names(config))
-    config[['level']] = loglevels['INFO']
-  for (key in names(config))
-    if(key != "") container[[key]] <- config[[key]]
+  if (! ("level" %in% names(config)) ) {
+    config$level <- loglevels['INFO']
+  }
+
+  for (key in names(config)) {
+    if(key != "") {
+      container[[key]] <- config[[key]]
+    }
+  }
   invisible()
 }
