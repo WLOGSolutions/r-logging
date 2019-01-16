@@ -101,13 +101,13 @@ writeToConsole <- function(msg, handler, ...) {
                     "FINEST" = crayon_env$make_style("gray80"),
                     "FINER" = crayon_env$make_style("gray60"),
                     "FINE" = crayon_env$make_style("gray60"),
-                    "DEBUG" = crayon_env$make_style('deepskyblue4'),
+                    "DEBUG" = crayon_env$make_style("deepskyblue4"),
                     "INFO" = crayon_env$reset,
-                    "WARNING" = crayon_env$make_style('darkorange'),
-                    "ERROR" = crayon_env$make_style('red4'),
+                    "WARNING" = crayon_env$make_style("darkorange"),
+                    "ERROR" = crayon_env$make_style("red4"),
                     "CRITICAL" =
                       crayon_env$combine_styles(crayon_env$bold,
-                                                crayon_env$make_style('red1')),
+                                                crayon_env$make_style("red1")),
                     crayon_env$make_style("gray100"))
     res <- paste0(style(msg), crayon_env$reset(""))
     return(res)

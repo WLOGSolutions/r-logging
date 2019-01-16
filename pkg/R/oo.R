@@ -122,7 +122,7 @@ Logger <- setRefClass(
       handlers <<- handlers[!(names(handlers) == handler)]
     },
 
-    addHandler = function(handler, ..., level = 20, formatter = defaultFormat) {
+    addHandler = function(handler, ..., level = 0, formatter = defaultFormat) {
       handler_env <- new.env()
       if (is.character(handler)) {
         ## first parameter is handler name

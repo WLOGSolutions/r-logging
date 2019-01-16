@@ -33,7 +33,7 @@ updateOptions <- function(container, ...)
 #'
 updateOptions.character <- function(container, ...) {
   ## container is really just the name of the container
-  updateOptions.environment(getLogger(container), ...)
+  updateOptions(getLogger(container), ...)
 }
 
 #' @describeIn updateOptions Update options of logger or handler
@@ -55,4 +55,12 @@ updateOptions.environment <- function(container, ...) {
     }
   }
   invisible()
+}
+
+#' @describeIn updateOptions Update options of logger or handler
+#'   passed by reference.
+#' @export
+#'
+updateOptions.Logger <- function(container, ...) {
+  updateOptions.environment(container, ...)
 }

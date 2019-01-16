@@ -144,6 +144,10 @@ getLogger <- function(name = "", ...) {
                          level = namedLevel("INFO"))
     updateOptions.environment(logger, ...)
     logging.options[[fullname]] <- logger
+
+    if (fullname == "logging.ROOT") {
+      .basic_config(logger)
+    }
   }
   logging.options[[fullname]]
 }
@@ -171,8 +175,10 @@ NULL
 #' @details
 #' \code{basicConfig} creates the root logger, attaches a console handler(by
 #' \var{basic.stdout} name) to it and sets the level of the handler to
-#' \code{logging.level} INFO. The level of the logger can be passed as a
-#' parameter to the function.
+#' \code{level}. You must not call \code{basicConfig} to for logger to work any more:
+#' then root logger is created it gets initialized by default the same way as
+#' \code{basicConfig} does. If you need clear logger to fill with you own handlers
+#' use \code{logReset} to remove all default handlers.
 #'
 #' @param level The logging level of the root logger. Defaults to INFO. Please do notice that
 #'   this has no effect on the handling level of the handler that basicConfig attaches to the
@@ -182,10 +188,18 @@ NULL
 #'
 basicConfig <- function(level = 20) {
   root_logger <- getLogger()
+
   updateOptions(root_logger, level = namedLevel(level))
-  root_logger$addHandler("basic.stdout", writeToConsole,
-                         level = namedLevel(level))
+  .basic_config(root_logger)
+
   invisible()
+}
+
+#' Called from basicConfig and while creating rootLogger.
+#' @noRd
+.basic_config <- function(root_logger) {
+  stopifnot(root_logger$name == "")
+  root_logger$addHandler("basic.stdout", writeToConsole)
 }
 
 
@@ -193,8 +207,8 @@ basicConfig <- function(level = 20) {
 #'
 #' @details
 #' \code{logReset} reinitializes the whole logging system as if the package had just been
-#' loaded. typically, you would want to call \code{basicConfig} immediately after a call
-#' to \code{logReset}.
+#' loaded except it also removes all default handlers. Typically, you would want to call
+#' \code{basicConfig} immediately after a call to \code{logReset}.
 #'
 #' @export
 #'
@@ -204,8 +218,8 @@ logReset <- function() {
   ## remove all content from the logging environment
   rm(list = ls(logging.options), envir = logging.options)
 
-  root_logger <- getLogger()
-  root_logger$setLevel(0)
+  root_logger <- getLogger(level = "INFO")
+  root_logger$removeHandler("basic.stdout")
 
   invisible()
 }
@@ -284,7 +298,8 @@ removeHandler <- function(handler, logger = "") {
   if (is.character(logger)) {
     logger <- getLogger(logger)
   }
-  if (!is.character(handler)) { # handler was passed as its action
+  if (!is.character(handler)) {
+    # handler was passed as its action
     handler <- deparse(substitute(handler))
   }
   logger$removeHandler(handler)
@@ -317,7 +332,8 @@ getHandler <- function(handler, logger = "") {
   if (is.character(logger)) {
     logger <- getLogger(logger)
   }
-  if (!is.character(handler)) { # handler was passed as its action
+  if (!is.character(handler)) {
+    # handler was passed as its action
     handler <- deparse(substitute(handler))
   }
   logger$getHandler(handler)

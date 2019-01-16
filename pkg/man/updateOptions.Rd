@@ -4,6 +4,7 @@
 \alias{updateOptions}
 \alias{updateOptions.character}
 \alias{updateOptions.environment}
+\alias{updateOptions.Logger}
 \title{Changes settings of logger or handler.}
 \usage{
 updateOptions(container, ...)
@@ -11,6 +12,8 @@ updateOptions(container, ...)
 \method{updateOptions}{character}(container, ...)
 
 \method{updateOptions}{environment}(container, ...)
+
+\method{updateOptions}{Logger}(container, ...)
 }
 \arguments{
 \item{container}{a logger, its name or a handler.}
@@ -26,6 +29,9 @@ Changes settings of logger or handler.
 by name.
 
 \item \code{environment}: Update options of logger or handler
+passed by reference.
+
+\item \code{Logger}: Update options of logger or handler
 passed by reference.
 }}
 

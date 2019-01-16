@@ -49,7 +49,7 @@ test_that("500.basicConfigSetsLevelOfHandler", {
   basicConfig("DEBUG")
 
   root_logger <- getLogger("")
-  expect <- logging:::loglevels["DEBUG"]
+  expect <- logging:::loglevels["NOTSET"]
   current <- root_logger$getHandler("basic.stdout")[["level"]]
 
   expect_equal(current, expect)
@@ -57,7 +57,7 @@ test_that("500.basicConfigSetsLevelOfHandler", {
   logReset()
   basicConfig("ERROR")
   root_logger <- getLogger("")  ## needed: `logReset` unlinked the old one
-  expect <- logging:::loglevels["ERROR"]
+  expect <- logging:::loglevels["NOTSET"]
   current <- root_logger$getHandler("basic.stdout")[["level"]]
 
   expect_equal(current, expect)

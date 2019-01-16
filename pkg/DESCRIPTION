@@ -18,5 +18,6 @@ Depends:
 Imports: 
   methods
 Suggests:
-  testthat
+  testthat, 
+  crayon
 RoxygenNote: 6.1.1

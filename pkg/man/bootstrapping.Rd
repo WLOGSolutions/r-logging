@@ -22,12 +22,14 @@ in a know initial state.
 \details{
 \code{basicConfig} creates the root logger, attaches a console handler(by
 \var{basic.stdout} name) to it and sets the level of the handler to
-\code{logging.level} INFO. The level of the logger can be passed as a
-parameter to the function.
+\code{level}. You must not call \code{basicConfig} to for logger to work any more:
+then root logger is created it gets initialized by default the same way as
+\code{basicConfig} does. If you need clear logger to fill with you own handlers
+use \code{logReset} to remove all default handlers.
 
 \code{logReset} reinitializes the whole logging system as if the package had just been
-loaded. typically, you would want to call \code{basicConfig} immediately after a call
-to \code{logReset}.
+loaded except it also removes all default handlers. Typically, you would want to call
+\code{basicConfig} immediately after a call to \code{logReset}.
 }
 \examples{
 basicConfig()
