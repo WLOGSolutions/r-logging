@@ -67,6 +67,8 @@ Logger <- setRefClass(
                                 x <- paste(x, collapse = ",")
                               x
                             })
+        } else {
+          optargs <- list(fmt="%s")
         }
         msg <- do.call("sprintf", c(msg, optargs))
       } else {
