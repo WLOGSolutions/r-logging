@@ -42,3 +42,4 @@ script:
 - R CMD build .
 - R CMD check *tar.gz
 - Rscript -e 'devtools::install()' --no-init-file
+- Rscript -e 'devtools::test()' --no-init-file

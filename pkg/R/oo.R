@@ -67,10 +67,20 @@ Logger <- setRefClass(
                                 x <- paste(x, collapse = ",")
                               x
                             })
-        } else {
-          optargs <- list(fmt="%s")
         }
-        msg <- do.call("sprintf", c(msg, optargs))
+
+        if (nchar(msg) > 8192) { # 8192 is limitation on fmt in sprintf
+          if (length(optargs) > 0) {
+            stop("'msg' length exceeds maximal format length 8192")
+          }
+          if (grepl("%[^%]", gsub("%%", "_", msg))) {
+            stop("too few arguments for format")
+          }
+
+          # else msg must not change in any way
+        } else {
+          msg <- do.call("sprintf", c(msg, optargs))
+        }
       } else {
         ## invoked as list of expressions
         ## this assumes that the function the user calls is two levels up, e.g.:
