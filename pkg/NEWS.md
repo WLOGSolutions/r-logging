@@ -1,3 +1,9 @@
+# logging 0.9-106 (2019-01-23)
+  * issue #2 fixed: handling of sprintf limitation to 8192 characters in fmt.
+    If no formatting parameters provided and fmt does not contain markers it
+    logs message just as it is. If formatting required on msg over 8192 chars
+    it raises error.
+
 # logging 0.9-105 (2019-01-16)
   * Documentation generation migrated to roxygen2
   * Tests migrated to testthat, test coverage enhanced

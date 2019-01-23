@@ -90,19 +90,19 @@ test_that("formatlimits/over_limit_wo_formatting", {
   env$logged <- c()
 
   # long message with %% at end
-  msg8190_Mperc <- paste0(msg8190, "%%", "X")
-  stopifnot(nchar(msg8190_Mperc) == 8193)
+  msg8190_m_perc <- paste0(msg8190, "%%", "X")
+  stopifnot(nchar(msg8190_m_perc) == 8193)
 
-  loginfo(msg8190_Mperc)
+  loginfo(msg8190_m_perc)
 
-  expect_equal(env$logged, paste0("INFO::", msg8190_Mperc))
+  expect_equal(env$logged, paste0("INFO::", msg8190_m_perc))
   env$logged <- c()
 
   # long message with %% at start
-  msg8190_percM <- paste0("%%", "X", msg8190)
-  stopifnot(nchar(msg8190_percM) == 8193)
+  msg8190_perc_m <- paste0("%%", "X", msg8190)
+  stopifnot(nchar(msg8190_perc_m) == 8193)
 
-  loginfo(msg8190_percM)
+  loginfo(msg8190_perc_m)
 
-  expect_equal(env$logged, paste0("INFO::", msg8190_percM))
+  expect_equal(env$logged, paste0("INFO::", msg8190_perc_m))
 })

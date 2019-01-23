@@ -1,5 +1,5 @@
 Package: logging
-Version: 0.9-105
+Version: 0.9-106
 Title: R Logging Package
 Authors@R: c(
     person("Mario", "Frasca", email = "mariotomo@gmail.com", role = c("aut")),
@@ -14,7 +14,7 @@ License: GPL-3
 Encoding: UTF-8
 Language: en-US
 Depends: 
-  R (>= 3.1.0)
+  R (>= 3.2.0)
 Imports: 
   methods
 Suggests:
