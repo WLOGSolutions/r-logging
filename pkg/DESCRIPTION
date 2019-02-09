@@ -1,5 +1,5 @@
 Package: logging
-Version: 0.9-106
+Version: 0.9-107
 Title: R Logging Package
 Authors@R: c(
     person("Mario", "Frasca", email = "mariotomo@gmail.com", role = c("aut")),

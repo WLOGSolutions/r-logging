@@ -137,3 +137,56 @@ defaultFormat <- function(record) {
                 paste(record$levelname, record$logger, msg, sep = ":"))
   return(text)
 }
+
+## default way of composing msg with parameters
+defaultMsgCompose <- function(msg, ...) {
+  optargs <- list(...)
+  if (is.character(msg)) {
+    ## invoked as ("printf format", arguments_for_format)
+    if (length(optargs) > 0) {
+      optargs <- lapply(optargs,
+                        function(x) {
+                          if (length(x) != 1)
+                            x <- paste(x, collapse = ",")
+                          x
+                        })
+    }
+
+    # 8192 is limitation on fmt in sprintf
+    if (nchar(msg) > 8192) {
+      if (length(optargs) > 0) {
+        stop("'msg' length exceeds maximal format length 8192")
+      }
+      if (grepl("%[^%]", gsub("%%", "_", msg))) {
+        stop("too few arguments for format")
+      }
+
+      # else msg must not change in any way
+      return(msg)
+    }
+    msg <- do.call("sprintf", c(msg, optargs))
+    return(msg)
+  }
+
+  ## invoked as list of expressions
+  ## this assumes that the function the user calls is two levels up, e.g.:
+  ## loginfo -> .levellog -> logger$log -> .default_msg_composer
+  ## levellog -> .levellog -> logger$log -> .default_msg_composer
+  external_call <- sys.call(-3)
+  external_fn <- eval(external_call[[1]])
+  matched_call <- match.call(external_fn, external_call)
+  matched_call <- matched_call[-1]
+  matched_call_names <- names(matched_call)
+
+  ## We are interested only in the msg and ... parameters,
+  ## i.e. in msg and all parameters not explicitly declared
+  ## with the function
+  formal_names <- names(formals(external_fn))
+  is_output_param <-
+    matched_call_names == "msg" |
+    !(matched_call_names %in% c(setdiff(formal_names, "...")))
+
+  label <- lapply(matched_call[is_output_param], deparse)
+  msg <- sprintf("%s: %s", label, c(msg, optargs))
+  return(msg)
+}

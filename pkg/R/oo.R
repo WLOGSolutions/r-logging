@@ -21,7 +21,8 @@ Logger <- setRefClass(
   fields = list(
     name = "character",
     handlers = "list",
-    level = "numeric"),
+    level = "numeric",
+    msg_composer = "function"),
   methods = list(
     getParent = function() {
       # split the name on the '.'
@@ -29,6 +30,17 @@ Logger <- setRefClass(
       removed <- parts[-length(parts)] # except the last item
       parent_name <- paste(removed, collapse = ".")
       return(getLogger(parent_name))
+    },
+
+    getMsgComposer = function() {
+      if (!is.null(msg_composer) && !is.null(functionBody(msg_composer))) {
+        return(msg_composer)
+      }
+      if (name != "") {
+        parent_logger <- getParent()
+        return(parent_logger$getMsgComposer())
+      }
+      return(defaultMsgCompose)
     },
 
     .logrecord = function(record) {
@@ -57,56 +69,8 @@ Logger <- setRefClass(
       ## loggers from here up to the root.
       record <- list()
 
-      optargs <- list(...)
-      if (is.character(msg)) {
-        ## invoked as ("printf format", arguments_for_format)
-        if (length(optargs) > 0) {
-          optargs <- lapply(optargs,
-                            function(x) {
-                              if (length(x) != 1)
-                                x <- paste(x, collapse = ",")
-                              x
-                            })
-        }
-
-        # 8192 is limitation on fmt in sprintf
-        if (nchar(msg) > 8192) {
-          if (length(optargs) > 0) {
-            stop("'msg' length exceeds maximal format length 8192")
-          }
-          if (grepl("%[^%]", gsub("%%", "_", msg))) {
-            stop("too few arguments for format")
-          }
-
-          # else msg must not change in any way
-        } else {
-          msg <- do.call("sprintf", c(msg, optargs))
-        }
-      } else {
-        ## invoked as list of expressions
-        ## this assumes that the function the user calls is two levels up, e.g.:
-        ## loginfo -> .levellog -> logger$log
-        ## levellog -> .levellog -> logger$log
-        external_call <- sys.call(-2)
-        external_fn <- eval(external_call[[1]])
-        matched_call <- match.call(external_fn, external_call)
-        matched_call <- matched_call[-1]
-        matched_call_names <- names(matched_call)
-
-        ## We are interested only in the msg and ... parameters,
-        ## i.e. in msg and all parameters not explicitly declared
-        ## with the function
-        formal_names <- names(formals(external_fn))
-        is_output_param <-
-          matched_call_names == "msg" |
-          !(matched_call_names %in% c(setdiff(formal_names, "...")))
-
-        label <- lapply(matched_call[is_output_param], deparse)
-        msg <- sprintf("%s: %s", label, c(msg, optargs))
-      }
-
-      record$msg <- msg
-
+      composer_f <- getMsgComposer()
+      record$msg <- composer_f(msg, ...)
       record$timestamp <- sprintf("%s", Sys.time())
       record$logger <- name
       record$level <- msglevel

@@ -368,3 +368,59 @@ setLevel <- function(level, container = "") {
   }
   assign("level", namedLevel(level), container)
 }
+
+#'
+#' Sets message composer for logger.
+#'
+#' Message composer is used to compose log message out of formating string and arguments.
+#' It is function with signature \code{function(msg, ...)}. Formating message is passed under msg
+#' and formating arguments are passed as \code{...}.
+#'
+#' If message composer is not set default is in use (realized with \code{sprintf}). If message
+#' composer is not set for sub-logger, parent's message composer will be used.
+#'
+#' @param composer_f message composer function (type: function(msg, ...))
+#' @param container name of logger to reser message composer for (type: character)
+#'
+#' @examples
+#' setMsgComposer(function(msg, ...) paste0("s-", msg, "-e"))
+#' loginfo("a message") # will log '<TS> INFO::s-a message-e'
+#' resetMsgComposer()
+#' loginfo("a message") # will log '<TS> INFO::a message'
+#'
+#' @export
+#'
+setMsgComposer <- function(composer_f, container = "") {
+  if (!is.function(composer_f)
+      || paste(formalArgs(composer_f), collapse = ", ") != "msg, ...") {
+    stop(paste("message composer(passed as composer_f) must be function",
+               " with signature function(msg, ...)"))
+  }
+
+  if (is.null(container)) {
+    stop("NULL container provided: cannot set message composer for NULL container")
+  }
+
+  if (is.character(container)) {
+    container <- getLogger(container)
+  }
+  assign("msg_composer", composer_f, container)
+}
+
+#'
+#' Resets previously set message composer.
+#'
+#' @param container name of logger to reser message composer for (type: character)
+#'
+#' @export
+#'
+resetMsgComposer <- function(container = "") {
+  if (is.null(container)) {
+    stop("NULL container provided: cannot resset message composer for NULL container")
+  }
+
+  if (is.character(container)) {
+    container <- getLogger(container)
+  }
+  assign("msg_composer", function() NULL, container)
+}
