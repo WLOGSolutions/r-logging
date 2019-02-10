@@ -1,3 +1,7 @@
+# logging 0.9-107 (2019-02-09)
+  * issue #4: added possibility to set custom message composer for logger e.g.
+    based on glue formating.
+
 # logging 0.9-106 (2019-01-23)
   * issue #2 fixed: handling of sprintf limitation to 8192 characters in fmt.
     If no formatting parameters provided and fmt does not contain markers it
