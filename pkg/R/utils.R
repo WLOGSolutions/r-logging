@@ -153,7 +153,7 @@ defaultMsgCompose <- function(msg, ...) {
     }
 
     # 8192 is limitation on fmt in sprintf
-    if (nchar(msg) > 8192) {
+    if (any(nchar(msg) > 8192)) {
       if (length(optargs) > 0) {
         stop("'msg' length exceeds maximal format length 8192")
       }
