@@ -1,9 +1,13 @@
+|       Travis       |   Total downloads   |      Downloads     |     CRAN version   |
+| :----------------: | :----------------: | :----------------: | :----------------: |
+| [![Travis build status](https://travis-ci.com/WLOGSolutions/r-logging.svg?branch=master)](https://travis-ci.com/WLOGSolutions/r-logging) | [![CRAN total downloads](http://cranlogs.r-pkg.org/badges/grand-total/logging)](http://cranlogs.r-pkg.org/badges/grand-total/logging)| [![CRAN downloads](https://cranlogs.r-pkg.org/badges/logging)](https://cranlogs.r-pkg.org/badges/logging)| [![CRAN version](http://www.r-pkg.org/badges/version/logging)](http://www.r-pkg.org/badges/version/logging)|
+ 
 r-logging
 =========
 
-R port of the popular log4j logging module.
+R port of the popular Python logging package.
 
-it implements hierarchical logging, multiple handlers at a single logger, formattable log records...
+It implements hierarchical logging, multiple handlers at a single logger, formattable log records...
 
 What you find here behaves similarly to what you also find in Python's standard logging module.
 
@@ -17,9 +21,14 @@ Far from being comparable to a Python standard module, this tiny logging module 
 
 - some sample handlers, sending log records
  - to the console, 
- - to a file, 
- - to a sentry server.
+ - to a file
 
-for more information, have a look at the [online
-tutorial] (http://logging.r-forge.r-project.org/sample_session.php) on
-[r-forge] (http://r-forge.r-project.org/).
+for more information, have a look at the [online tutorial] (http://logging.r-forge.r-project.org/sample_session.php) 
+on [r-forge] (http://r-forge.r-project.org/).
+
+installation
+============
+Simply call
+```
+devtools::install_github("WLOGSolutions/r-logging/pkg")
+```

@@ -1,23 +1,45 @@
-# Sample .travis.yml for R projects.
-#
-# See README.md for instructions, or for more configuration options,
-# see the wiki:
-#   https://github.com/craigcitro/r-travis/wiki
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: r
-sudo: required
 
-r_binary_packages:
- - svUnit
- - XML
-r_packages:
- - methods
+os:
+- linux
+- osx
+
+r:
+- oldrel
+- release
+- devel
+- 3.3.0
 
 env:
-  - WARNINGS_ARE_ERRORS=1
+- TravisCI=true
 
-notifications:
-  email:
-    on_success: change
-    on_failure: change
+cache: packages
+warnings_are_errors: true
 
+matrix:
+  exclude:
+  - os: osx
+    r: devel
+
+before_install:
+- cd pkg
+- if [ "$TRAVIS_OS_NAME" == "osx" ]; then sudo chown -R $(whoami) /usr/local/share/man/man7; brew install libgit2; fi
+
+addons:
+  apt:
+    packages:
+    - libgit2-dev
+
+install:
+- Rscript -e 'install.packages(c("roxygen2"));if (!all(c("roxygen2") %in% installed.packages())) { q(status = 1, save = "no")}' --no-init-file
+- Rscript -e 'install.packages(c("devtools"));if (!all(c("devtools") %in% installed.packages())) { q(status = 1, save = "no")}' --no-init-file
+- Rscript -e 'devtools::install_deps(dep = T)' --no-init-file
+- Rscript -e 'devtools::document()'
+
+script:
+- R CMD build .
+- R CMD check *tar.gz
+- Rscript -e 'devtools::install()' --no-init-file
+- Rscript -e 'devtools::test()' --no-init-file
