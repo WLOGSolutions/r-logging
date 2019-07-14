@@ -57,7 +57,7 @@ test_that("formatlimits/over_limit_w_formatting_fails", {
   regexp = "'msg' length exceeds maximal format length 8192")
 })
 
-test_that("formatlimits/over_limit_wo_format_args_fails", {
+test_that("formatlimits/over_limit_wo_format_args_passes", {
   env <- test_setup()
 
   msg0_9 <- paste(0:9, collapse = "")
@@ -67,10 +67,9 @@ test_that("formatlimits/over_limit_wo_format_args_fails", {
   msg8190_sX <- paste0(msg8190, "%s", "X")
   stopifnot(nchar(msg8190_sX) == 8193)
 
-  expect_error({
-    loginfo(msg8190_sX)
-  },
-  regexp = "too few arguments for format")
+  loginfo(msg8190_sX)
+
+  expect_equal(env$logged, paste0("INFO::", msg8190_sX))
 })
 
 test_that("formatlimits/over_limit_wo_formatting", {
