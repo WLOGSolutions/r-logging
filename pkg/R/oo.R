@@ -43,6 +43,15 @@ Logger <- setRefClass(
       return(defaultMsgCompose)
     },
 
+    setMsgComposer = function(composer_f) {
+      if (!is.function(composer_f)
+          || paste(formalArgs(composer_f), collapse = ", ") != "msg, ...") {
+        stop(paste("message composer(passed as composer_f) must be function",
+                   " with signature function(msg, ...)"))
+      }
+      msg_composer <<- composer_f
+    },
+
     .deducelevel = function(initial_level = loglevels[["NOTSET"]]) {
       if (initial_level != loglevels[["NOTSET"]]) {
         # it's proper level (set: Not for inheritance)
