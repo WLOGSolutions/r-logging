@@ -63,8 +63,8 @@ Logger <- setRefClass(
       }
 
       if (name == "") {
-        # assume it's INFO, as root logger cannot inherit
-        return(loglevels[["INFO"]])
+        # assume it's FINEST, as root logger cannot inherit
+        return(loglevels[["FINEST"]])
       }
 
       # ask parent for level
