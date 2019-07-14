@@ -141,7 +141,7 @@ getLogger <- function(name = "", ...) {
   if (!exists(fullname, envir = logging.options)) {
     logger <- Logger$new(name = name,
                          handlers = list(),
-                         level = namedLevel("INFO"))
+                         level = namedLevel("NOTSET"))
     updateOptions.environment(logger, ...)
     logging.options[[fullname]] <- logger
 
