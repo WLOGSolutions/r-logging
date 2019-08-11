@@ -26,7 +26,7 @@ Logger <- setRefClass(
   methods = list(
     getParent = function() {
       # split the name on the '.'
-      parts <- strsplit(name, ".", fixed = TRUE)[[1]]
+      parts <- unlist(strsplit(name, ".", fixed = TRUE))
       removed <- parts[-length(parts)] # except the last item
       parent_name <- paste(removed, collapse = ".")
       return(getLogger(parent_name))
@@ -43,16 +43,48 @@ Logger <- setRefClass(
       return(defaultMsgCompose)
     },
 
+    setMsgComposer = function(composer_f) {
+      if (!is.function(composer_f)
+          || paste(formalArgs(composer_f), collapse = ", ") != "msg, ...") {
+        stop(paste("message composer(passed as composer_f) must be function",
+                   " with signature function(msg, ...)"))
+      }
+      msg_composer <<- composer_f
+    },
+
+    .deducelevel = function(initial_level = loglevels[["NOTSET"]]) {
+      if (initial_level != loglevels[["NOTSET"]]) {
+        # it's proper level (set: Not for inheritance)
+        return(initial_level)
+      }
+
+      if (level != loglevels[["NOTSET"]]) {
+        return(level)
+      }
+
+      if (name == "") {
+        # assume it's FINEST, as root logger cannot inherit
+        return(loglevels[["FINEST"]])
+      }
+
+      # ask parent for level
+      parent_logger <- getParent()
+      return(parent_logger$.deducelevel())
+    },
+
     .logrecord = function(record) {
-      if (record$level >= level) {
+      logger_level <- .deducelevel(level)
+      if (record$level >= logger_level) {
         for (handler in handlers) {
-          if (record$level >= with(handler, level)) {
+          handler_level <- .deducelevel(with(handler, level))
+          if (record$level >= handler_level) {
             action <- with(handler, action)
             formatter <- with(handler, formatter)
             action(formatter(record), handler, record)
           }
         }
       }
+
       if (name != "") {
         parent_logger <- getParent()
         parent_logger$.logrecord(record)

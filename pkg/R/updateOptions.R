@@ -43,10 +43,13 @@ updateOptions.character <- function(container, ...) {
 updateOptions.environment <- function(container, ...) {
   ## the container is a logger
   config <- list(...)
-  if (! ("level" %in% names(config)) ) {
+  if ("level" %in% names(config)) {
+    config$level <- namedLevel(config$level)
+  } else if (get("name", container) == "") {
+    # root logger
     config$level <- loglevels["INFO"]
   } else {
-    config$level <- namedLevel(config$level)
+    config$level <- loglevels["NOTSET"]
   }
 
   for (key in names(config)) {

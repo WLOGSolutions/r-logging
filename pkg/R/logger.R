@@ -141,7 +141,7 @@ getLogger <- function(name = "", ...) {
   if (!exists(fullname, envir = logging.options)) {
     logger <- Logger$new(name = name,
                          handlers = list(),
-                         level = namedLevel("INFO"))
+                         level = namedLevel("NOTSET"))
     updateOptions.environment(logger, ...)
     logging.options[[fullname]] <- logger
 
@@ -391,12 +391,6 @@ setLevel <- function(level, container = "") {
 #' @export
 #'
 setMsgComposer <- function(composer_f, container = "") {
-  if (!is.function(composer_f)
-      || paste(formalArgs(composer_f), collapse = ", ") != "msg, ...") {
-    stop(paste("message composer(passed as composer_f) must be function",
-               " with signature function(msg, ...)"))
-  }
-
   if (is.null(container)) {
     stop("NULL container provided: cannot set message composer for NULL container")
   }
@@ -404,6 +398,7 @@ setMsgComposer <- function(composer_f, container = "") {
   if (is.character(container)) {
     container <- getLogger(container)
   }
+  container$setMsgComposer(composer_f)
   assign("msg_composer", composer_f, container)
 }
 
