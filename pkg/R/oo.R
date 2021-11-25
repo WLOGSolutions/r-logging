@@ -100,9 +100,18 @@ Logger <- setRefClass(
       ## fine, we create the record and pass it to all handlers attached to the
       ## loggers from here up to the root.
       record <- list()
+      
+      msg_to_string <- if(typeof(msg) == "character") {
+        msg
+      } else {
+        paste0("\n", paste0(capture.output(
+          print(msg)
+        ), collapse = "\n"))
+      }
 
+      
       composer_f <- getMsgComposer()
-      record$msg <- composer_f(msg, ...)
+      record$msg <- composer_f(msg_to_string, ...)
       record$timestamp <- sprintf("%s", Sys.time())
       record$logger <- name
       record$level <- msglevel
